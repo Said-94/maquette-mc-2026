@@ -4,5 +4,8 @@ Allow: /
 Disallow: /_bmad/
 Disallow: /_bmad-output/
 Disallow: /ai-proxy/
+Disallow: /booking-worker/
+# Page interne de l'accueil (validation des rendez-vous)
+Disallow: /valider.html
 
 Sitemap: https://motoscool.fr/sitemap.xml

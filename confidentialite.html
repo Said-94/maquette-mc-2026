@@ -75,29 +75,30 @@
 
     <h2>Responsable du traitement</h2>
     <div class="box">
-      <p>Moto's Cool <span class="todo">[À COMPLÉTER : forme juridique et SIRET]</span>, 15 ter avenue du Président Salvador Allende, 94400 Vitry-sur-Seine.<br>
-      Téléphone : <a href="tel:+33143762638">01 43 76 26 38</a> · Email : <span class="todo">[À COMPLÉTER : adresse email de contact RGPD]</span><br>
-      Représentant : <span class="todo">[À COMPLÉTER : nom du représentant légal]</span></p>
+      <p>Moto's Cool, SAS au capital de 500 €, SIRET 106 094 550 00014, 15 ter avenue du Président Salvador Allende, 94400 Vitry-sur-Seine.<br>
+      Téléphone : <a href="tel:+33143762638">01 43 76 26 38</a> · Email : <span class="mail" data-u="contact" data-d="motoscool.fr">contact [arobase] motoscool [point] fr</span><br>
+      Représentant : Oualid Benadjiba, président</p>
     </div>
 
     <h2>Données collectées par le formulaire de rendez-vous</h2>
     <p>Le site ne collecte des données personnelles que lorsque vous remplissez le formulaire de rendez-vous. Les champs sont :</p>
     <ul>
       <li><b>Véhicule</b> : type (moto, scooter, quad, autre), plaque d'immatriculation, marque, modèle, cylindrée, année, kilométrage, intervention souhaitée ;</li>
-      <li><b>Rendez-vous</b> : lieu (atelier ou domicile), adresse d'intervention (uniquement pour une intervention à domicile), date et heure souhaitées ;</li>
+      <li><b>Rendez-vous</b> : lieu (atelier ou dépannage à domicile), adresse (uniquement pour un dépannage à domicile), date et heure souhaitées ;</li>
       <li><b>Contact</b> : nom, téléphone, adresse email ;</li>
       <li><b>Message</b> libre (facultatif) : merci de n'y indiquer aucune donnée sensible ;</li>
-      <li><b>Photos du véhicule</b> (facultatif, 3 au maximum) : elles sont réduites dans votre navigateur (1 600 pixels maximum) puis jointes à votre demande, uniquement pour préparer le diagnostic. Évitez de photographier des personnes ou des documents ;</li>
-      <li><b>Position géographique</b> (facultatif) : seulement si vous utilisez le bouton « Me localiser » pour une intervention à domicile et que vous l'autorisez dans votre navigateur. Les coordonnées (latitude, longitude et précision) sont jointes à la demande pour aider le dépanneur à vous trouver.</li>
+      <li><b>Position géographique</b> (facultatif) : seulement si vous utilisez le bouton « Me localiser » pour un dépannage à domicile et que vous l'autorisez dans votre navigateur. Les coordonnées (latitude, longitude et précision) sont jointes à la demande pour aider le dépanneur à vous trouver.</li>
     </ul>
-    <p>Le vérificateur de zone de dépannage (code postal ou commune) n'enregistre rien : lorsque vous saisissez un nom de commune, ce texte est envoyé à l'API Adresse de l'État (api-adresse.data.gouv.fr) uniquement pour trouver le code postal correspondant.</p>
+    <p>Le vérificateur de zone de dépannage (commune, code postal ou clic sur la carte) n'enregistre rien : le texte saisi ou le point cliqué est envoyé à l'API Adresse de l'État (api-adresse.data.gouv.fr) uniquement pour trouver la commune correspondante.</p>
+    <h3 id="envoi">Envoi de votre demande</h3>
+    <p>Votre demande est envoyée par email à l'accueil de Moto's Cool, qui la vérifie puis l'enregistre dans le logiciel de gestion de l'atelier G8 et vous rappelle pour confirmer le rendez-vous. L'email passe par un relais technique hébergé par Cloudflare, qui ne conserve rien, et par le service d'envoi d'emails Brevo (Sendinblue SAS, France, serveurs situés dans l'Union européenne). Un champ invisible et la durée de saisie servent à écarter les envois automatiques (robots) ; ils ne sont pas conservés.</p>
 
     <h3 id="localisation">Bouton « Me localiser »</h3>
-    <p>La localisation n'est jamais demandée automatiquement : elle ne l'est que si vous cliquez sur « Me localiser », et votre navigateur vous demande alors votre accord. Votre position est envoyée à l'API Adresse de l'État (api-adresse.data.gouv.fr) pour retrouver l'adresse correspondante et vérifier que vous êtes dans notre zone de dépannage. Elle n'est ni conservée sur le site ni transmise à un tiers. Elle n'est enregistrée avec votre demande de rendez-vous que si vous choisissez une intervention à domicile et envoyez le formulaire. Vous pouvez refuser : la vérification par code postal fonctionne sans localisation.</p>
+    <p>La localisation n'est jamais demandée automatiquement : elle ne l'est que si vous cliquez sur « Me localiser », et votre navigateur vous demande alors votre accord. Votre position est envoyée à l'API Adresse de l'État (api-adresse.data.gouv.fr) pour retrouver l'adresse correspondante et vérifier que vous êtes dans notre zone de dépannage. Elle n'est ni conservée sur le site ni transmise à un tiers. Elle n'est jointe à votre demande de rendez-vous que si vous choisissez un dépannage à domicile et envoyez le formulaire. Vous pouvez refuser : la vérification par code postal fonctionne sans localisation.</p>
 
     <h3 id="assistant">Assistant « Une question ? »</h3>
     <p>L'assistant est un outil automatique, sans conseiller humain. Dans sa version actuelle, il répond uniquement à partir des informations du site : vos messages restent dans votre navigateur et ne sont ni envoyés ni enregistrés.</p>
-    <p>Si l'assistant fonctionne en mode IA (cela est alors indiqué dans la fenêtre de l'assistant), le texte de vos messages et des réponses précédentes de la conversation est transmis, via un serveur intermédiaire hébergé par Cloudflare, à la société Anthropic (fournisseur du modèle d'IA Claude) pour générer la réponse. Moto's Cool ne conserve pas ces conversations. <span class="todo">[À COMPLÉTER avant activation du mode IA : durée de conservation chez Anthropic et Cloudflare, lieu de traitement et garanties de transfert hors UE]</span>. N'indiquez dans l'assistant aucune donnée personnelle ou sensible : pour un rendez-vous, utilisez le formulaire.</p>
+    <p>Si l'assistant fonctionne en mode IA (cela est alors indiqué dans la fenêtre de l'assistant), le texte de vos messages et des réponses précédentes de la conversation est transmis, via un serveur intermédiaire hébergé par Cloudflare, à la société Anthropic (fournisseur du modèle d'IA Claude) pour générer la réponse. Moto's Cool ne conserve pas ces conversations. Ce mode n'est pas activé à ce jour ; s'il l'était, cette page préciserait au préalable les durées de conservation et le lieu de traitement. N'indiquez dans l'assistant aucune donnée personnelle ou sensible : pour un rendez-vous, utilisez le formulaire.</p>
 
     <h3 id="whatsapp">WhatsApp</h3>
     <p>Si un bouton WhatsApp est affiché, il ouvre simplement l'application WhatsApp avec un message prérempli. Rien n'est envoyé tant que vous ne validez pas l'envoi. L'échange relève alors des conditions de WhatsApp (Meta), et Moto's Cool utilise vos messages uniquement pour vous répondre.</p>
@@ -113,31 +114,33 @@
         </tbody>
       </table>
     </div>
-    <p>Vos données ne sont jamais vendues, ni utilisées à des fins de prospection commerciale sans votre accord.</p>
+    <p>Vos données ne sont jamais vendues. Moto's Cool n'envoie pas de SMS ni d'emails publicitaires et ne fait aucune mesure d'audience.</p>
 
     <h2>Durées de conservation</h2>
     <ul>
-      <li>Demande de rendez-vous restée sans suite : 3 ans à compter du dernier contact <span class="todo">[À VALIDER]</span> ;</li>
+      <li>Demande de rendez-vous restée sans suite : 3 ans à compter du dernier contact ;</li>
       <li>Données clients (intervention réalisée) : durée de la relation commerciale puis 3 ans, et pendant la durée de la garantie applicable ;</li>
       <li>Factures et pièces comptables : 10 ans (article L.123-22 du Code de commerce).</li>
     </ul>
 
     <h2>Destinataires</h2>
     <ul>
-      <li>Le personnel habilité de Moto's Cool (accueil, techniciens, dépanneurs) ;</li>
-      <li>L'éditeur du logiciel de gestion d'atelier <b>G8</b>, dans lequel la demande est enregistrée, agissant en tant que sous-traitant : <span class="todo">[À COMPLÉTER : nom, adresse de l'éditeur de G8 et lieu d'hébergement des données]</span> ;</li>
+      <li>L'accueil de Moto's Cool, seul destinataire des demandes de rendez-vous ;</li>
+      <li>L'éditeur du logiciel de gestion d'atelier <b>G8</b>, la société <b>Orisha</b>, dans lequel le rendez-vous est enregistré après validation, agissant en tant que sous-traitant ; les données sont hébergées en France par OVHcloud ;</li>
+      <li>L'expert-comptable de Moto's Cool, pour les seules pièces comptables (factures) ;</li>
+      <li>Les prestataires d'envoi de la demande : Cloudflare (relais technique, sans conservation) et Brevo (envoi de l'email, Union européenne) ;</li>
       <li>L'hébergeur du site (voir les <a href="mentions-legales.html">mentions légales</a>) ;</li>
       <li>Uniquement si l'assistant fonctionne en mode IA : Cloudflare (serveur intermédiaire) et Anthropic (modèle d'IA), pour les seuls messages écrits dans l'assistant ;</li>
       <li>Le cas échéant, les autorités habilitées, sur réquisition légale.</li>
     </ul>
-    <p>Transfert hors de l'Union européenne : aucun <span class="todo">[À VÉRIFIER auprès de l'éditeur de G8 et de l'hébergeur]</span>.</p>
+    <p>Transfert hors de l'Union européenne : vos données sont stockées dans l'Union européenne (G8 chez OVHcloud en France, emails chez Brevo). Seul le relais technique Cloudflare, société américaine adhérente au Data Privacy Framework UE–États-Unis, peut traiter la demande le temps de son acheminement, sans la conserver.</p>
 
     <h2>Sécurité</h2>
     <p>Moto's Cool met en œuvre des mesures techniques et organisationnelles adaptées (accès restreint, connexion chiffrée HTTPS, logiciel de gestion sécurisé) pour protéger vos données contre la perte, l'accès non autorisé ou la divulgation.</p>
 
     <h2>Vos droits</h2>
     <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation du traitement, d'opposition et de portabilité de vos données, ainsi que du droit de définir des directives relatives à leur sort après votre décès.</p>
-    <p>Pour les exercer, contactez-nous par email à <span class="todo">[À COMPLÉTER : adresse email]</span> ou par courrier à l'adresse de l'atelier, en précisant votre demande. Une réponse vous sera apportée dans un délai d'un mois.</p>
+    <p>Pour les exercer, contactez-nous par email à <span class="mail" data-u="contact" data-d="motoscool.fr">contact [arobase] motoscool [point] fr</span> ou par courrier à l'adresse de l'atelier, en précisant votre demande. Une réponse vous sera apportée dans un délai d'un mois.</p>
     <p>Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la <b>CNIL</b> : 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 – <a href="https://www.cnil.fr" rel="noopener">www.cnil.fr</a>.</p>
 
     <h2 id="cookies">Cookies et traceurs</h2>
@@ -150,7 +153,7 @@
     <h3>Ressources externes</h3>
     <p>Les polices de caractères sont hébergées sur le site lui-même : aucune requête n'est faite vers Google. Pour afficher certaines fonctions, le site charge des ressources depuis des serveurs tiers, qui reçoivent à cette occasion votre adresse IP, comme pour toute page web :</p>
     <ul>
-      <li>cdnjs / Cloudflare (bibliothèques GSAP, Three.js et Leaflet) ;</li>
+      <li>cdnjs / Cloudflare et jsDelivr (bibliothèques GSAP, Three.js, Lenis et Leaflet) ;</li>
       <li>OpenStreetMap (fonds de carte de la zone de dépannage et plan d'accès) ;</li>
       <li>API Adresse de l'État (recherche de commune ou bouton « Me localiser », uniquement si vous les utilisez) ;</li>
       <li>en mode IA uniquement : Cloudflare et Anthropic (assistant, voir ci-dessus).</li>
@@ -160,7 +163,7 @@
     <p>Si des outils de mesure d'audience ou des contenus tiers déposant des cookies étaient ajoutés à l'avenir, un bandeau de consentement serait mis en place et cette page mise à jour.</p>
 
     <h2>Mise à jour</h2>
-    <p>Cette politique peut évoluer. Dernière mise à jour : <span class="todo">[À COMPLÉTER : date]</span>.</p>
+    <p>Cette politique peut évoluer. Dernière mise à jour : 2 novembre 2026.</p>
   </main>
 
   <footer>
@@ -176,6 +179,8 @@
     </div>
   </footer>
   <script>
+    // Email reconstitué à l'affichage (protection contre les robots qui collectent les adresses)
+    document.querySelectorAll('.mail').forEach(function (m) { var a = document.createElement('a'), e = m.dataset.u + '@' + m.dataset.d; a.href = 'mailto:' + e; a.textContent = e; m.replaceChildren(a); });
     if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
   </script>
 </body>

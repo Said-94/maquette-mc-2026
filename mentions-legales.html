@@ -71,36 +71,39 @@
 
     <h2>Éditeur du site</h2>
     <dl>
-      <dt>Raison sociale</dt><dd>Moto's Cool <span class="todo">[À COMPLÉTER : dénomination sociale exacte si différente]</span></dd>
-      <dt>Forme juridique</dt><dd><span class="todo">[À COMPLÉTER : forme juridique (SARL, SAS, EURL, entreprise individuelle…)]</span></dd>
-      <dt>Capital social</dt><dd><span class="todo">[À COMPLÉTER : montant du capital social en euros]</span></dd>
+      <dt>Nom commercial</dt><dd>Moto's Cool</dd>
+      <dt>Dénomination sociale</dt><dd><span class="todo">[À CONFIRMER : dénomination exacte figurant sur le Kbis]</span></dd>
+      <dt>Forme juridique</dt><dd>SAS (société par actions simplifiée)</dd>
+      <dt>Capital social</dt><dd>500 €</dd>
       <dt>Siège social</dt><dd>15 ter avenue du Président Salvador Allende, 94400 Vitry-sur-Seine</dd>
-      <dt>SIRET</dt><dd><span class="todo">[À COMPLÉTER : numéro SIRET (14 chiffres)]</span></dd>
-      <dt>RCS / RM</dt><dd><span class="todo">[À COMPLÉTER : RCS Créteil n° … ou Répertoire des métiers n° …]</span></dd>
-      <dt>N° de TVA intracommunautaire</dt><dd><span class="todo">[À COMPLÉTER : FR + 11 caractères]</span></dd>
+      <dt>SIRET</dt><dd>106 094 550 00014</dd>
+      <dt>RCS</dt><dd>RCS Créteil 106 094 550</dd>
+      <dt>N° de TVA intracommunautaire</dt><dd>FR84 106 094 550</dd>
       <dt>Téléphone</dt><dd><a href="tel:+33143762638">01 43 76 26 38</a></dd>
-      <dt>Email</dt><dd><span class="todo">[À COMPLÉTER : adresse email de contact]</span></dd>
-      <dt>Directeur de la publication</dt><dd><span class="todo">[À COMPLÉTER : nom et prénom du représentant légal]</span></dd>
+      <!-- Email reconstitué à l'affichage (protection contre les robots qui collectent les adresses) -->
+      <dt>Email</dt><dd><span id="mail" data-u="contact" data-d="motoscool.fr">contact [arobase] motoscool [point] fr</span></dd>
+      <dt>Directeur de la publication</dt><dd>Oualid Benadjiba, président</dd>
     </dl>
 
     <h2>Hébergeur</h2>
     <dl>
-      <dt>Nom</dt><dd><span class="todo">[À COMPLÉTER : nom ou raison sociale de l'hébergeur]</span></dd>
-      <dt>Adresse</dt><dd><span class="todo">[À COMPLÉTER : adresse postale de l'hébergeur]</span></dd>
-      <dt>Téléphone</dt><dd><span class="todo">[À COMPLÉTER : téléphone de l'hébergeur]</span></dd>
+      <dt>Nom</dt><dd>OVH SAS</dd>
+      <dt>Adresse</dt><dd>2 rue Kellermann, 59100 Roubaix, France</dd>
+      <dt>Téléphone</dt><dd>1007 (depuis la France)</dd>
+      <dt>Site</dt><dd><a href="https://www.ovhcloud.com/fr/" rel="noopener">ovhcloud.com</a></dd>
     </dl>
 
     <h2>Conception du site</h2>
-    <p><span class="todo">[À COMPLÉTER : nom du concepteur / prestataire du site et contact]</span></p>
+    <p>SYZ Agency.</p>
 
     <h2>Propriété intellectuelle</h2>
     <p>L'ensemble des contenus de ce site (textes, logo, mise en page, illustrations, animations) est la propriété de Moto's Cool ou de ses partenaires et est protégé par le Code de la propriété intellectuelle. Toute reproduction, représentation ou adaptation, totale ou partielle, sans autorisation écrite préalable est interdite.</p>
-    <p>Les marques de constructeurs citées (Yamaha, Honda, Suzuki, Kawasaki, Piaggio, Vespa, Ducati, Moto Guzzi, Triumph, BMW) appartiennent à leurs propriétaires respectifs ; elles sont citées uniquement pour indiquer les véhicules entretenus. Moto's Cool n'est pas un concessionnaire officiel de ces marques <span class="todo">[À VÉRIFIER]</span>.</p>
+    <p>Les marques de constructeurs citées (Yamaha, Honda, Suzuki, Kawasaki, Piaggio, Vespa, Ducati, Moto Guzzi, Triumph, BMW) appartiennent à leurs propriétaires respectifs ; elles sont citées uniquement pour indiquer les véhicules entretenus. Moto's Cool n'est pas un concessionnaire officiel de ces marques.</p>
 
     <h2>Crédits et services tiers</h2>
     <ul>
       <li>Fonds de carte : © les contributeurs d'<a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>, affichés avec la bibliothèque Leaflet.</li>
-      <li>Contours des départements : données issues du projet open source france-geojson (Grégoire David), dérivées des données IGN / Etalab.</li>
+      <li>Zone de dépannage : contour tracé par Moto's Cool à partir des communes desservies.</li>
       <li>Recherche de commune : API Adresse de la Base Adresse Nationale (api-adresse.data.gouv.fr).</li>
       <li>Films 3D : la dépanneuse est basée sur « 2012 Mercedes-Benz Sprinter Tow » par tonielpro520 (<a href="https://sketchfab.com/3d-models/2012-mercedes-benz-sprinter-tow-ca8895c45272400d96388278900d388a" rel="noopener">Sketchfab</a>), sous licence <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a> ; modifiée (logos retirés, marquage Moto's Cool). Personnage : « Motorcyclist » par BUY AND PRINT (licence Sketchfab Standard).</li>
       <li>Animations : GSAP, Lenis et Three.js ; polices Orbitron et Nunito, hébergées sur le site (licence SIL Open Font License, fichiers issus du projet Fontsource).</li>
@@ -117,11 +120,13 @@
     <h2>Données personnelles et cookies</h2>
     <p>Le traitement des données transmises via le formulaire de rendez-vous et l'usage des cookies sont décrits dans la <a href="confidentialite.html">politique de confidentialité</a> (voir aussi la <a href="confidentialite.html#cookies">gestion des cookies</a>).</p>
 
+    <!-- À AJOUTER dès que le garage a choisi son médiateur (obligation légale, art. L.612-1 du Code de la consommation) :
     <h2>Médiation de la consommation</h2>
-    <p>Conformément aux articles L.612-1 et suivants du Code de la consommation, le client consommateur peut recourir gratuitement à un médiateur de la consommation en cas de litige : <span class="todo">[À COMPLÉTER : nom, adresse et site web du médiateur auquel adhère le garage]</span>.</p>
+    <p>Conformément aux articles L.612-1 et suivants du Code de la consommation, le client consommateur peut recourir gratuitement à un médiateur de la consommation en cas de litige : [nom, adresse et site web du médiateur].</p>
+    -->
 
     <h2>Droit applicable</h2>
-    <p>Les présentes mentions sont régies par le droit français. Dernière mise à jour : <span class="todo">[À COMPLÉTER : date]</span>.</p>
+    <p>Les présentes mentions sont régies par le droit français. Dernière mise à jour : 2 novembre 2026.</p>
   </main>
 
   <footer>
@@ -139,6 +144,10 @@
   <!-- Crédit du modèle 3D (licence CC-BY) : affiché seulement si SITE_BIKE.bikeCredit est renseigné dans assets/site-bike.js -->
   <script src="assets/site-bike.js"></script>
   <script>
+    (function () {
+      var m = document.getElementById('mail');
+      if (m) { var a = document.createElement('a'), e = m.dataset.u + '@' + m.dataset.d; a.href = 'mailto:' + e; a.textContent = e; m.replaceChildren(a); }
+    })();
     (function () {
       var c = window.SITE_BIKE && window.SITE_BIKE.bikeCredit;
       if (!c || !c.text) return;

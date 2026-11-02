@@ -126,11 +126,13 @@
       const get = t => parts.find(p => p.type === t).value;
       const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
       const mins = (+get('hour') % 24) * 60 + +get('minute');
-      const h = HOURS[day];
-      return { open: !!(h && mins >= h[0] && mins < h[1]), day };
+      const h = HOURS[day] || [];
+      return { open: h.some(([o, c]) => mins >= o && mins < c), day };
     } catch (e) { return null; }
   }
-  const REASONS = "Chez Moto's Cool, ce sont des techniciens qualifiés qui s'en occupent, toutes marques. Le prix est fixé après un diagnostic sur place, avec un devis que vous validez, et nos réparations sont garanties.";
+  const REASONS = "Chez Moto's Cool, nous nous occupons de toutes les marques. Le prix est fixé après un diagnostic à l'atelier, avec un devis que vous validez, et nos interventions sont garanties.";
+  const HOURS_TXT = 'du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 18h30';
+  const ZONE_TXT = MC.ZONE_TXT || 'tout Paris, tout le Val-de-Marne et les villes proches';
   // Symptômes critiques pour la sécurité : ne pas rouler, appeler le dépannage
   const SAFETY = /\bfrein(e|ent) (mal|plus|pas|moins)\b|\bne frein(e|ent)\b|\bplus de frein|\bfrein\w* (lache|mou|molle|spongieux|bloque|ne marche|ne repond)|\blevier (mou|qui s enfonce)|\bdirection (dure|bloquee|bloque|qui tire|qui tremble|floue)\b|\bguidon (dur|bloque|qui tremble|qui vibre)\b|\btire (a gauche|a droite)\b|\bodeur d essence\b|\bodeur de carburant\b|\bfuite d essence\b|\bessence qui coule\b|\bfumee\b|\b(ca|qui|moto|moteur|scooter|elle|il) fume\b|\bflammes?\b|\bsent le brule\b|\baccident\b|\bchute\b|\b(suis|est) tombee?\b/;
 
@@ -200,16 +202,17 @@
     }
     // 2. Code postal : vérification de la zone de dépannage
     if (cp) {
-      const code = cp.slice(0, 2), z = ZONE[code];
-      if (z) return { text: `Oui, ${cp} est dans notre zone de dépannage : ${z.nom} (${code}). ${z.delai} Le prix du dépannage dépend de la distance et de la situation ; il vous est annoncé au téléphone avant le départ.`, actions: [A.call('Appeler le dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) };
-      return { text: `${cp} n'est pas dans notre zone de dépannage, qui couvre Paris (75), la Seine-et-Marne (77), l'Essonne (91) et le Val-de-Marne (94). Appelez-nous quand même : nous vous orienterons. Vous pouvez aussi venir à l'atelier de Vitry-sur-Seine, avec ou sans rendez-vous.`, actions: [A.call(), A.visit()] };
+      const code = cp.slice(0, 2);
+      if ((MC.ZONE_FULL || []).includes(code)) return { text: `Oui, ${cp} est dans notre zone de dépannage. Intervention express pendant nos horaires d'ouverture : nous venons chercher la moto et nous l'amenons à l'atelier. Le tarif dépend de la distance et de la situation.`, actions: [A.call('Appeler le dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) };
+      if ((MC.ZONE_PART || []).includes(code)) return { text: `Dans ce département, nous intervenons dans les villes proches de l'atelier seulement. Vérifiez votre commune sur la carte de la rubrique Dépannage, ou appelez-nous : nous vous répondons tout de suite.`, actions: [A.call(), A.zone()] };
+      return { text: `${cp} n'est pas dans notre zone de dépannage, qui couvre ${ZONE_TXT}. Appelez-nous quand même : nous vous orienterons. Pour un entretien ou une réparation, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.visit()] };
     }
     // 3. Symptôme décrit : écoute, causes générales, sécurité, puis atelier
     const safety = SAFETY.test(text);
     if (sym.length && !(score.prix && !safety) && !(score.panne && !safety)) {
       const s = sym[0];
       const intro = safety
-        ? `Merci de nous avoir décrit le problème. Par sécurité, ne roulez pas avec la moto dans cet état : mettez-vous à l'abri de la circulation et appelez-nous, nous organisons le dépannage (Paris, Seine-et-Marne, Essonne et Val-de-Marne).`
+        ? `Merci de nous avoir décrit le problème. Par sécurité, ne roulez pas avec la moto dans cet état : mettez-vous à l'abri de la circulation et appelez-nous, nous organisons le dépannage (${ZONE_TXT}).`
         : `Merci de nous avoir décrit le problème, c'est bien de ne pas le laisser traîner.`;
       return { text: `${intro}\n\nEn général, ce type de symptôme peut venir de plusieurs choses : ${s.causes}. Mais seul un contrôle par un technicien permet de poser un diagnostic fiable.\n\n${REASONS}`, actions: safety ? [A.call('Appeler pour un dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) : ctas(s.inter, [A.visit()]) };
     }
@@ -218,30 +221,30 @@
     const o = openNow();
     switch (id) {
       case 'panne':
-        return { text: `Vous êtes en panne ? Mettez-vous d'abord en sécurité, à l'écart de la circulation. Appelez-nous au ${PHONE} : nous évaluons la situation au téléphone, nous vous annonçons le prix avant le départ, puis nous réparons sur place quand c'est possible, ou nous ramenons la moto à l'atelier.\n\nZone de dépannage : Paris (75), Seine-et-Marne (77), Essonne (91) et Val-de-Marne (94). Donnez-moi votre code postal si vous voulez vérifier.`, actions: [A.call('Appeler le dépannage'), A.zone(), A.wa()].filter(Boolean) };
+        return { text: `Vous êtes en panne ? Mettez-vous d'abord en sécurité, à l'écart de la circulation. Appelez-nous au ${PHONE} pendant nos horaires d'ouverture : nous évaluons la situation au téléphone, puis notre dépanneur vient chercher la moto et l'amène à l'atelier, où elle est diagnostiquée.\n\nZone de dépannage : ${ZONE_TXT}. Donnez-moi votre code postal si vous voulez vérifier.`, actions: [A.call('Appeler le dépannage'), A.zone(), A.wa()].filter(Boolean) };
       case 'zone':
-        return { text: `Nous dépannons uniquement à Paris (75), en Seine-et-Marne (77), dans l'Essonne (91) et dans le Val-de-Marne (94). Indiquez-moi votre code postal (5 chiffres) et je vérifie tout de suite.\n\nPour l'entretien et les réparations, l'atelier de Vitry-sur-Seine accueille tout le monde, d'où que vous veniez.`, actions: [A.call(), A.zone()] };
+        return { text: `Nous dépannons dans ${ZONE_TXT} (environ 25 km autour de l'atelier). Indiquez-moi votre code postal ou vérifiez votre commune sur la carte.\n\nPour l'entretien et les réparations, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.zone()] };
       case 'prix':
         // Règle : aucun prix, fourchette, estimation ou « à partir de », pour quoi que ce soit.
-        return { text: `Pour le prix, on voit ça ensemble : chaque moto est différente, donc je ne donne aucun tarif, même approximatif. Le prix est fixé avec l'équipe après le diagnostic, sur un devis que vous validez. Aucun travail n'est engagé sans votre accord.\n\nPour un dépannage, c'est pareil : le prix vous est annoncé par l'équipe au téléphone, avant le départ.\n\nLe plus simple : appelez-nous ou prenez rendez-vous.`, actions: ctas() };
+        return { text: `Pour le prix, on voit ça ensemble : chaque moto est différente, donc nous ne donnons aucun tarif à l'avance, même approximatif. Le prix est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Aucun travail n'est engagé sans votre accord.\n\nPour un dépannage, le tarif dépend de la distance et de la situation : appelez-nous pour en parler.\n\nLe plus simple : appelez-nous ou prenez rendez-vous.`, actions: ctas() };
       case 'paiement':
-        return { text: `Moyens de paiement acceptés : carte bancaire (y compris sans contact), Revolut, espèces et virement bancaire.\nNon acceptés : PayPal, chèque et paiement en plusieurs fois.`, actions: [A.book(prefill), A.call()] };
+        return { text: `Moyens de paiement acceptés : carte bancaire (avec ou sans contact), espèces et virement bancaire.`, actions: [A.book(prefill), A.call()] };
       case 'garantie':
-        return { text: `Oui, nos réparations et nos ventes sont garanties. Les conditions de garantie sont précisées sur votre devis et sur votre facture. Pour une question sur une intervention déjà réalisée, appelez l'atelier : nous retrouverons votre dossier.`, actions: [A.call(), A.book(prefill)] };
+        return { text: `Oui, nos interventions sont garanties : en cas de souci lié à notre travail, revenez nous voir, nous le reprenons. Les conditions sont précisées sur votre facture. Pour une intervention déjà réalisée, appelez l'atelier : nous retrouverons votre dossier.`, actions: [A.call(), A.book(prefill)] };
       case 'horaires':
-        return { text: `L'atelier est ouvert du lundi au vendredi de 9h30 à 18h30 et le samedi de 10h00 à 18h30. Il est fermé le dimanche.${o ? (o.open ? `\n\nNous sommes ouverts en ce moment : vous pouvez passer ou appeler.` : `\n\nNous sommes fermés en ce moment (${DAYS[o.day]}) : vous pouvez réserver un créneau en ligne, nous vous recontactons pour le confirmer.`) : ''}`, actions: [A.call(), A.book(prefill), A.visit()] };
+        return { text: `L'atelier est ouvert ${HOURS_TXT}. Il est fermé le dimanche. Le dépannage fonctionne aux mêmes horaires.${o ? (o.open ? `\n\nNous sommes ouverts en ce moment : vous pouvez appeler.` : `\n\nNous sommes fermés en ce moment : vous pouvez réserver un créneau en ligne, nous vous rappelons pour le confirmer.`) : ''}`, actions: [A.call(), A.book(prefill), A.visit()] };
       case 'adresse':
-        return { text: `L'atelier se trouve au ${ADDRESS}. Vous pouvez venir avec ou sans rendez-vous pendant nos horaires (du lundi au vendredi 9h30–18h30, le samedi 10h00–18h30).`, actions: [A.visit(), A.call(), A.book(prefill)] };
+        return { text: `L'atelier se trouve au ${ADDRESS}. Il est ouvert ${HOURS_TXT}. Réparations et entretien sur rendez-vous ; sans rendez-vous, nous faisons uniquement les contrôles et diagnostics.`, actions: [A.visit(), A.call(), A.book(prefill)] };
       case 'sansrdv':
-        return { text: `Oui, vous pouvez venir sans rendez-vous à l'atelier, ${ADDRESS}, pendant nos horaires d'ouverture. Le rendez-vous en ligne vous réserve simplement un créneau.`, actions: [A.visit(), A.book(prefill), A.call()] };
+        return { text: `Sans rendez-vous, nous faisons uniquement les contrôles et diagnostics : passez à l'atelier, ${ADDRESS}, pendant nos horaires d'ouverture. Pour une réparation ou un entretien, il faut prendre rendez-vous.`, actions: [A.book(prefill), A.visit(), A.call()] };
       case 'rdv':
-        return { text: `Vous pouvez réserver en ligne en 2 minutes : véhicule, jour et heure, à l'atelier ou à domicile (75, 77, 91, 94). Nous vous recontactons pour confirmer. Si c'est urgent, appelez-nous directement.`, actions: [A.book(prefill), A.call()] };
+        return { text: `Vous pouvez réserver en ligne en 2 minutes, tout en haut de la page : véhicule, jour et heure, à l'atelier ou en dépannage à domicile. L'accueil vous rappelle pour confirmer. Si c'est urgent, appelez-nous directement.`, actions: [A.book(prefill), A.call()] };
       case 'marques': {
         const named = BRANDS.find(b => text.includes(norm(b)));
-        return { text: `${named ? `Oui, nous intervenons sur les ${named}. ` : ''}Nous entretenons et réparons les motos et scooters ${BRANDS.join(', ')}. Pour une autre marque, appelez-nous : nous étudierons votre demande.\n\n${REASONS}`, actions: ctas() };
+        return { text: `${named ? `Oui, nous intervenons sur les ${named}. ` : ''}Nous entretenons et réparons les motos et scooters ${BRANDS.join(', ')} et bien d'autres marques. Pour un modèle particulier, appelez-nous.\n\n${REASONS}`, actions: ctas() };
       }
       case 'entretien':
-        return { text: `Nous faisons l'entretien et la révision selon le carnet du constructeur : vidange, filtres, kit chaîne, liquides et contrôle de sécurité complet. Le prix est fixé après contrôle, sur devis que vous validez.\n\n${REASONS}`, actions: [A.book(prefill, 'Entretien'), A.call(), A.visit()] };
+        return { text: `Nous faisons l'entretien et la révision selon les préconisations du constructeur : vidange, filtres, kit chaîne, liquides et contrôle de sécurité complet, sur rendez-vous. Le prix est fixé après contrôle, sur devis que vous validez.\n\n${REASONS}`, actions: [A.book(prefill, 'Entretien'), A.call(), A.visit()] };
       case 'scooter':
         return { text: `Oui, nous entretenons et réparons les scooters de toutes cylindrées, du 50 cm³ au maxi-scooter, avec le même soin que les motos.\n\n${REASONS}`, actions: [A.book(prefill, 'Entretien'), A.call()] };
       case 'quad':
@@ -255,7 +258,7 @@
       case 'bonjour':
         return { text: `Bonjour ! Dites-moi ce qui arrive à votre moto, ou posez-moi une question : horaires, zone de dépannage, paiement, rendez-vous…`, actions: [A.call(), A.book(prefill)] };
       default:
-        return { text: `Je ne suis pas sûr de bien comprendre, et je préfère ne pas vous répondre au hasard. Le plus sûr est d'appeler l'atelier au ${PHONE} : un technicien vous répondra directement. Vous pouvez aussi décrire votre besoin dans le formulaire de rendez-vous.`, actions: ctas() };
+        return { text: `Je ne suis pas sûr de bien comprendre, et je préfère ne pas vous répondre au hasard. Le plus sûr est d'appeler l'atelier au ${PHONE} : nous vous répondrons directement. Vous pouvez aussi décrire votre besoin dans le formulaire de rendez-vous.`, actions: ctas() };
     }
   }
 
