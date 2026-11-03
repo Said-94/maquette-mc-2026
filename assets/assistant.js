@@ -132,7 +132,7 @@
   }
   const REASONS = "Chez Moto's Cool, nous nous occupons de toutes les marques. Le prix est fixé après un diagnostic à l'atelier, avec un devis que vous validez, et nos interventions sont garanties.";
   const HOURS_TXT = 'du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 18h30';
-  const ZONE_TXT = MC.ZONE_TXT || 'tout Paris, tout le Val-de-Marne et les villes proches';
+  const ZONE_TXT = MC.ZONE_TXT || "toute l'Île-de-France";
   // Symptômes critiques pour la sécurité : ne pas rouler, appeler le dépannage
   const SAFETY = /\bfrein(e|ent) (mal|plus|pas|moins)\b|\bne frein(e|ent)\b|\bplus de frein|\bfrein\w* (lache|mou|molle|spongieux|bloque|ne marche|ne repond)|\blevier (mou|qui s enfonce)|\bdirection (dure|bloquee|bloque|qui tire|qui tremble|floue)\b|\bguidon (dur|bloque|qui tremble|qui vibre)\b|\btire (a gauche|a droite)\b|\bodeur d essence\b|\bodeur de carburant\b|\bfuite d essence\b|\bessence qui coule\b|\bfumee\b|\b(ca|qui|moto|moteur|scooter|elle|il) fume\b|\bflammes?\b|\bsent le brule\b|\baccident\b|\bchute\b|\b(suis|est) tombee?\b/;
 
@@ -204,7 +204,6 @@
     if (cp) {
       const code = cp.slice(0, 2);
       if ((MC.ZONE_FULL || []).includes(code)) return { text: `Oui, ${cp} est dans notre zone de dépannage. Intervention express pendant nos horaires d'ouverture : nous venons chercher la moto et nous l'amenons à l'atelier. Le tarif dépend de la distance et de la situation.`, actions: [A.call('Appeler le dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) };
-      if ((MC.ZONE_PART || []).includes(code)) return { text: `Dans ce département, nous intervenons dans les villes proches de l'atelier seulement. Vérifiez votre commune sur la carte de la rubrique Dépannage, ou appelez-nous : nous vous répondons tout de suite.`, actions: [A.call(), A.zone()] };
       return { text: `${cp} n'est pas dans notre zone de dépannage, qui couvre ${ZONE_TXT}. Appelez-nous quand même : nous vous orienterons. Pour un entretien ou une réparation, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.visit()] };
     }
     // 3. Symptôme décrit : écoute, causes générales, sécurité, puis atelier
@@ -223,7 +222,7 @@
       case 'panne':
         return { text: `Vous êtes en panne ? Mettez-vous d'abord en sécurité, à l'écart de la circulation. Appelez-nous au ${PHONE} pendant nos horaires d'ouverture : nous évaluons la situation au téléphone, puis notre dépanneur vient chercher la moto et l'amène à l'atelier, où elle est diagnostiquée.\n\nZone de dépannage : ${ZONE_TXT}. Donnez-moi votre code postal si vous voulez vérifier.`, actions: [A.call('Appeler le dépannage'), A.zone(), A.wa()].filter(Boolean) };
       case 'zone':
-        return { text: `Nous dépannons dans ${ZONE_TXT} (environ 25 km autour de l'atelier). Indiquez-moi votre code postal ou vérifiez votre commune sur la carte.\n\nPour l'entretien et les réparations, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.zone()] };
+        return { text: `Nous dépannons dans ${ZONE_TXT}. Indiquez-moi votre code postal ou vérifiez votre commune sur la carte.\n\nPour l'entretien et les réparations, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.zone()] };
       case 'prix':
         // Règle : aucun prix, fourchette, estimation ou « à partir de », pour quoi que ce soit.
         return { text: `Pour le prix, on voit ça ensemble : chaque moto est différente, donc nous ne donnons aucun tarif à l'avance, même approximatif. Le prix est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Aucun travail n'est engagé sans votre accord.\n\nPour un dépannage, le tarif dépend de la distance et de la situation : appelez-nous pour en parler.\n\nLe plus simple : appelez-nous ou prenez rendez-vous.`, actions: ctas() };
