@@ -1,5 +1,5 @@
 /* Pages secondaires (zones d'intervention et services) — même identité que l'accueil */
-:root { --red: #e63027; --red-ui: #d42a21; --red-text: #ff6a60; --red-dark: #b8231c; --green: #2ecc71; --bg: #26262b; --bg-0: #26262b; --bg-2: #303036; --line: #4d4d56; --text: #f2f2f2; --muted: #c4c4cc; --max: 1080px; }
+:root { --red: #e63027; --red-ui: #d42a21; --red-text: #ff7a70; --red-dark: #b8231c; --green: #2ecc71; --bg: #34343b; --bg-0: #34343b; --bg-2: #3f3f47; --line: #5e5e68; --text: #f2f2f2; --muted: #d2d2d9; --max: 1080px; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
@@ -13,7 +13,7 @@ a { color: inherit; }
 .logo { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.25rem; text-decoration: none; letter-spacing: .02em; white-space: nowrap; }
 
 /* En-tête */
-.site-head { position: sticky; top: 0; z-index: 20; background: rgba(38,38,43,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.site-head { position: sticky; top: 0; z-index: 20; background: rgba(52,52,59,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
 .site-head nav ul { display: flex; gap: 22px; list-style: none; }
 .site-head nav a { color: var(--muted); font-weight: 700; text-decoration: none; }

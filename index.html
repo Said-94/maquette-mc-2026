@@ -11,7 +11,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; font-src 'self'; media-src 'self'; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; frame-src https://www.openstreetmap.org; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="canonical" href="https://motoscool.fr/">
-  <meta name="theme-color" content="#26262b">
+  <meta name="theme-color" content="#34343b">
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/icons/icon-192.png" type="image/png" sizes="192x192">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -125,17 +125,17 @@
       --red: #e63027;
       --red-dark: #b8231c;
       --red-ui: #d42a21;   /* fond rouge sous texte blanc (contraste AA) */
-      --red-text: #ff6a60; /* petit texte rouge sur fond sombre (contraste AA) */
+      --red-text: #ff7a70; /* petit texte rouge sur fond sombre (contraste AA) */
       --cyan: #20e3ff;
       --green: #2ecc71;
       --orange: #ff9f1a;
-      --bg: #26262b;
-      --bg-0: #26262b;
-      --bg-2: #303036;
-      --bg-3: #3a3a41;
-      --line: #4d4d56;
+      --bg: #34343b;
+      --bg-0: #34343b;
+      --bg-2: #3f3f47;
+      --bg-3: #4a4a53;
+      --line: #5e5e68;
       --text: #f2f2f2;
-      --muted: #c4c4cc;
+      --muted: #d2d2d9;
       --radius: 14px;
       --max: 1180px;
     }
@@ -201,7 +201,7 @@
     /* Compteur de vitesse (HUD) */
     .hud {
       position: fixed; left: 18px; bottom: 18px; z-index: 55; font-family: 'Orbitron', sans-serif;
-      background: rgba(38,38,43,.75); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 14px;
+      background: rgba(52,52,59,.75); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 14px;
       padding: 10px 16px; display: none; align-items: center; gap: 14px; opacity: 0; transition: opacity .6s;
     }
     /* Affiché seulement quand la marge gauche (≥ 230 px) est plus large que le compteur (≈ 190 px) : il ne recouvre jamais le contenu */
@@ -215,7 +215,7 @@
 
     /* En-tête */
     header { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background .3s, border-color .3s; border-bottom: 1px solid transparent; }
-    header.scrolled { background: rgba(38,38,43,.88); backdrop-filter: blur(10px); border-color: var(--line); }
+    header.scrolled { background: rgba(52,52,59,.88); backdrop-filter: blur(10px); border-color: var(--line); }
     .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
     .nav .logo { font-size: 1.35rem; }
     .nav ul { display: flex; gap: 22px; list-style: none; }
@@ -238,11 +238,11 @@
     .hero-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     @media (min-width: 961px) { .hero-vid { opacity: .4; } }
     /* Voile à gauche : la moto reste un décor, le titre et les boutons dominent */
-    .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(38,38,43,.92) 0%, rgba(38,38,43,.7) 32%, rgba(38,38,43,0) 62%); }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(52,52,59,.92) 0%, rgba(52,52,59,.7) 32%, rgba(52,52,59,0) 62%); }
     #trails { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
     .hero .wrap { position: relative; z-index: 2; width: 100%; }
     /* Sélecteur de teinte « Ta moto » : petit, discret */
-    .paint { display: inline-flex; align-items: center; gap: 12px; margin-top: 26px; padding: 8px 14px; border-radius: 999px; background: rgba(38,38,43,.6); border: 1px solid var(--line); backdrop-filter: blur(6px); font-size: .8rem; }
+    .paint { display: inline-flex; align-items: center; gap: 12px; margin-top: 26px; padding: 8px 14px; border-radius: 999px; background: rgba(52,52,59,.6); border: 1px solid var(--line); backdrop-filter: blur(6px); font-size: .8rem; }
     .paint-title { font-family: 'Orbitron', sans-serif; font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
     .paint-row { display: flex; gap: 8px; }
     .sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.18); background: var(--c); cursor: pointer; padding: 0; transition: transform .2s, border-color .2s; }
@@ -289,15 +289,15 @@
     .tour.on .tour-stage { height: 100vh; overflow: hidden; }
     .tour.on .tour-3d { display: block; position: absolute; inset: 0; }
     .tour.on .tour-3d canvas { display: block; width: 100%; height: 100%; }
-    .tour.on .tour-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(270deg, rgba(38,38,43,.85) 0%, rgba(38,38,43,.35) 38%, rgba(38,38,43,0) 60%); }
+    .tour.on .tour-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(270deg, rgba(52,52,59,.85) 0%, rgba(52,52,59,.35) 38%, rgba(52,52,59,0) 60%); }
     .tour.on .tour-steps { position: absolute; z-index: 2; top: 0; bottom: 0; right: max(20px, calc((100vw - var(--max)) / 2 + 20px)); width: min(460px, 40vw); margin: 0; padding: 0; display: block; }
     .tour.on .tour-step { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-46%); opacity: 0; pointer-events: none; transition: opacity .5s ease, transform .5s ease; }
     .tour.on .tour-step.active { opacity: 1; transform: translateY(-50%); pointer-events: auto; }
     .tour.on .tour-step .hpanel { min-height: 0; padding: 30px; }
     .tour.on .tour-step .hpanel .num { font-size: 5rem; }
     .tour.on .tour-step .hpanel .ico { display: none; }
-    .tour.on .tour-tag { justify-self: start; padding: 6px 12px; border-radius: 8px; background: rgba(38,38,43,.72); backdrop-filter: blur(6px); }
-    .tour.on .tour-dots { display: flex; flex-direction: column; gap: 10px; position: absolute; z-index: 2; left: max(20px, calc((100vw - var(--max)) / 2 + 20px)); bottom: 40px; list-style: none; font-size: .72rem; color: var(--muted); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 14px 18px; border-radius: 14px; background: rgba(38,38,43,.62); backdrop-filter: blur(6px); }
+    .tour.on .tour-tag { justify-self: start; padding: 6px 12px; border-radius: 8px; background: rgba(52,52,59,.72); backdrop-filter: blur(6px); }
+    .tour.on .tour-dots { display: flex; flex-direction: column; gap: 10px; position: absolute; z-index: 2; left: max(20px, calc((100vw - var(--max)) / 2 + 20px)); bottom: 40px; list-style: none; font-size: .72rem; color: var(--muted); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 14px 18px; border-radius: 14px; background: rgba(52,52,59,.62); backdrop-filter: blur(6px); }
     .tour-dots li { display: flex; align-items: center; gap: 10px; opacity: .5; transition: opacity .3s, color .3s; }
     .tour-dots li::before { content: ""; width: 18px; height: 2px; background: currentColor; transition: width .3s; }
     .tour-dots li.on { opacity: 1; color: var(--text); }
@@ -313,7 +313,7 @@
     .hpanel:hover::before { opacity: 1; }
     .hpanel .num {
       position: absolute; top: 14px; right: 26px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 8.5rem; line-height: 1;
-      -webkit-text-stroke: 2px #4d4d56; color: transparent; transition: -webkit-text-stroke-color .3s;
+      -webkit-text-stroke: 2px #5e5e68; color: transparent; transition: -webkit-text-stroke-color .3s;
     }
     .hpanel:hover .num { -webkit-text-stroke-color: var(--red); }
     .hpanel .ico { width: 58px; height: 58px; border-radius: 14px; display: grid; place-items: center; background: rgba(230,48,39,.14); color: var(--red); margin-bottom: 22px; position: relative; }
@@ -331,7 +331,7 @@
     .bigm { padding: 70px 0; overflow: hidden; border-block: 1px solid var(--line); background: var(--bg-0); }
     .bigm div { white-space: nowrap; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: clamp(3rem, 9vw, 8rem); line-height: 1.08; }
     .bigm .l1 { color: var(--red); }
-    .bigm .l2 { -webkit-text-stroke: 2px #5a5a64; color: transparent; }
+    .bigm .l2 { -webkit-text-stroke: 2px #6c6c77; color: transparent; }
     /* Textes décoratifs (aria-hidden) rendus en pseudo-élément */
     .bigm .l2::before, .giant::before { content: attr(data-text); }
 
@@ -376,11 +376,11 @@
     .story { background: var(--bg-0); }
     .scenes { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 44px; counter-reset: sc; }
     .scene { background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
-    .scene-vid { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; background: #0b0c12; }
+    .scene-vid { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; background: var(--bg-2); }
     /* Film 4K plein écran (section cinéma) */
-    .cine { position: relative; min-height: min(92vh, 900px); display: flex; align-items: center; overflow: hidden; background: #000; isolation: isolate; }
+    .cine { position: relative; min-height: min(92vh, 900px); display: flex; align-items: center; overflow: hidden; background: var(--bg); isolation: isolate; }
     .cine-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
-    .cine::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.72) 40%, rgba(0,0,0,0) 68%), linear-gradient(0deg, var(--bg-0) 0%, rgba(0,0,0,0) 22%), linear-gradient(180deg, var(--bg-0) 0%, rgba(0,0,0,0) 18%); }
+    .cine::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(52,52,59,.9) 0%, rgba(52,52,59,.66) 40%, rgba(52,52,59,0) 68%), linear-gradient(0deg, var(--bg-0) 0%, rgba(0,0,0,0) 22%), linear-gradient(180deg, var(--bg-0) 0%, rgba(0,0,0,0) 18%); }
     .cine .wrap { width: 100%; }
     .cine-txt { max-width: 520px; }
     .cine-txt h2 { margin: 10px 0 16px; }
@@ -392,7 +392,7 @@
     @media (max-width: 760px) {
       .cine { min-height: 0; display: block; }
       .cine-vid { position: relative; inset: auto; height: auto; aspect-ratio: 1; z-index: 0; }
-      .cine::before { background: linear-gradient(0deg, var(--bg-0) 0%, rgba(0,0,0,0) 40%); z-index: 1; height: 100vw; }
+      .cine::before { background: linear-gradient(0deg, var(--bg-0) 0%, rgba(52,52,59,0) 40%); z-index: 1; height: 100vw; }
       .cine .wrap { position: relative; z-index: 2; margin-top: -18vw; padding-bottom: 40px; }
       .fx-truck video { opacity: .3; }
     }
@@ -410,7 +410,7 @@
     .tow-msg.ko { border-left-color: var(--orange); }
     .tow-msg a { color: var(--red-text); font-weight: 800; }
     .zone-map { position: relative; z-index: 0; isolation: isolate; height: 440px; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); display: grid; }
-    .zone-map .leaflet-tile-pane { filter: grayscale(1) invert(.92) contrast(.9) brightness(.85); }
+    .zone-map .leaflet-tile-pane { filter: grayscale(1) invert(.88) contrast(.85) brightness(1); }
     .zone-map.leaflet-container { background: #1a1a1f; font-family: inherit; }
     .map-fallback { align-self: center; justify-self: center; text-align: center; color: var(--muted); padding: 24px; font-weight: 600; }
     .map-note { color: var(--muted); font-size: .85rem; margin-top: 8px; min-height: 1.2em; }
@@ -439,7 +439,7 @@
     .neon { font-family: 'Orbitron', sans-serif; font-size: clamp(1.4rem, 4vw, 2.1rem); font-weight: 900; color: var(--red); display: block; margin: 14px 0 18px; text-shadow: 0 0 8px var(--red), 0 0 30px var(--red), 0 0 60px rgba(230,48,39,.6); animation: neon 4s infinite; }
     @keyframes neon { 0%, 89%, 93%, 100% { opacity: 1; } 90%, 92% { opacity: .35; text-shadow: none; } }
     .road { position: relative; height: 96px; margin-top: 40px; overflow: hidden; }
-    .road::after { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 4px; background: repeating-linear-gradient(90deg, #5a5a64 0 40px, transparent 40px 70px); }
+    .road::after { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 4px; background: repeating-linear-gradient(90deg, #6c6c77 0 40px, transparent 40px 70px); }
     #truck { position: absolute; left: 0; bottom: 14px; width: 90px; height: 90px; color: var(--red); filter: drop-shadow(0 0 14px rgba(230,48,39,.7)); }
 
     /* Tarifs, garantie & paiement */
@@ -543,7 +543,7 @@
     /* Pied de page géant */
     .giant {
       font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: clamp(2.2rem, 13vw, 14rem); line-height: .9; text-align: center; white-space: nowrap;
-      -webkit-text-stroke: 2px #4d4d56; color: transparent; padding: 60px 0 20px; user-select: none; transition: color .5s, -webkit-text-stroke-color .5s;
+      -webkit-text-stroke: 2px #5e5e68; color: transparent; padding: 60px 0 20px; user-select: none; transition: color .5s, -webkit-text-stroke-color .5s;
     }
     .giant:hover { color: var(--red); -webkit-text-stroke-color: var(--red); }
     footer { border-top: 1px solid var(--line); padding: 30px 0 110px; color: var(--muted); font-size: .9rem; }
@@ -634,7 +634,7 @@
     .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 440px); gap: 48px; align-items: center; }
     .hero-grid h1 { font-size: clamp(3rem, 8vw, 7.6rem); }
     .hero-main { min-width: 0; }
-    .rdv-card { position: relative; background: rgba(22,22,26,.94); border: 1px solid var(--line); border-radius: 22px; padding: 24px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(230,48,39,.06), 0 0 60px -20px rgba(230,48,39,.35); }
+    .rdv-card { position: relative; background: rgba(63,63,71,.94); border: 1px solid var(--line); border-radius: 22px; padding: 24px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(230,48,39,.06), 0 0 60px -20px rgba(230,48,39,.35); }
     .rdv-card .kicker { margin-bottom: 4px; font-size: .7rem; }
     .rdv-title { font-size: 1.45rem; margin-bottom: 14px; }
     .rdv-steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; counter-reset: st; margin-bottom: 18px; }
@@ -664,7 +664,7 @@
 
     /* ---------- v2 : section « Ta moto » (3D ou film) ---------- */
     .garage3d { position: relative; min-height: min(88vh, 820px); display: flex; align-items: center; overflow: hidden; isolation: isolate; background: radial-gradient(ellipse at 72% 55%, rgba(230,48,39,.22), transparent 60%), var(--bg-0); }
-    .garage3d::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(38,38,43,.92) 0%, rgba(38,38,43,.6) 30%, rgba(38,38,43,0) 58%); }
+    .garage3d::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(52,52,59,.92) 0%, rgba(52,52,59,.6) 30%, rgba(52,52,59,0) 58%); }
     .garage3d .wrap { position: relative; z-index: 2; width: 100%; }
     .garage3d .lead { max-width: 470px; }
     .garage3d h2 { max-width: 560px; }
@@ -716,7 +716,7 @@
       .rdv-card { padding: 18px; border-radius: 18px; }
       .rdv-nav .btn { flex: 1; }
       .garage3d { min-height: 70vh; align-items: flex-end; padding-bottom: 60px; }
-      .garage3d::before { background: linear-gradient(0deg, rgba(38,38,43,.95) 0%, rgba(38,38,43,.4) 45%, rgba(38,38,43,0) 70%); }
+      .garage3d::before { background: linear-gradient(0deg, rgba(52,52,59,.95) 0%, rgba(52,52,59,.4) 45%, rgba(52,52,59,0) 70%); }
     }
 
     @media (max-width: 1060px) {
@@ -761,7 +761,7 @@
       html { scroll-padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
       .sos-bar {
         display: grid; grid-template-columns: 1.35fr 1fr; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 65;
-        padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(38,38,43,.94); border-top: 1px solid var(--line);
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(52,52,59,.94); border-top: 1px solid var(--line);
       }
       .sos-bar a { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; border-radius: 999px; font-weight: 800; font-size: .98rem; }
       .sos-bar svg { width: 18px; height: 18px; flex-shrink: 0; }
@@ -1337,7 +1337,7 @@
     <a href="#devis" class="sos-rdv">Rendez-vous</a>
   </nav>
   <button class="to-top" id="to-top" aria-label="Revenir en haut">
-    <svg class="ring" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#4d4d56" stroke-width="3"/><circle id="ring" cx="26" cy="26" r="24" fill="none" stroke="#e63027" stroke-width="3" stroke-dasharray="150.8" stroke-dashoffset="150.8"/></svg>
+    <svg class="ring" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#5e5e68" stroke-width="3"/><circle id="ring" cx="26" cy="26" r="24" fill="none" stroke="#e63027" stroke-width="3" stroke-dasharray="150.8" stroke-dashoffset="150.8"/></svg>
     <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
   </button>
 

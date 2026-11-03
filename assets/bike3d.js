@@ -178,7 +178,7 @@ function makeTextures(q) {
 // Fond de studio (dégradé) pour les vues avec post-traitement, identique au fond CSS
 function studioBackground(kind) {
   return tex(canvas(512, 512, (g, w, h) => {
-    g.fillStyle = '#0a0a0c'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#34343b'; g.fillRect(0, 0, w, h);
     const [cx, cy] = kind === 'hero' ? [0.72, 0.55] : [0.38, 0.55];
     const gr = g.createRadialGradient(cx * w, cy * h, 0, cx * w, cy * h, w * 0.62);
     gr.addColorStop(0, kind === 'hero' ? 'rgba(230,48,39,.22)' : 'rgba(230,48,39,.12)'); gr.addColorStop(1, 'rgba(230,48,39,0)');
@@ -990,7 +990,7 @@ function makeView(canvas, object, kind, tier, T) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = kind === 'hero' ? 0.86 : 1;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.setClearColor(0x0a0a0c, bloom ? 1 : 0);
+  renderer.setClearColor(0x34343b, bloom ? 1 : 0);
   renderer.shadowMap.enabled = desk;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -999,7 +999,7 @@ function makeView(canvas, object, kind, tier, T) {
   scene.environment = pm.fromScene(room, 0.04).texture;
   pm.dispose(); if (room.dispose) room.dispose();
   if (bloom) scene.background = studioBackground(kind);
-  scene.fog = new THREE.FogExp2(0x0a0a0c, 0.055);
+  scene.fog = new THREE.FogExp2(0x34343b, 0.055);
 
   // Éclairage de studio : grande boîte à lumière, contre-jour rouge, débouchage froid
   let area = null;
@@ -1018,7 +1018,7 @@ function makeView(canvas, object, kind, tier, T) {
   const fill = new THREE.DirectionalLight(0x9fb6ff, 0.55); fill.position.set(-3, 1.4, 2.6); scene.add(fill);
 
   // Sol sombre brillant qui s'estompe, ombre de contact douce, halo rouge
-  const floor = new THREE.Mesh(new THREE.CircleGeometry(4, 64), new THREE.MeshPhysicalMaterial({ color: 0x0b0b0d, roughness: 0.55, metalness: 0, specularIntensity: 0.12, transparent: true, alphaMap: T.fade, depthWrite: false, envMapIntensity: 0.06 }));
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(4, 64), new THREE.MeshPhysicalMaterial({ color: 0x2a2a30, roughness: 0.55, metalness: 0, specularIntensity: 0.12, transparent: true, alphaMap: T.fade, depthWrite: false, envMapIntensity: 0.06 }));
   floor.rotation.x = -Math.PI / 2; floor.receiveShadow = desk; floor.renderOrder = -3; scene.add(floor);
   const contact = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 0.85), new THREE.MeshBasicMaterial({ map: T.shadow, transparent: true, depthWrite: false, fog: false }));
   contact.rotation.x = -Math.PI / 2; contact.position.y = 0.002; contact.renderOrder = -2; scene.add(contact);
