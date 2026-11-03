@@ -11,7 +11,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; font-src 'self'; media-src 'self'; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; frame-src https://www.openstreetmap.org; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="canonical" href="https://motoscool.fr/">
-  <meta name="theme-color" content="#1e1e22">
+  <meta name="theme-color" content="#26262b">
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/icons/icon-192.png" type="image/png" sizes="192x192">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -130,7 +130,7 @@
       --green: #2ecc71;
       --orange: #ff9f1a;
       --bg: #26262b;
-      --bg-0: #1e1e22;
+      --bg-0: #26262b;
       --bg-2: #303036;
       --bg-3: #3a3a41;
       --line: #4d4d56;
@@ -238,7 +238,7 @@
     .hero-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     @media (min-width: 961px) { .hero-vid { opacity: .4; } }
     /* Voile à gauche : la moto reste un décor, le titre et les boutons dominent */
-    .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(30,30,34,.92) 0%, rgba(30,30,34,.7) 32%, rgba(30,30,34,0) 62%); }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(38,38,43,.92) 0%, rgba(38,38,43,.7) 32%, rgba(38,38,43,0) 62%); }
     #trails { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
     .hero .wrap { position: relative; z-index: 2; width: 100%; }
     /* Sélecteur de teinte « Ta moto » : petit, discret */
@@ -289,15 +289,15 @@
     .tour.on .tour-stage { height: 100vh; overflow: hidden; }
     .tour.on .tour-3d { display: block; position: absolute; inset: 0; }
     .tour.on .tour-3d canvas { display: block; width: 100%; height: 100%; }
-    .tour.on .tour-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(270deg, rgba(30,30,34,.85) 0%, rgba(30,30,34,.35) 38%, rgba(30,30,34,0) 60%); }
+    .tour.on .tour-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(270deg, rgba(38,38,43,.85) 0%, rgba(38,38,43,.35) 38%, rgba(38,38,43,0) 60%); }
     .tour.on .tour-steps { position: absolute; z-index: 2; top: 0; bottom: 0; right: max(20px, calc((100vw - var(--max)) / 2 + 20px)); width: min(460px, 40vw); margin: 0; padding: 0; display: block; }
     .tour.on .tour-step { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-46%); opacity: 0; pointer-events: none; transition: opacity .5s ease, transform .5s ease; }
     .tour.on .tour-step.active { opacity: 1; transform: translateY(-50%); pointer-events: auto; }
     .tour.on .tour-step .hpanel { min-height: 0; padding: 30px; }
     .tour.on .tour-step .hpanel .num { font-size: 5rem; }
     .tour.on .tour-step .hpanel .ico { display: none; }
-    .tour.on .tour-tag { justify-self: start; padding: 6px 12px; border-radius: 8px; background: rgba(30,30,34,.72); backdrop-filter: blur(6px); }
-    .tour.on .tour-dots { display: flex; flex-direction: column; gap: 10px; position: absolute; z-index: 2; left: max(20px, calc((100vw - var(--max)) / 2 + 20px)); bottom: 40px; list-style: none; font-size: .72rem; color: var(--muted); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 14px 18px; border-radius: 14px; background: rgba(30,30,34,.62); backdrop-filter: blur(6px); }
+    .tour.on .tour-tag { justify-self: start; padding: 6px 12px; border-radius: 8px; background: rgba(38,38,43,.72); backdrop-filter: blur(6px); }
+    .tour.on .tour-dots { display: flex; flex-direction: column; gap: 10px; position: absolute; z-index: 2; left: max(20px, calc((100vw - var(--max)) / 2 + 20px)); bottom: 40px; list-style: none; font-size: .72rem; color: var(--muted); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 14px 18px; border-radius: 14px; background: rgba(38,38,43,.62); backdrop-filter: blur(6px); }
     .tour-dots li { display: flex; align-items: center; gap: 10px; opacity: .5; transition: opacity .3s, color .3s; }
     .tour-dots li::before { content: ""; width: 18px; height: 2px; background: currentColor; transition: width .3s; }
     .tour-dots li.on { opacity: 1; color: var(--text); }
@@ -347,12 +347,12 @@
     .figs.on .fig b { font-size: min(calc(80vw / var(--n, 2)), 52vh, 20rem); }
 
     /* Onglets des prestations */
-    .prestations { background: var(--bg-2); }
+    .prestations { background: var(--bg); }
     .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; }
-    .tab { background: var(--bg); border: 1px solid var(--line); color: var(--muted); padding: 12px 22px; border-radius: 999px; font: inherit; font-weight: 800; cursor: pointer; transition: all .25s; }
+    .tab { background: var(--bg-2); border: 1px solid var(--line); color: var(--muted); padding: 12px 22px; border-radius: 999px; font: inherit; font-weight: 800; cursor: pointer; transition: all .25s; }
     .tab:hover { color: var(--text); }
     .tab.active { background: var(--red-ui); border-color: var(--red-ui); color: #fff; }
-    .panel { display: none; margin-top: 24px; background: var(--bg); border: 1px solid var(--line); border-radius: 20px; padding: 34px; grid-template-columns: 1fr auto; gap: 30px; align-items: center; }
+    .panel { display: none; margin-top: 24px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; padding: 34px; grid-template-columns: 1fr auto; gap: 30px; align-items: center; }
     .panel.active { display: grid; animation: fadeUp .5s ease; }
     .panel h3 { font-size: 1.5rem; }
     .panel ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 30px; }
@@ -443,14 +443,14 @@
     #truck { position: absolute; left: 0; bottom: 14px; width: 90px; height: 90px; color: var(--red); filter: drop-shadow(0 0 14px rgba(230,48,39,.7)); }
 
     /* Tarifs, garantie & paiement */
-    .tarifs { background: var(--bg-2); }
+    .tarifs { background: var(--bg); }
     .tarif-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 44px; }
-    .tcard { background: var(--bg); border: 1px solid var(--line); border-radius: 20px; padding: 30px; }
+    .tcard { background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; padding: 30px; }
     .tcard .ico { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: rgba(230,48,39,.14); color: var(--red); margin-bottom: 18px; }
     .tcard .ico svg { width: 26px; height: 26px; }
     .tcard h3 { font-size: 1.25rem; margin-bottom: 8px; }
     .tcard p { color: var(--muted); }
-    .pay { margin-top: 24px; background: var(--bg); border: 1px solid var(--line); border-radius: 20px; padding: 30px; }
+    .pay { margin-top: 24px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; padding: 30px; }
     .pay h3 { font-size: 1.25rem; margin-bottom: 16px; }
     .pay-row { display: grid; grid-template-columns: 140px 1fr; gap: 12px; align-items: center; margin-top: 12px; }
     .pay-label { font-weight: 800; color: var(--muted); font-size: .9rem; text-transform: uppercase; letter-spacing: .08em; }
@@ -664,7 +664,7 @@
 
     /* ---------- v2 : section « Ta moto » (3D ou film) ---------- */
     .garage3d { position: relative; min-height: min(88vh, 820px); display: flex; align-items: center; overflow: hidden; isolation: isolate; background: radial-gradient(ellipse at 72% 55%, rgba(230,48,39,.22), transparent 60%), var(--bg-0); }
-    .garage3d::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(30,30,34,.92) 0%, rgba(30,30,34,.6) 30%, rgba(30,30,34,0) 58%); }
+    .garage3d::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(38,38,43,.92) 0%, rgba(38,38,43,.6) 30%, rgba(38,38,43,0) 58%); }
     .garage3d .wrap { position: relative; z-index: 2; width: 100%; }
     .garage3d .lead { max-width: 470px; }
     .garage3d h2 { max-width: 560px; }
@@ -706,7 +706,7 @@
       .rdv-card { padding: 18px; border-radius: 18px; }
       .rdv-nav .btn { flex: 1; }
       .garage3d { min-height: 70vh; align-items: flex-end; padding-bottom: 60px; }
-      .garage3d::before { background: linear-gradient(0deg, rgba(30,30,34,.95) 0%, rgba(30,30,34,.4) 45%, rgba(30,30,34,0) 70%); }
+      .garage3d::before { background: linear-gradient(0deg, rgba(38,38,43,.95) 0%, rgba(38,38,43,.4) 45%, rgba(38,38,43,0) 70%); }
     }
 
     @media (max-width: 1060px) {
@@ -751,7 +751,7 @@
       html { scroll-padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
       .sos-bar {
         display: grid; grid-template-columns: 1.35fr 1fr; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 65;
-        padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(30,30,34,.94); border-top: 1px solid var(--line);
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(38,38,43,.94); border-top: 1px solid var(--line);
       }
       .sos-bar a { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; border-radius: 999px; font-weight: 800; font-size: .98rem; }
       .sos-bar svg { width: 18px; height: 18px; flex-shrink: 0; }

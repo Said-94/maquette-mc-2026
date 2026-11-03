@@ -1,5 +1,5 @@
 /* Pages secondaires (zones d'intervention et services) — même identité que l'accueil */
-:root { --red: #e63027; --red-ui: #d42a21; --red-text: #ff6a60; --red-dark: #b8231c; --green: #2ecc71; --bg: #26262b; --bg-0: #1e1e22; --bg-2: #303036; --line: #4d4d56; --text: #f2f2f2; --muted: #c4c4cc; --max: 1080px; }
+:root { --red: #e63027; --red-ui: #d42a21; --red-text: #ff6a60; --red-dark: #b8231c; --green: #2ecc71; --bg: #26262b; --bg-0: #26262b; --bg-2: #303036; --line: #4d4d56; --text: #f2f2f2; --muted: #c4c4cc; --max: 1080px; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
