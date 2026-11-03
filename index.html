@@ -683,12 +683,22 @@
     .socials { margin-top: 2px; }
 
     /* ---------- v2 : fond en hexagones, discret, sur les sections sombres ---------- */
-    /* Motos néon animées en fond, seulement là où il n'y a pas déjà une animation */
-    .fx-bike img { position: absolute; right: max(-60px, calc((100vw - var(--max)) / 2 - 140px)); bottom: 4%; width: min(56vw, 720px); height: auto; opacity: .28; }
-    .fx-bike span { position: absolute; right: max(20px, calc((100vw - var(--max)) / 2 + 20px)); bottom: 3%; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .32em; text-transform: uppercase; color: var(--muted); opacity: .45; }
-    .fx-bike.mid img { top: 16%; bottom: auto; }
-    footer.has-fx .fx-bike img { opacity: .13; bottom: 0; }
-    @media (max-width: 760px) { .fx-bike img { width: 120vw; right: -30vw; opacity: .12; } .fx-bike span { display: none; } }
+    /* Motos en relief : photo détourée qui pivote en 3D au défilement et suit la souris, reflet qui passe, halo rouge au sol */
+    .fx-bike { perspective: 1100px; }
+    .fx-bike .b3d { position: absolute; right: max(-40px, calc((100vw - var(--max)) / 2 - 60px)); bottom: 7%; height: clamp(220px, 30vw, 400px); transform-style: preserve-3d; transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg)); transition: transform .5s cubic-bezier(.2,.7,.2,1); opacity: 0; }
+    .fx-bike .b3d.on { opacity: .9; transition: transform .5s cubic-bezier(.2,.7,.2,1), opacity 1.2s; }
+    .fx-bike .b3d::before { content: ""; position: absolute; left: 6%; right: 6%; bottom: -6%; height: 22%; background: radial-gradient(closest-side, rgba(230,48,39,.42), transparent); filter: blur(6px); transform: translateZ(-40px); }
+    .fx-bike img { position: relative; display: block; height: 100%; width: auto; filter: drop-shadow(0 28px 30px rgba(0,0,0,.55)); -webkit-box-reflect: below -4px linear-gradient(transparent 72%, rgba(255,255,255,.14)); }
+    .fx-bike .b3d i { position: absolute; inset: 0; -webkit-mask: var(--m) center / 100% 100% no-repeat; mask: var(--m) center / 100% 100% no-repeat; background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.22) 50%, transparent 62%) 200% 0 / 250% 100% no-repeat; animation: bike-sheen 7s ease-in-out infinite; }
+    @keyframes bike-sheen { 0%, 35% { background-position: 200% 0; } 70%, 100% { background-position: -100% 0; } }
+    .fx-bike span { position: absolute; top: -26px; right: 6%; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .32em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+    .fx-bike.mid .b3d { top: 18%; bottom: auto; }
+    .fx-bike.low .b3d { height: clamp(200px, 24vw, 330px); right: max(-60px, calc((100vw - var(--max)) / 2 - 110px)); }
+    .fx-bike.top .b3d { top: 40px; bottom: auto; height: clamp(200px, 22vw, 300px); }
+    footer.has-fx .fx-bike .b3d { height: clamp(120px, 14vw, 190px); bottom: 18%; }
+    footer.has-fx .fx-bike .b3d.on { opacity: .28; } footer.has-fx .fx-bike span { display: none; }
+    @media (max-width: 760px) { .fx-bike .b3d { height: 52vw; right: -12vw; } .fx-bike .b3d.on { opacity: .28; } .fx-bike span { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .fx-bike .b3d i { animation: none; display: none; } }
     .tour { background-image: radial-gradient(ellipse at 38% 55%, rgba(230,48,39,.12), transparent 60%); }
 
     @media (max-width: 1060px) {
@@ -1178,7 +1188,7 @@
 
   <!-- TARIFS, GARANTIE & PAIEMENT -->
   <section class="tarifs has-fx" id="tarifs" aria-labelledby="tarifs-title">
-    <div class="fx fx-bike" aria-hidden="true"><img data-src="assets/bikes/tenere-700.svg" alt="" width="640" height="380" decoding="async"><span>Ténéré 700</span></div>
+    <div class="fx fx-bike top" aria-hidden="true"><div class="b3d" style="--m:url(assets/bikes/tenere-700.webp)"><img data-src="assets/bikes/tenere-700.webp" alt="" width="796" height="708" decoding="async"><i></i><span>Ténéré 700</span></div></div>
     <div class="wrap">
       <span class="kicker rv">Tarifs, garantie &amp; paiement</span>
       <h2 class="rv" id="tarifs-title">Un prix clair, après diagnostic.</h2>
@@ -1215,7 +1225,7 @@
 
   <!-- AVIS & RÉSEAUX : lien vers les avis Google (SITE.googleReviewsUrl) et comptes sociaux (SITE.socials) -->
   <section class="trust has-fx" id="avis" aria-labelledby="avis-title" hidden>
-    <div class="fx fx-bike" aria-hidden="true"><img data-src="assets/bikes/x-adv.svg" alt="" width="640" height="380" decoding="async"><span>X-ADV</span></div>
+    <div class="fx fx-bike low" aria-hidden="true"><div class="b3d" style="--m:url(assets/bikes/x-adv.webp)"><img data-src="assets/bikes/x-adv.webp" alt="" width="1100" height="999" decoding="async"><i></i><span>X-ADV</span></div></div>
     <div class="wrap">
       <span class="kicker rv">Avis &amp; réseaux</span>
       <h2 class="rv" id="avis-title">Ils nous ont confié leur moto.</h2>
@@ -1226,7 +1236,7 @@
 
   <!-- FAQ (garder identique au bloc FAQPage JSON-LD de l'en-tête) -->
   <section class="has-fx" id="faq" style="padding-bottom:0" aria-labelledby="faq-title">
-    <div class="fx fx-bike mid" aria-hidden="true"><img data-src="assets/bikes/tmax.svg" alt="" width="640" height="380" decoding="async"><span>TMAX</span></div>
+    <div class="fx fx-bike mid" aria-hidden="true"><div class="b3d" style="--m:url(assets/bikes/tmax.webp)"><img data-src="assets/bikes/tmax.webp" alt="" width="827" height="675" decoding="async"><i></i><span>TMAX</span></div></div>
     <div class="wrap">
       <span class="kicker rv">FAQ</span>
       <h2 class="rv" id="faq-title">Vos questions, nos réponses.</h2>
@@ -1279,7 +1289,7 @@
   </main>
 
   <footer class="has-fx">
-    <div class="fx fx-bike" aria-hidden="true"><img data-src="assets/bikes/tracer-7.svg" alt="" width="640" height="380" decoding="async"><span>Tracer 7</span></div>
+    <div class="fx fx-bike" aria-hidden="true"><div class="b3d" style="--m:url(assets/bikes/tracer-7.webp)"><img data-src="assets/bikes/tracer-7.webp" alt="" width="230" height="195" decoding="async"><i></i><span>Tracer 7</span></div></div>
     <div class="wrap foot-links">
       <nav aria-label="Zones d'intervention">
         <h2>Zones d'intervention</h2>
@@ -2255,12 +2265,31 @@
       const side = lightMode ? 720 : big ? 3840 : 1920;
       av1Ok(side, lightMode ? 720 : side * 9 / 16).then(ok => { if (ok && !cine.dataset.armed) cine.dataset.src = base + '.av1.mp4'; });
     }
-    // Motos néon : image chargée à l'approche de la section, pour que le dessin démarre sous les yeux
+    // Motos en relief : image chargée à l'approche, puis pivot 3D selon la position dans l'écran (et la souris sur ordinateur)
     const bikes = [...document.querySelectorAll('.fx-bike img[data-src]')];
+    const showBike = i => { i.src = i.dataset.src; i.decode().catch(() => {}).then(() => i.parentNode.classList.add('on')); };
     if ('IntersectionObserver' in window) {
-      const bo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.src = e.target.dataset.src; bo.unobserve(e.target); } }), { rootMargin: '0px 0px -15% 0px' });
+      const bo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { showBike(e.target); bo.unobserve(e.target); } }), { rootMargin: '200px 0px' });
       bikes.forEach(i => bo.observe(i));
-    } else bikes.forEach(i => { i.src = i.dataset.src; });
+    } else bikes.forEach(showBike);
+    if (!reduce && bikes.length) {
+      const boxes = bikes.map(i => i.parentNode);
+      let mx = 0, my = 0, ticking = false;
+      const tilt = () => {
+        ticking = false;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > innerHeight) continue;
+          const p = Math.max(-1, Math.min(1, ((r.top + r.height / 2) / innerHeight - 0.5) * 2)); // -1 en haut, 1 en bas
+          b.style.setProperty('--ry', (p * -22 + mx * 10).toFixed(2) + 'deg');
+          b.style.setProperty('--rx', (my * -5).toFixed(2) + 'deg');
+        }
+      };
+      const ask = () => { if (!ticking) { ticking = true; requestAnimationFrame(tilt); } };
+      addEventListener('scroll', ask, { passive: true });
+      if (matchMedia('(pointer: fine)').matches) addEventListener('pointermove', e => { mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; ask(); }, { passive: true });
+      tilt();
+    }
     const vids = [...document.querySelectorAll('video[data-autoplay]')];
     const arm = v => {
       if (v.dataset.armed) return;

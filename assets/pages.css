@@ -3,8 +3,8 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
-/* Moto néon animée en fond */
-body::before { content: ""; position: fixed; right: -40px; bottom: 0; z-index: -1; width: min(60vw, 720px); aspect-ratio: 640 / 380; background: url(bikes/tracer-7.svg) no-repeat center / contain; opacity: .1; pointer-events: none; }
+/* Moto en relief, discrète, en fond */
+body::before { content: ""; position: fixed; right: -20px; bottom: 2vh; z-index: -1; width: min(42vw, 560px); aspect-ratio: 1100 / 999; background: url(bikes/x-adv.webp) no-repeat center / contain; opacity: .16; filter: drop-shadow(0 24px 30px rgba(0,0,0,.5)); transform: perspective(1100px) rotateY(-14deg); pointer-events: none; }
 a { color: inherit; }
 :focus-visible { outline: 2px solid #20e3ff; outline-offset: 2px; }
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }

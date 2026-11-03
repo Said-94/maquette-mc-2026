@@ -8,7 +8,7 @@
  * - API Adresse, fonds de carte OpenStreetMap, proxy de l'assistant IA : jamais mis en cache.
  * Changer VERSION à chaque mise en ligne pour renouveler le cache.
  */
-const VERSION = 'v2-5-2026-11-03';
+const VERSION = 'v2-6-2026-11-03';
 // Préfixe « mc2- » : cette version partage l'adresse said-94.github.io avec la première maquette,
 // ses caches ne doivent pas effacer ceux de l'autre (et inversement).
 const PREFIX = 'mc2-';
