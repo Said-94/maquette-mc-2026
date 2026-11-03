@@ -683,9 +683,12 @@
     .socials { margin-top: 2px; }
 
     /* ---------- v2 : fond en hexagones, discret, sur les sections sombres ---------- */
-    /* Fond en nid d'abeilles façon plafond LED du garage : seulement sur les sections sans animation de fond */
-    :root { --hex: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='97' height='168' viewBox='0 0 97 168'%3E%3Cg fill='none' stroke='%23fff'%3E%3Cpath stroke-opacity='.035' stroke-width='9' d='M48.5 0 97 28v56L48.5 112 0 84V28zM48.5 112v56'/%3E%3Cpath stroke-opacity='.12' stroke-width='1.6' d='M48.5 0 97 28v56L48.5 112 0 84V28zM48.5 112v56'/%3E%3C/g%3E%3C/svg%3E"); }
-    main > section:not(.hero):not(.cine):not(.garage3d):not(.tour):not(.has-fx), footer { background-image: var(--hex); background-size: 97px 168px; background-position: center top; }
+    /* Motos néon animées en fond, seulement là où il n'y a pas déjà une animation */
+    .fx-bike img { position: absolute; right: max(-60px, calc((100vw - var(--max)) / 2 - 140px)); bottom: 4%; width: min(56vw, 720px); height: auto; opacity: .28; }
+    .fx-bike span { position: absolute; right: max(20px, calc((100vw - var(--max)) / 2 + 20px)); bottom: 3%; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .32em; text-transform: uppercase; color: var(--muted); opacity: .45; }
+    .fx-bike.mid img { top: 16%; bottom: auto; }
+    footer.has-fx .fx-bike img { opacity: .13; bottom: 0; }
+    @media (max-width: 760px) { .fx-bike img { width: 120vw; right: -30vw; opacity: .12; } .fx-bike span { display: none; } }
     .tour { background-image: radial-gradient(ellipse at 38% 55%, rgba(230,48,39,.12), transparent 60%); }
 
     @media (max-width: 1060px) {
@@ -1174,7 +1177,8 @@
   </section>
 
   <!-- TARIFS, GARANTIE & PAIEMENT -->
-  <section class="tarifs" id="tarifs" aria-labelledby="tarifs-title">
+  <section class="tarifs has-fx" id="tarifs" aria-labelledby="tarifs-title">
+    <div class="fx fx-bike" aria-hidden="true"><img data-src="assets/bikes/tenere-700.svg" alt="" width="640" height="380" decoding="async"><span>Ténéré 700</span></div>
     <div class="wrap">
       <span class="kicker rv">Tarifs, garantie &amp; paiement</span>
       <h2 class="rv" id="tarifs-title">Un prix clair, après diagnostic.</h2>
@@ -1210,7 +1214,8 @@
   </section>
 
   <!-- AVIS & RÉSEAUX : lien vers les avis Google (SITE.googleReviewsUrl) et comptes sociaux (SITE.socials) -->
-  <section class="trust" id="avis" aria-labelledby="avis-title" hidden>
+  <section class="trust has-fx" id="avis" aria-labelledby="avis-title" hidden>
+    <div class="fx fx-bike" aria-hidden="true"><img data-src="assets/bikes/x-adv.svg" alt="" width="640" height="380" decoding="async"><span>X-ADV</span></div>
     <div class="wrap">
       <span class="kicker rv">Avis &amp; réseaux</span>
       <h2 class="rv" id="avis-title">Ils nous ont confié leur moto.</h2>
@@ -1220,7 +1225,8 @@
   </section>
 
   <!-- FAQ (garder identique au bloc FAQPage JSON-LD de l'en-tête) -->
-  <section id="faq" style="padding-bottom:0" aria-labelledby="faq-title">
+  <section class="has-fx" id="faq" style="padding-bottom:0" aria-labelledby="faq-title">
+    <div class="fx fx-bike mid" aria-hidden="true"><img data-src="assets/bikes/tmax.svg" alt="" width="640" height="380" decoding="async"><span>TMAX</span></div>
     <div class="wrap">
       <span class="kicker rv">FAQ</span>
       <h2 class="rv" id="faq-title">Vos questions, nos réponses.</h2>
@@ -1272,7 +1278,8 @@
   </section>
   </main>
 
-  <footer>
+  <footer class="has-fx">
+    <div class="fx fx-bike" aria-hidden="true"><img data-src="assets/bikes/tracer-7.svg" alt="" width="640" height="380" decoding="async"><span>Tracer 7</span></div>
     <div class="wrap foot-links">
       <nav aria-label="Zones d'intervention">
         <h2>Zones d'intervention</h2>
@@ -2248,6 +2255,12 @@
       const side = lightMode ? 720 : big ? 3840 : 1920;
       av1Ok(side, lightMode ? 720 : side * 9 / 16).then(ok => { if (ok && !cine.dataset.armed) cine.dataset.src = base + '.av1.mp4'; });
     }
+    // Motos néon : image chargée à l'approche de la section, pour que le dessin démarre sous les yeux
+    const bikes = [...document.querySelectorAll('.fx-bike img[data-src]')];
+    if ('IntersectionObserver' in window) {
+      const bo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.src = e.target.dataset.src; bo.unobserve(e.target); } }), { rootMargin: '0px 0px -15% 0px' });
+      bikes.forEach(i => bo.observe(i));
+    } else bikes.forEach(i => { i.src = i.dataset.src; });
     const vids = [...document.querySelectorAll('video[data-autoplay]')];
     const arm = v => {
       if (v.dataset.armed) return;
