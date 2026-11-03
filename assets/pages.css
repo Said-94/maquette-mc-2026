@@ -1,16 +1,17 @@
 /* Pages secondaires (zones d'intervention et services) — même identité que l'accueil */
-:root { --red: #e63027; --red-ui: #d42a21; --red-text: #ef4136; --red-dark: #b8231c; --green: #2ecc71; --bg: #0e0e10; --bg-0: #0a0a0c; --bg-2: #16161a; --line: #2c2c33; --text: #f2f2f2; --muted: #a3a3ad; --max: 1080px; }
+:root { --red: #e63027; --red-ui: #d42a21; --red-text: #ff6a60; --red-dark: #b8231c; --green: #2ecc71; --bg: #26262b; --bg-0: #1e1e22; --bg-2: #303036; --line: #4d4d56; --text: #f2f2f2; --muted: #c4c4cc; --max: 1080px; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+body { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='97' height='168' viewBox='0 0 97 168'%3E%3Cg fill='none' stroke='%23fff'%3E%3Cpath stroke-opacity='.035' stroke-width='9' d='M48.5 0 97 28v56L48.5 112 0 84V28zM48.5 112v56'/%3E%3Cpath stroke-opacity='.12' stroke-width='1.6' d='M48.5 0 97 28v56L48.5 112 0 84V28zM48.5 112v56'/%3E%3C/g%3E%3C/svg%3E"); background-size: 97px 168px; font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
 a { color: inherit; }
 :focus-visible { outline: 2px solid #20e3ff; outline-offset: 2px; }
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
 .r { color: var(--red-text); }
+.logo .r, h1 .r, h2 .r { color: var(--red); }
 .logo { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.25rem; text-decoration: none; letter-spacing: .02em; white-space: nowrap; }
 
 /* En-tête */
-.site-head { position: sticky; top: 0; z-index: 20; background: rgba(14,14,16,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.site-head { position: sticky; top: 0; z-index: 20; background: rgba(38,38,43,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
 .site-head nav ul { display: flex; gap: 22px; list-style: none; }
 .site-head nav a { color: var(--muted); font-weight: 700; text-decoration: none; }
