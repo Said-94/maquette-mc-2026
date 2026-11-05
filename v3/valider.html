@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valider un rendez-vous – Moto's Cool (accueil)</title>
+  <!-- Page interne de l'accueil : jamais indexée -->
+  <meta name="robots" content="noindex, nofollow">
+  <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-Dpjzp3Driz54S8s16dJ3oSYVET2hvffHngY1ILFH+as='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.workers.dev">
+  <meta name="theme-color" content="#303036">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <style>
+    :root { --red: #e63027; --red-ui: #d42a21; --bg: #303036; --bg-2: #3b3b42; --bg-3: #46464e; --line: #5e5e68; --text: #f2f2f2; --muted: #d2d2d9; --green: #2ecc71; --orange: #ff9f1a; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+    header { border-bottom: 1px solid var(--line); }
+    header .wrap { display: flex; justify-content: space-between; align-items: center; height: 64px; }
+    .logo { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.15rem; }
+    .r { color: #ff7a70; }
+    .tag { font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    main { padding: 36px 0 60px; }
+    h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); line-height: 1.2; }
+    .when { color: #ff7a70; font-weight: 800; font-size: 1.15rem; margin-top: 6px; }
+    .card { margin-top: 22px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
+    .card h2 { font-family: 'Orbitron', sans-serif; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: #ff7a70; margin-bottom: 12px; }
+    dl { display: grid; grid-template-columns: minmax(120px, 170px) 1fr; gap: 6px 16px; }
+    dt { color: var(--muted); font-weight: 700; }
+    dd { font-weight: 700; overflow-wrap: anywhere; }
+    .msg { white-space: pre-wrap; color: var(--text); }
+    .acts { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 20px; border-radius: 999px; font: inherit; font-weight: 800; border: 2px solid var(--line); background: transparent; color: var(--text); cursor: pointer; text-decoration: none; text-align: center; }
+    .btn:hover { border-color: var(--red); }
+    .btn-red { background: var(--red-ui); border-color: var(--red-ui); color: #fff; }
+    .btn-red:hover { background: #b8231c; }
+    .btn[disabled] { opacity: .55; cursor: not-allowed; }
+    .note { margin-top: 12px; color: var(--muted); font-size: .9rem; }
+    .state { margin-top: 12px; font-weight: 800; min-height: 1.5em; }
+    .state.ok { color: var(--green); } .state.ko { color: var(--orange); }
+    .err { margin-top: 30px; padding: 22px; border-radius: 16px; border: 1px solid var(--orange); color: var(--orange); font-weight: 700; }
+    @media (max-width: 560px) { dl { grid-template-columns: 1fr; gap: 0; } dd { margin-bottom: 8px; } }
+  </style>
+</head>
+<body>
+  <header><div class="wrap"><span class="logo"><span class="r">MOTO'S</span> COOL</span><span class="tag">Accueil · validation</span></div></header>
+  <main class="wrap" id="app">
+    <p class="err" id="err" hidden>Ce lien de validation est incomplet ou abîmé. Ouvrez-le depuis l'email reçu, sans le modifier.</p>
+  </main>
+  <script src="assets/rdv-mail.js"></script>
+  <script>
+    /**
+     * Validation d'une demande par l'accueil, depuis le bouton de l'email.
+     * La demande est dans le fragment de l'adresse (#d=…) : elle n'est jamais envoyée au serveur du site.
+     * 1. L'accueil vérifie la demande (et rappelle le client si besoin).
+     * 2. « Valider et envoyer dans G8 » : envoi automatique vers G8 dès que G8_ENDPOINT est renseigné
+     *    (accès à fournir par Orisha, éditeur de G8). En attendant, la fiche est copiée pour être collée dans G8.
+     * 3. Confirmation au client par SMS ou email, avec un message prérempli.
+     */
+    const G8_ENDPOINT = ''; // ex : 'https://rdv-motoscool.xxx.workers.dev/g8' (à brancher quand Orisha ouvre l'accès)
+    const PHONE = '01 43 76 26 38';
+    const app = document.getElementById('app');
+    let p = null;
+    // d = fiche encodée ; s = signature du service de rendez-vous (vérifiée côté serveur par la route G8 : un lien fabriqué est refusé)
+    const RAW = (location.hash.match(/[#&]d=([A-Za-z0-9_-]{1,20000})/) || [])[1] || '', SIG = (location.hash.match(/[#&]s=([A-Za-z0-9_-]{43})/) || [])[1] || '', TS = +((location.hash.match(/[#&]t=(\d{10})/) || [])[1] || 0);
+    try { p = MCMail.decode(RAW); } catch (e) { p = null; }
+    if (!p || !p.contact || !p.vehicule || !p.rdv) {
+      document.getElementById('err').hidden = false;
+    } else {
+      const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+      const c = p.contact, v = p.vehicule, r = p.rdv;
+      const date = MCMail.dateFr(r.date), heure = MCMail.hourFr(r.heure), jour = MCMail.dayFr(r.date);
+      const quand = `${jour} ${date} à ${heure.replace(':', 'h')}`;
+      const card = (title, rows) => {
+        const box = el('section', 'card'); box.append(el('h2', '', title));
+        const dl = el('dl');
+        rows.filter(([, val]) => val !== '' && val != null).forEach(([k, val]) => dl.append(el('dt', '', k), el('dd', '', String(val))));
+        box.append(dl); return box;
+      };
+      app.append(el('h1', '', `Demande de ${c.nom || 'rendez-vous'}`), el('p', 'when', `${r.lieu} · ${quand}`));
+      app.append(card('Véhicule', [['Type', v.type], ['Immatriculation', v.immatriculation], ['Marque / modèle', `${v.marque || ''} ${v.modele || ''}`.trim()],
+        ['Cylindrée', v.cylindree ? v.cylindree + ' cc' : ''], ['Année', v.annee], ['Kilométrage', v.kilometrage != null ? v.kilometrage + ' km' : ''], ['Intervention', v.interventionLabel || v.intervention]]));
+      app.append(card('Rendez-vous', [['Lieu', r.lieu], ['Adresse', r.adresse], ['Date', `${jour} ${date}`], ['Heure', heure],
+        ['Position', r.position ? `${r.position.lat}, ${r.position.lng} (± ${r.position.accuracy} m)` : '']]));
+      app.append(card('Contact', [['Nom', c.nom], ['Téléphone', c.telephone], ['Email', c.email]]));
+      if (p.message) { const m = el('section', 'card'); m.append(el('h2', '', 'Message'), el('p', 'msg', p.message)); app.append(m); }
+
+      // Actions de l'accueil
+      const tel = String(c.telephone || '').replace(/[^0-9+]/g, '');
+      const mail = /^[^\s@<>]+@[^\s@<>]+\.[a-z]{2,}$/i.test(c.email || '') ? c.email : '';
+      const conf = `Bonjour ${c.nom}, votre rendez-vous chez Moto's Cool est confirmé le ${quand} (${r.lieu === "A l'atelier" ? "à l'atelier, 15 ter av. du Président Salvador Allende, Vitry-sur-Seine" : r.lieu.toLowerCase()}). Pour toute question : ${PHONE}. À bientôt !`;
+      const acts = el('section', 'card'); acts.append(el('h2', '', 'Actions'));
+      const grid = el('div', 'acts');
+      const link = (label, href, cls) => { const a = el('a', 'btn' + (cls ? ' ' + cls : ''), label); a.href = href; return a; };
+      const g8 = el('button', 'btn btn-red', 'Valider et envoyer dans G8'); g8.type = 'button';
+      grid.append(g8);
+      if (tel) grid.append(link('Appeler le client', `tel:${tel}`), link('Confirmer par SMS', `sms:${tel}?body=${encodeURIComponent(conf)}`));
+      if (mail) grid.append(link('Confirmer par email', `mailto:${mail}?subject=${encodeURIComponent("Confirmation de votre rendez-vous – Moto's Cool")}&body=${encodeURIComponent(conf)}`));
+      const copy = el('button', 'btn', 'Copier la fiche'); copy.type = 'button'; grid.append(copy);
+      const state = el('p', 'state'); state.setAttribute('aria-live', 'polite');
+      acts.append(grid, state, el('p', 'note', G8_ENDPOINT
+        ? "« Valider » enregistre le rendez-vous dans G8. Confirmez ensuite au client par SMS ou par email."
+        : "Envoi automatique dans G8 : disponible dès qu'Orisha (éditeur de G8) aura ouvert l'accès. En attendant, « Valider » copie la fiche : collez-la dans G8, puis confirmez au client."));
+      app.append(acts);
+
+      const fiche = MCMail.text(p);
+      const copyText = () => (navigator.clipboard ? navigator.clipboard.writeText(fiche) : Promise.reject());
+      const show = (txt, ok) => { state.textContent = txt; state.className = 'state ' + (ok ? 'ok' : 'ko'); };
+      copy.addEventListener('click', () => copyText().then(() => show('Fiche copiée ✓', true), () => show('Copie impossible : sélectionnez le texte à la main.', false)));
+      g8.addEventListener('click', async () => {
+        if (!G8_ENDPOINT) return copyText().then(() => show('Fiche copiée ✓ : collez-la dans G8, puis confirmez au client.', true), () => show('Copie impossible : recopiez la fiche dans G8.', false));
+        g8.disabled = true; show('Envoi vers G8…', true);
+        try {
+          const res = await fetch(G8_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ d: RAW, t: TS, s: SIG }), credentials: 'omit' });
+          if (!res.ok) throw new Error(res.status);
+          show('Rendez-vous enregistré dans G8 ✓ Confirmez maintenant au client.', true);
+        } catch (e) { g8.disabled = false; show("L'envoi vers G8 n'a pas abouti : réessayez, ou copiez la fiche.", false); }
+      });
+    }
+  </script>
+</body>
+</html>

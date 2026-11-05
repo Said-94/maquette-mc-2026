@@ -3,7 +3,7 @@
 Le formulaire du site envoie chaque demande à ce petit service. Le service :
 
 1. vérifie la demande ;
-2. écarte les robots (champ piège, durée de saisie, 5 demandes maximum par adresse IP toutes les 10 minutes) ;
+2. écarte les robots (champ piège, durée de saisie, 5 demandes maximum par adresse IP toutes les 10 minutes, 60 emails maximum par heure) ;
 3. envoie un email à l'accueil (`contact@motoscool.fr`), au format du garage, avec un bouton **« Valider ce rendez-vous »**.
 
 Le service ne stocke rien.
@@ -32,6 +32,9 @@ Elles se trouvent dans **Settings › Variables** :
 | `FROM_EMAIL` | `rdv@motoscool.fr` (adresse du domaine validé) |
 | `SITE_URL` | `https://motoscool.fr/` (avec le `/` final) |
 | `ALLOWED_ORIGINS` | `https://motoscool.fr,https://said-94.github.io` |
+| `SIGN_KEY` | une longue chaîne aléatoire (type *Secret*) : signe et date chaque lien « Valider » |
+
+Ne pas renseigner `TURNSTILE_SECRET` tant que le widget Turnstile n'est pas ajouté au formulaire, sinon toutes les demandes seront refusées.
 
 ### 4. Brancher le site
 - Dans `index.html`, mettre l'adresse du Worker dans `SITE.bookingEndpoint`, par exemple `https://rdv-motoscool.xxx.workers.dev`.

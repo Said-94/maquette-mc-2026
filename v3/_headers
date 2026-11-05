@@ -1,0 +1,28 @@
+# En-têtes de sécurité et de cache pour Cloudflare Pages (ignoré par GitHub Pages).
+# S'ajoutent à la CSP déjà présente dans chaque page (balise meta) ; frame-ancestors n'existe qu'ici.
+
+/*
+  Content-Security-Policy: frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Permissions-Policy: camera=(), microphone=(), payment=(), usb=(), serial=(), bluetooth=(), magnetometer=(), gyroscope=(), accelerometer=(), browsing-topics=(), geolocation=(self)
+  Cross-Origin-Opener-Policy: same-origin
+  X-Permitted-Cross-Domain-Policies: none
+
+# Pages : toujours la dernière version
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Fiche de validation des rendez-vous : jamais en cache, jamais indexée, aucun référent transmis
+/valider.html
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
+  Referrer-Policy: no-referrer
+
+# Fichiers statiques (polices, images, vidéos, modèles 3D, scripts) : cache d'une semaine, rafraîchi en arrière-plan
+/assets/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
