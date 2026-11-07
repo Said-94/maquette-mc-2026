@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-crU2fMtq0KvVkNFMggdJFlL7dysxUmdNKgXmztu0wik=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-QzO3VlnzTHLmorimSacWjcQSjsUSu3IAdKSThpZQc4A=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -255,7 +255,12 @@
     .hero-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     @media (min-width: 961px) { .hero-vid { opacity: .4; } }
     /* Voile à gauche : la moto reste un décor, le titre et les boutons dominent */
-    .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(48,48,54,.92) 0%, rgba(48,48,54,.7) 32%, rgba(48,48,54,0) 62%); }
+    /* Film de la Ducati en studio, en fond de l'accueil (le formulaire passe devant) */
+    .hero-film { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; pointer-events: none; }
+    /* Voile : sombre à gauche sous le titre, transparent sur la moto, fondu en bas vers la section suivante */
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(0deg, var(--bg-0) 0%, transparent 22%),
+        linear-gradient(90deg, rgba(8,8,10,.86) 0%, rgba(8,8,10,.55) 34%, rgba(8,8,10,0) 58%); }
     #trails { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
     .hero .wrap { position: relative; z-index: 2; width: 100%; }
     /* Sélecteur de teinte « Ta moto » : petit, discret */
@@ -769,6 +774,7 @@
       .hero .sub { margin-top: 12px; min-height: 3.3em; }
       /* Téléphone : la prise de rendez-vous remonte ; l'appel reste dans la barre fixe en bas d'écran */
       .hero .lead, .hero-cta { display: none; }
+      .hero::before { background: linear-gradient(0deg, var(--bg-0) 0%, transparent 18%), rgba(8,8,10,.55); }
       .hero-grid { gap: 22px; }
       .rdv-card { padding: 18px; border-radius: 18px; }
       .rdv-nav .btn { flex: 1; }
@@ -914,6 +920,7 @@
   <main>
   <!-- ACCUEIL -->
   <section class="hero" id="accueil" aria-label="Accueil">
+    <video class="hero-film" id="hero-film" data-autoplay muted loop playsinline preload="none" poster="../assets/video/hero-poster.jpg" aria-hidden="true" width="1920" height="1080"></video>
     <canvas id="trails" aria-hidden="true"></canvas>
     <div class="wrap hero-grid">
       <div class="hero-main">
@@ -2365,6 +2372,16 @@
     } else document.querySelectorAll('.neons').forEach(n => n.classList.add('lit'));
 
     // ---------- Vidéos (film 4K, scènes 3D, dépanneuse en fond) : chargées et lues seulement à l'écran ----------
+    // Film de l'accueil : vertical sur écran en hauteur, léger sur mobile, 4K sur grand écran net, 1080p sinon
+    const heroFilmEl = $('#hero-film');
+    if (heroFilmEl) {
+      const tall = innerHeight > innerWidth, big = innerWidth * devicePixelRatio > 2600 && !midEnd && mem >= 8;
+      const base = '../assets/video/' + (tall ? 'hero-portrait' : lightMode ? 'hero-mobile' : big ? 'hero-4k' : 'hero-1080');
+      if (tall) heroFilmEl.poster = '../assets/video/hero-portrait.jpg';
+      heroFilmEl.dataset.src = base + '.mp4';
+      const w = tall || lightMode ? 720 : big ? 3840 : 1920, h = tall ? 1280 : lightMode ? 720 : w * 9 / 16;
+      av1Ok(w, h).then(ok => { if (ok && !heroFilmEl.dataset.armed) heroFilmEl.dataset.src = base + '.av1.mp4'; });
+    }
     const vids = [...document.querySelectorAll('video[data-autoplay]')];
     // Images fixes des vidéos : demandées seulement à l'approche (environ 800 px), jamais au premier chargement
     {
