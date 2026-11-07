@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-Qbg0w2rDxMk9P75MlAXSEcImlRnx5MYZXtXOXiZwEAE=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-aVvZ+XNI4OR7T8J3q+mSPNhaNX0ea2tNCl0xQ5olJk0=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -672,7 +672,8 @@
 
     /* Avis & réalisations */
     .trust { background: var(--bg-0); }
-    #avis { padding-bottom: 40px; }
+    #avis { padding: 120px 0; min-height: 78vh; display: flex; align-items: center; }
+    #avis > .wrap { width: 100%; }
     .trust-cta { margin-top: 28px; }
 
     /* Listes du pied de page (zones et services) */
@@ -685,6 +686,19 @@
     .has-fx { position: relative; isolation: isolate; }
     .fx { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: strict; }
     /* Animations de fond tournées dans l'atelier Moto's Cool recréé en 3D */
+    /* Transition d'arrivée d'une partie : fin trait néon rouge qui se dessine depuis le centre, puis s'atténue */
+    .sec-line { position: absolute; z-index: 3; left: 0; right: 0; top: 0; height: 2px; pointer-events: none; transform: scaleX(0); opacity: 0;
+      background: linear-gradient(90deg, transparent, rgba(230,48,39,.9) 20%, #ff8a80 50%, rgba(230,48,39,.9) 80%, transparent);
+      box-shadow: 0 0 14px rgba(230,48,39,.7), 0 0 34px rgba(230,48,39,.35); }
+    .sec-in > .sec-line { animation: sec-line 1.6s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes sec-line { 0% { transform: scaleX(0); opacity: 0; } 15% { opacity: 1; } 55% { transform: scaleX(1); opacity: .9; } 100% { transform: scaleX(1); opacity: .22; } }
+    /* Logo MOTO'S COOL en filigrane, dans les sections sans animation de fond */
+    .logo-bg { position: absolute; z-index: -1; left: 50%; top: 70px; transform: translateX(-50%); pointer-events: none; user-select: none; white-space: nowrap;
+      display: flex; gap: .25em; font-family: 'Orbitron', sans-serif; font-weight: 900; line-height: 1; font-size: clamp(4rem, 15vw, 17rem); letter-spacing: -.01em; }
+    #depannage, #photos { overflow-x: clip; }
+    .logo-bg .lr { color: rgba(230,48,39,.1); }
+    .logo-bg .lo { color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,.09); }
+    @media (max-width: 760px) { .logo-bg { font-size: 17vw; top: 40px; } }
     .fx-atelier { position: absolute; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; background: #120c0c; }
     .fx-atelier video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 72% 50%; }
     .fx-atelier::after { content: ""; position: absolute; inset: 0;
@@ -860,6 +874,7 @@
       .giant { font-size: 10vw; }
     }
     @media (prefers-reduced-motion: reduce) {
+      .sec-in > .sec-line { animation: none; transform: scaleX(1); opacity: .22; }
       .fx-atelier video { animation: none; }
       .neons .nx { animation: none !important; opacity: .3; }
       /* Néons hexagonaux blancs, discrets (rappel du plafond de l'atelier) */
@@ -922,10 +937,10 @@
         <li><a href="#services">Services</a></li>
         
         <li><a href="#depannage">Dépannage</a></li>
-        <li><a href="#photos">Photos</a></li>
         <li><a href="#avis">Avis</a></li>
         <li><a href="#devis">Rendez-vous</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="#photos">Photos</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
       <a href="tel:+33143762638" class="btn btn-red"><svg aria-hidden="true"><use href="#i-phone"/></svg>01 43 76 26 38</a>
@@ -1168,6 +1183,7 @@
 
   <!-- DÉPANNAGE -->
   <section class="has-fx" id="depannage" aria-labelledby="depannage-title">
+    <div class="logo-bg" aria-hidden="true"><span class="lr">MOTO'S</span><span class="lo">COOL</span></div>
     <div class="fx fx-streaks" aria-hidden="true"><i style="--y:14%;--w:220px;--d:9s;--t:-1s"></i><i style="--y:33%;--w:160px;--d:7s;--t:-4s"></i><i style="--y:58%;--w:260px;--d:11s;--t:-6s"></i><i style="--y:22%;--w:120px;--d:8s;--t:-3s"></i><i style="--y:71%;--w:200px;--d:10s;--t:-8s"></i><i style="--y:86%;--w:150px;--d:7.5s;--t:-2s"></i><i style="--y:46%;--w:180px;--d:12s;--t:-9s"></i></div>
     <div class="wrap">
       <div class="tow-grid">
@@ -1247,23 +1263,6 @@
   </section>
 
 
-  <!-- PHOTOS DE L'ATELIER : liste dans SITE.gallery (images dans assets/photos/) -->
-  <section class="photos has-fx" id="photos" aria-labelledby="photos-title">
-    <div class="neons on" aria-hidden="true"><svg class="nx" style="left:90%;top:10%;width:46px;--d:0.2s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:4%;top:78%;width:36px;--d:0.8s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg></div>
-    <div class="wrap">
-      <span class="kicker rv">Photos</span>
-      <h2 class="rv" id="photos-title">L'atelier en images.</h2>
-      <p class="lead rv">Notre atelier de Vitry-sur-Seine, les motos qui passent entre nos mains et l'équipe qui s'en occupe.</p>
-      <ul class="gallery rv" id="gallery" aria-label="Photos de l'atelier"></ul>
-    </div>
-    <dialog class="lightbox" id="lightbox" aria-label="Photo agrandie">
-      <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
-      <button type="button" class="lb-btn lb-close" id="lb-close" aria-label="Fermer">&times;</button>
-      <button type="button" class="lb-btn lb-prev" id="lb-prev" aria-label="Photo précédente">&#8249;</button>
-      <button type="button" class="lb-btn lb-next" id="lb-next" aria-label="Photo suivante">&#8250;</button>
-    </dialog>
-  </section>
-
   <!-- AVIS & RÉSEAUX : lien vers les avis Google (SITE.googleReviewsUrl) et comptes sociaux (SITE.socials) -->
   <section class="trust has-fx" id="avis" aria-labelledby="avis-title">
     <div class="neons on" aria-hidden="true"><svg class="nx" style="left:44%;top:12%;width:64px;--d:0.1s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:56%;top:70%;width:40px;--d:0.5s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx" style="left:3%;top:72%;width:48px;--d:0.9s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:86%;top:78%;width:44px;--d:1.3s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:70%;top:4%;width:30px;--d:1.7s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg></div>
@@ -1321,6 +1320,24 @@
   </section>
 
   <!-- CONTACT -->
+  <!-- PHOTOS DE L'ATELIER : liste dans SITE.gallery (images dans assets/photos/) -->
+  <section class="photos has-fx" id="photos" aria-labelledby="photos-title">
+    <div class="logo-bg" aria-hidden="true"><span class="lr">MOTO'S</span><span class="lo">COOL</span></div>
+    <div class="neons on" aria-hidden="true"><svg class="nx" style="left:90%;top:10%;width:46px;--d:0.2s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:4%;top:78%;width:36px;--d:0.8s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg></div>
+    <div class="wrap">
+      <span class="kicker rv">Photos</span>
+      <h2 class="rv" id="photos-title">L'atelier en images.</h2>
+      <p class="lead rv">Notre atelier de Vitry-sur-Seine, les motos qui passent entre nos mains et l'équipe qui s'en occupe.</p>
+      <ul class="gallery rv" id="gallery" aria-label="Photos de l'atelier"></ul>
+    </div>
+    <dialog class="lightbox" id="lightbox" aria-label="Photo agrandie">
+      <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+      <button type="button" class="lb-btn lb-close" id="lb-close" aria-label="Fermer">&times;</button>
+      <button type="button" class="lb-btn lb-prev" id="lb-prev" aria-label="Photo précédente">&#8249;</button>
+      <button type="button" class="lb-btn lb-next" id="lb-next" aria-label="Photo suivante">&#8250;</button>
+    </dialog>
+  </section>
+
   <section class="has-fx" id="contact" aria-labelledby="contact-title">
     <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-entree.jpg" width="1280" height="720"><source data-src="../assets/video/atelier-entree.webm" type="video/webm"><source data-src="../assets/video/atelier-entree.mp4" type="video/mp4"></video></div>
     <div class="fx fx-road" aria-hidden="true"><i></i></div>
@@ -2446,6 +2463,19 @@
       const fo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !$('#chiffres').classList.contains('on')) { e.target.classList.add('play'); fo.unobserve(e.target); } }), { threshold: 0.4 });
       document.querySelectorAll('.fig').forEach(f => fo.observe(f));
     } else document.querySelectorAll('.fig').forEach(f => f.classList.add('play'));
+
+    // Transition d'arrivée de chaque partie (un trait néon), déclenchée une seule fois, sans toucher au défilement
+    {
+      const secs = [...document.querySelectorAll('main > section:not(.hero), main > div.bigm')];
+      secs.forEach(sec => {
+        if (getComputedStyle(sec).position === 'static') sec.style.position = 'relative';
+        const l = document.createElement('i'); l.className = 'sec-line'; l.setAttribute('aria-hidden', 'true'); sec.prepend(l);
+      });
+      if ('IntersectionObserver' in window) {
+        const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('sec-in'); so.unobserve(e.target); } }), { rootMargin: '0px 0px -25% 0px' });
+        secs.forEach(x => so.observe(x));
+      } else secs.forEach(x => x.classList.add('sec-in'));
+    }
 
     // Néons : allumés seulement quand leur section arrive à l'écran
     if ('IntersectionObserver' in window) {
