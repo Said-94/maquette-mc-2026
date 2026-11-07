@@ -131,7 +131,7 @@
     } catch (e) { return null; }
   }
   const REASONS = "Chez Moto's Cool, nous nous occupons de toutes les marques. Le prix est fixé après un diagnostic à l'atelier, avec un devis que vous validez, et nos interventions sont garanties.";
-  const HOURS_TXT = 'du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 18h30';
+  const HOURS_TXT = 'du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 19h00';
   const ZONE_TXT = MC.ZONE_TXT || "toute l'Île-de-France";
   // Symptômes critiques pour la sécurité : ne pas rouler, appeler le dépannage
   const SAFETY = /\bfrein(e|ent) (mal|plus|pas|moins)\b|\bne frein(e|ent)\b|\bplus de frein|\bfrein\w* (lache|mou|molle|spongieux|bloque|ne marche|ne repond)|\blevier (mou|qui s enfonce)|\bdirection (dure|bloquee|bloque|qui tire|qui tremble|floue)\b|\bguidon (dur|bloque|qui tremble|qui vibre)\b|\btire (a gauche|a droite)\b|\bodeur d essence\b|\bodeur de carburant\b|\bfuite d essence\b|\bessence qui coule\b|\bfumee\b|\b(ca|qui|moto|moteur|scooter|elle|il) fume\b|\bflammes?\b|\bsent le brule\b|\baccident\b|\bchute\b|\b(suis|est) tombee?\b/;
@@ -247,7 +247,7 @@
       case 'scooter':
         return { text: `Oui, nous entretenons et réparons les scooters de toutes cylindrées, du 50 cm³ au maxi-scooter, avec le même soin que les motos.\n\n${REASONS}`, actions: [A.book(prefill, 'Entretien'), A.call()] };
       case 'quad':
-        return { text: `Pour un quad, le plus simple est de nous appeler : nous vous dirons si nous pouvons le prendre en charge. Vous pouvez aussi indiquer « Quad » dans le formulaire de rendez-vous.`, actions: [A.call(), A.book(prefill)] };
+        return { text: `Désolé, Moto's Cool ne prend pas en charge les quads : l'atelier s'occupe des motos et des scooters, toutes marques. Pour une moto ou un scooter, nous sommes là !`, actions: [A.call(), A.book(prefill)] };
       case 'vente':
         return { text: `Le site présente nos services d'entretien, de réparation et de dépannage. Pour toute question sur une pièce ou une vente, appelez directement l'atelier.`, actions: [A.call(), A.visit()] };
       case 'contact':

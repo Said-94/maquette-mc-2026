@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-68Hq8BEm5T2DcKUNy+KlH6yEd1s43/JZREVkx1v0nTA=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-Qbg0w2rDxMk9P75MlAXSEcImlRnx5MYZXtXOXiZwEAE=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -99,12 +99,12 @@
       { "@type": "AdministrativeArea", "name": "Val-d'Oise (95)" }
     ],
     "sameAs": ["https://www.tiktok.com/@motos.cool"],
-    "openingHours": ["Mo-Fr 09:30-13:00", "Mo-Fr 14:00-18:30", "Sa 10:00-13:00", "Sa 14:00-18:30"],
+    "openingHours": ["Mo-Fr 09:30-13:00", "Mo-Fr 14:00-18:30", "Sa 10:00-13:00", "Sa 14:00-19:00"],
     "openingHoursSpecification": [
       { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:30", "closes": "13:00" },
       { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "14:00", "closes": "18:30" },
       { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "13:00" },
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "14:00", "closes": "18:30" }
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "14:00", "closes": "19:00" }
     ]
   }
   </script>
@@ -116,7 +116,7 @@
     "mainEntity": [
       { "@type": "Question", "name": "Intervenez-vous sur toutes les marques ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui : nous entretenons et réparons les motos et scooters Yamaha, Honda, Suzuki, Kawasaki, Piaggio, Vespa, Ducati, Moto Guzzi, Triumph, BMW et bien d'autres marques. Pour un modèle particulier, appelez-nous." } },
       { "@type": "Question", "name": "Dans quelles zones faites-vous du dépannage ?", "acceptedAnswer": { "@type": "Answer", "text": "Dans toute l'Île-de-France : Paris (75), les Hauts-de-Seine (92), la Seine-Saint-Denis (93), le Val-de-Marne (94), la Seine-et-Marne (77), les Yvelines (78), l'Essonne (91) et le Val-d'Oise (95). Le tarif dépend de la distance depuis l'atelier de Vitry-sur-Seine et de la situation. Appelez le 01 43 76 26 38 : nous vous disons tout de suite quand nous pouvons venir." } },
-      { "@type": "Question", "name": "Quels sont vos horaires ?", "acceptedAnswer": { "@type": "Answer", "text": "L'atelier est ouvert du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 18h30. Il est fermé le dimanche. Le dépannage fonctionne aux mêmes horaires." } },
+      { "@type": "Question", "name": "Quels sont vos horaires ?", "acceptedAnswer": { "@type": "Answer", "text": "L'atelier est ouvert du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 19h00. Il est fermé le dimanche. Le dépannage fonctionne aux mêmes horaires." } },
       { "@type": "Question", "name": "Comment obtenir un devis ?", "acceptedAnswer": { "@type": "Answer", "text": "Nous ne donnons pas de prix à l'avance : le prix est établi après un diagnostic de votre moto à l'atelier, puis un devis que vous validez avant toute intervention. Prenez rendez-vous avec le formulaire en haut de la page ou appelez-nous au 01 43 76 26 38." } },
       { "@type": "Question", "name": "Peut-on venir sans rendez-vous ?", "acceptedAnswer": { "@type": "Answer", "text": "Uniquement pour un contrôle ou un diagnostic : passez à l'atelier, 15 ter avenue du Président Salvador Allende à Vitry-sur-Seine, pendant nos horaires d'ouverture. Pour une réparation ou un entretien, il faut prendre rendez-vous." } },
       { "@type": "Question", "name": "Combien coûte une réparation ou un dépannage ?", "acceptedAnswer": { "@type": "Answer", "text": "Chaque moto et chaque panne sont différentes : le prix est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Pour un dépannage, le tarif dépend de la distance et de la situation : appelez-nous pour en parler." } },
@@ -971,7 +971,6 @@
                 <div class="chips">
                   <label class="chip"><input type="radio" name="type" value="Moto" required checked><span>Moto</span></label>
                   <label class="chip"><input type="radio" name="type" value="Scooter"><span>Scooter</span></label>
-                  <label class="chip"><input type="radio" name="type" value="Quad"><span>Quad</span></label>
                   <label class="chip"><input type="radio" name="type" value="Autre"><span>Autre</span></label>
                 </div>
               </div>
@@ -1296,7 +1295,7 @@
       <div class="faq-list rv">
         <details><summary>Intervenez-vous sur toutes les marques ?</summary><p>Oui : nous entretenons et réparons les motos et scooters Yamaha, Honda, Suzuki, Kawasaki, Piaggio, Vespa, Ducati, Moto Guzzi, Triumph, BMW et bien d'autres marques. Pour un modèle particulier, appelez-nous.</p></details>
         <details><summary>Dans quelles zones faites-vous du dépannage ?</summary><p>Dans toute l'Île-de-France : Paris (75), les Hauts-de-Seine (92), la Seine-Saint-Denis (93), le Val-de-Marne (94), la Seine-et-Marne (77), les Yvelines (78), l'Essonne (91) et le Val-d'Oise (95). Le tarif dépend de la distance depuis l'atelier de Vitry-sur-Seine et de la situation. Appelez le 01 43 76 26 38 : nous vous disons tout de suite quand nous pouvons venir. <a href="#depannage">Vérifier ma ville sur la carte</a></p></details>
-        <details><summary>Quels sont vos horaires ?</summary><p>L'atelier est ouvert du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 18h30. Il est fermé le dimanche. Le dépannage fonctionne aux mêmes horaires. <a href="#contact">Voir l'adresse et les horaires</a></p></details>
+        <details><summary>Quels sont vos horaires ?</summary><p>L'atelier est ouvert du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 19h00. Il est fermé le dimanche. Le dépannage fonctionne aux mêmes horaires. <a href="#contact">Voir l'adresse et les horaires</a></p></details>
         <details><summary>Comment obtenir un devis ?</summary><p>Nous ne donnons pas de prix à l'avance : le prix est établi après un diagnostic de votre moto à l'atelier, puis un devis que vous validez avant toute intervention. Prenez rendez-vous avec le formulaire en haut de la page ou appelez-nous au 01 43 76 26 38.</p></details>
         <details><summary>Peut-on venir sans rendez-vous ?</summary><p>Uniquement pour un contrôle ou un diagnostic : passez à l'atelier, 15 ter avenue du Président Salvador Allende à Vitry-sur-Seine, pendant nos horaires d'ouverture. Pour une réparation ou un entretien, il faut prendre rendez-vous.</p></details>
         <details><summary>Combien coûte une réparation ou un dépannage ?</summary><p>Chaque moto et chaque panne sont différentes : le prix est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Pour un dépannage, le tarif dépend de la distance et de la situation : appelez-nous pour en parler. <a href="#devis">Prendre rendez-vous</a></p></details>
@@ -1339,7 +1338,7 @@
               <tr data-d="3"><td>Mercredi</td><td>9h30 – 13h00 · 14h00 – 18h30</td></tr>
               <tr data-d="4"><td>Jeudi</td><td>9h30 – 13h00 · 14h00 – 18h30</td></tr>
               <tr data-d="5"><td>Vendredi</td><td>9h30 – 13h00 · 14h00 – 18h30</td></tr>
-              <tr data-d="6"><td>Samedi</td><td>10h00 – 13h00 · 14h00 – 18h30</td></tr>
+              <tr data-d="6"><td>Samedi</td><td>10h00 – 13h00 · 14h00 – 19h00</td></tr>
               <tr data-d="0"><td>Dimanche</td><td>Fermé</td></tr>
             </table>
           </div>
@@ -1533,7 +1532,7 @@
     };
     const BRANDS = ['Yamaha', 'Honda', 'Suzuki', 'Kawasaki', 'Piaggio', 'Vespa', 'Ducati', 'Moto Guzzi', 'Triumph', 'BMW'];
     // Horaires d'ouverture : plages [ouverture, fermeture] en minutes, index 0 = dimanche (pause déjeuner 13h–14h)
-    const WEEK = [[570, 780], [840, 1110]], SAT = [[600, 780], [840, 1110]];
+    const WEEK = [[570, 780], [840, 1110]], SAT = [[600, 780], [840, 1140]];
     const HOURS = [null, WEEK, WEEK, WEEK, WEEK, WEEK, SAT];
     const hm = m => `${Math.floor(m / 60)}h${String(m % 60).padStart(2, '0')}`;
 
