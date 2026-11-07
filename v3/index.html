@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-QzO3VlnzTHLmorimSacWjcQSjsUSu3IAdKSThpZQc4A=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-68Hq8BEm5T2DcKUNy+KlH6yEd1s43/JZREVkx1v0nTA=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -77,7 +77,7 @@
     "telephone": "+33143762638",
     "priceRange": "€€",
     "currenciesAccepted": "EUR",
-    "paymentAccepted": "Carte bancaire (avec ou sans contact), Espèces, Virement bancaire",
+    "paymentAccepted": "Carte bancaire (avec ou sans contact), Apple Pay, Google Pay, Espèces, Virement bancaire",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "15 ter avenue du Président Salvador Allende",
@@ -98,7 +98,7 @@
       { "@type": "AdministrativeArea", "name": "Val-de-Marne (94)" },
       { "@type": "AdministrativeArea", "name": "Val-d'Oise (95)" }
     ],
-    "sameAs": ["https://www.tiktok.com/@motos.cool", "https://www.instagram.com/moto_s_cool/", "https://www.facebook.com/p/Motos-cool-61592390813664/"],
+    "sameAs": ["https://www.tiktok.com/@motos.cool"],
     "openingHours": ["Mo-Fr 09:30-13:00", "Mo-Fr 14:00-18:30", "Sa 10:00-13:00", "Sa 14:00-18:30"],
     "openingHoursSpecification": [
       { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:30", "closes": "13:00" },
@@ -121,7 +121,7 @@
       { "@type": "Question", "name": "Peut-on venir sans rendez-vous ?", "acceptedAnswer": { "@type": "Answer", "text": "Uniquement pour un contrôle ou un diagnostic : passez à l'atelier, 15 ter avenue du Président Salvador Allende à Vitry-sur-Seine, pendant nos horaires d'ouverture. Pour une réparation ou un entretien, il faut prendre rendez-vous." } },
       { "@type": "Question", "name": "Combien coûte une réparation ou un dépannage ?", "acceptedAnswer": { "@type": "Answer", "text": "Chaque moto et chaque panne sont différentes : le prix est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Pour un dépannage, le tarif dépend de la distance et de la situation : appelez-nous pour en parler." } },
       { "@type": "Question", "name": "Réparez-vous à domicile ?", "acceptedAnswer": { "@type": "Answer", "text": "Non : nous faisons du dépannage à domicile. Notre dépanneur vient chercher votre moto et l'amène à l'atelier de Vitry-sur-Seine, où elle est diagnostiquée puis réparée." } },
-      { "@type": "Question", "name": "Quels moyens de paiement acceptez-vous ?", "acceptedAnswer": { "@type": "Answer", "text": "Nous acceptons la carte bancaire (avec ou sans contact), les espèces et le virement bancaire." } },
+      { "@type": "Question", "name": "Quels moyens de paiement acceptez-vous ?", "acceptedAnswer": { "@type": "Answer", "text": "Nous acceptons la carte bancaire (avec ou sans contact), Apple Pay, Google Pay, les espèces et le virement bancaire." } },
       { "@type": "Question", "name": "Pas de prix à l'aveugle : comment ça marche ?", "acceptedAnswer": { "@type": "Answer", "text": "Chaque moto est différente : nous ne donnons pas de prix à l'avance. Le tarif est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Aucun travail n'est engagé sans votre accord." } },
       { "@type": "Question", "name": "Vos interventions sont-elles garanties ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui : en cas de souci lié à notre intervention, revenez nous voir, nous la reprenons. Les conditions sont précisées sur votre facture." } }
     ]
@@ -293,7 +293,7 @@
     @keyframes drip { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
 
     /* Manifeste */
-    .manifesto { min-height: 100vh; display: flex; align-items: center; background: var(--bg-0); }
+    .manifesto { min-height: 70vh; display: flex; align-items: center; background: var(--bg-0); }
     .manifesto p { font-size: clamp(1.8rem, 5.2vw, 4.2rem); font-weight: 800; line-height: 1.15; max-width: 1150px; }
     .manifesto .w.red { color: var(--red); }
 
@@ -453,7 +453,6 @@
     .tow-msg.ko { border-left-color: var(--orange); }
     .tow-msg a { color: var(--red-text); font-weight: 800; }
     .zone-map { position: relative; z-index: 0; isolation: isolate; height: 440px; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); display: grid; }
-    .zone-map .leaflet-tile-pane { filter: grayscale(1) invert(.86) contrast(.8) brightness(1.18); }
     .zone-map.leaflet-container { background: #3a3a40; font-family: inherit; }
     .map-fallback { align-self: center; justify-self: center; text-align: center; color: var(--muted); padding: 24px; font-weight: 600; }
     .map-note { color: var(--muted); font-size: .85rem; margin-top: 8px; min-height: 1.2em; }
@@ -558,6 +557,24 @@
 
     /* FAQ */
     .faq-list { margin-top: 40px; display: grid; gap: 12px; max-width: 860px; }
+    /* Photos de l'atelier */
+    .gallery { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 220px; gap: 12px; margin-top: 36px; }
+    .gallery li:first-child { grid-column: span 2; grid-row: span 2; }
+    .ph, .ph-empty { width: 100%; height: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); }
+    .ph { display: block; padding: 0; cursor: zoom-in; }
+    .ph img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+    .ph:hover img, .ph:focus-visible img { transform: scale(1.05); }
+    .ph-empty { display: grid; place-items: center; align-content: center; gap: 10px; color: var(--muted); font-size: .9rem; font-weight: 700; border-style: dashed;
+      background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(255,255,255,.03) 14px 28px), var(--bg-2); }
+    .ph-empty svg { width: 34px; height: 34px; color: var(--red); }
+    .lightbox { border: 0; padding: 0; background: transparent; max-width: 94vw; max-height: 92vh; overflow: visible; }
+    .lightbox::backdrop { background: rgba(10,10,12,.9); }
+    .lightbox figure { margin: 0; text-align: center; }
+    .lightbox img { max-width: 94vw; max-height: 82vh; border-radius: 12px; }
+    .lightbox figcaption { color: #fff; margin-top: 10px; font-weight: 700; }
+    .lb-btn { position: fixed; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(20,20,24,.8); color: #fff; font-size: 1.8rem; line-height: 1; cursor: pointer; }
+    .lb-close { top: 18px; right: 18px; } .lb-prev { left: 18px; top: 50%; } .lb-next { right: 18px; top: 50%; }
+    @media (max-width: 760px) { .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 140px; gap: 8px; } }
     .faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 28px; align-items: start; }
     .faq-side { position: sticky; top: 96px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; padding: 24px; display: grid; gap: 12px; }
     .faq-side h3 { font-size: 1.25rem; }
@@ -592,26 +609,25 @@
     .map { border-radius: 20px; overflow: hidden; border: 1px solid var(--line); min-height: 380px; }
     .cmap { width: 100%; height: 100%; min-height: 380px; display: grid; }
     .cmap.leaflet-container { background: #3a3a40; font-family: inherit; }
-    .cmap .leaflet-tile-pane { filter: grayscale(1) invert(.86) contrast(.8) brightness(1.18); }
+    /* Choix du fond de carte : Plan (couleur) ou Satellite */
+    .map-style { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgba(255,255,255,.95); box-shadow: 0 2px 12px rgba(0,0,0,.35); }
+    .map-style button { border: 0; background: none; font: 800 .78rem/1 'Nunito', sans-serif; padding: 8px 13px; border-radius: 999px; color: #2a2a30; cursor: pointer; }
+    .map-style button[aria-pressed="true"] { background: var(--red-ui); color: #fff; }
+    .map-style button:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
     .shop-pin span { position: relative; display: block; width: 20px; height: 20px; border-radius: 50%; background: var(--red); border: 3px solid #fff; box-shadow: 0 0 16px var(--red); }
     .shop-pin span::after { content: ""; position: absolute; inset: -12px; border-radius: 50%; border: 2px solid var(--red); animation: pinpulse 1.8s ease-out infinite; }
     @keyframes pinpulse { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
     .status#status-contact { margin: 4px 0 6px; }
+    .info-line .mail a { color: var(--text); font-weight: 800; }
+    .mail-note { color: var(--muted); font-size: .82rem; }
 
     /* Pied de page géant */
     .giant {
       font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: clamp(2.2rem, 13vw, 14rem); line-height: .9; text-align: center; white-space: nowrap;
       -webkit-text-stroke: 2px #5e5e68; color: transparent; padding: 60px 0 20px; user-select: none; transition: color .5s, -webkit-text-stroke-color .5s;
     }
-    .giant { transition: color .06s, -webkit-text-stroke-color .06s, text-shadow .06s; }
+    .giant { margin-bottom: 30px; }
     .giant.lit { -webkit-text-stroke-color: #ff5a4f; color: rgba(230,48,39,.16); text-shadow: 0 0 18px rgba(230,48,39,.9), 0 0 42px rgba(230,48,39,.45); }
-    /* Petites motos rouges qui font des allers-retours sous le grand texte */
-    .minimotos { position: relative; height: 46px; margin: 0 auto 30px; max-width: var(--max); border-bottom: 2px dashed #55555f; }
-    .mm { position: absolute; bottom: 4px; left: 0; width: 64px; height: 37px; color: var(--red); filter: drop-shadow(0 0 6px rgba(230,48,39,.7)); animation: mm-ride var(--d) var(--t) linear infinite; }
-    .mm g.w { transform-box: fill-box; transform-origin: center; animation: mm-wheel .5s linear infinite; }
-    @keyframes mm-wheel { to { transform: rotate(360deg); } }
-    @keyframes mm-ride { 0% { left: 0; transform: scaleX(1); } 49.9% { left: calc(100% - 64px); transform: scaleX(1); } 50% { left: calc(100% - 64px); transform: scaleX(-1); } 99.9% { left: 0; transform: scaleX(-1); } 100% { left: 0; transform: scaleX(1); } }
-    @media (max-width: 760px) { .mm.nm { display: none; } }
     footer { border-top: 1px solid var(--line); padding: 30px 0 110px; color: var(--muted); font-size: .9rem; }
     .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: center; }
     .legal-links { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; }
@@ -844,7 +860,6 @@
       .giant { font-size: 10vw; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .mm, .mm g.w { animation: none !important; }
       .neons .nx { animation: none !important; opacity: .3; }
       /* Néons hexagonaux blancs, discrets (rappel du plafond de l'atelier) */
     .neons { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
@@ -892,6 +907,7 @@
     <symbol id="i-check" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 100 20 10 10 0 000-20zm-2 15-5-5 1.4-1.4 3.6 3.6 7.6-7.6L19 8l-9 9z"/></symbol>
     <symbol id="i-euro" viewBox="0 0 24 24"><path fill="currentColor" d="M15 18.5c-2.5 0-4.7-1.4-5.8-3.5H15l1-2H8.6c-.1-.3-.1-.7-.1-1s0-.7.1-1H15l1-2H9.2C10.3 6.9 12.5 5.5 15 5.5c1.6 0 3 .6 4.1 1.5L21 5.2C19.4 3.8 17.3 3 15 3c-3.9 0-7.3 2.5-8.5 6H3l-1 2h4.1c0 .3-.1.7-.1 1s0 .7.1 1H3l-1 2h4.5c1.2 3.5 4.6 6 8.5 6 2.3 0 4.4-.8 6-2.2l-1.9-1.8c-1.1.9-2.5 1.5-4.1 1.5z"/></symbol>
     <symbol id="i-locate" viewBox="0 0 24 24"><path fill="currentColor" d="M12 8a4 4 0 100 8 4 4 0 000-8zm9 3h-2.1A7 7 0 0013 5.1V3h-2v2.1A7 7 0 005.1 11H3v2h2.1a7 7 0 005.9 5.9V21h2v-2.1a7 7 0 005.9-5.9H21v-2zm-9 6a5 5 0 110-10 5 5 0 010 10z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm9 7.2L4 7.3V17h16V7.3l-8 4.9zM5.2 7l6.8 4.2L18.8 7H5.2z"/></symbol>
     <symbol id="i-camera" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3 7.2 5H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V7a2 2 0 00-2-2h-3.2L15 3H9zm3 15a5 5 0 110-10 5 5 0 010 10zm0-2a3 3 0 100-6 3 3 0 000 6z"/></symbol>
     <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.7 4.3 3.8 1.6.7 2.2.7 3 .6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></symbol>
     <symbol id="i-external" viewBox="0 0 24 24"><path fill="currentColor" d="M14 3v2h3.6l-9.8 9.8 1.4 1.4L19 6.4V10h2V3h-7zm5 16H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7z"/></symbol>
@@ -905,6 +921,7 @@
         <li><a href="#services">Services</a></li>
         
         <li><a href="#depannage">Dépannage</a></li>
+        <li><a href="#photos">Photos</a></li>
         <li><a href="#avis">Avis</a></li>
         <li><a href="#devis">Rendez-vous</a></li>
         <li><a href="#faq">FAQ</a></li>
@@ -1230,6 +1247,23 @@
   </section>
 
 
+  <!-- PHOTOS DE L'ATELIER : liste dans SITE.gallery (images dans assets/photos/) -->
+  <section class="photos has-fx" id="photos" aria-labelledby="photos-title">
+    <div class="neons on" aria-hidden="true"><svg class="nx" style="left:90%;top:10%;width:46px;--d:0.2s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:4%;top:78%;width:36px;--d:0.8s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg></div>
+    <div class="wrap">
+      <span class="kicker rv">Photos</span>
+      <h2 class="rv" id="photos-title">L'atelier en images.</h2>
+      <p class="lead rv">Notre atelier de Vitry-sur-Seine, les motos qui passent entre nos mains et l'équipe qui s'en occupe.</p>
+      <ul class="gallery rv" id="gallery" aria-label="Photos de l'atelier"></ul>
+    </div>
+    <dialog class="lightbox" id="lightbox" aria-label="Photo agrandie">
+      <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+      <button type="button" class="lb-btn lb-close" id="lb-close" aria-label="Fermer">&times;</button>
+      <button type="button" class="lb-btn lb-prev" id="lb-prev" aria-label="Photo précédente">&#8249;</button>
+      <button type="button" class="lb-btn lb-next" id="lb-next" aria-label="Photo suivante">&#8250;</button>
+    </dialog>
+  </section>
+
   <!-- AVIS & RÉSEAUX : lien vers les avis Google (SITE.googleReviewsUrl) et comptes sociaux (SITE.socials) -->
   <section class="trust has-fx" id="avis" aria-labelledby="avis-title">
     <div class="neons on" aria-hidden="true"><svg class="nx" style="left:44%;top:12%;width:64px;--d:0.1s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:56%;top:70%;width:40px;--d:0.5s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx" style="left:3%;top:72%;width:48px;--d:0.9s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:86%;top:78%;width:44px;--d:1.3s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:70%;top:4%;width:30px;--d:1.7s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg></div>
@@ -1237,12 +1271,14 @@
     <div class="wrap">
       <span class="kicker rv">Avis &amp; réseaux</span>
       <h2 class="rv" id="avis-title">Ils nous ont confié leur moto.</h2>
-      <p class="lead rv">Lisez les avis laissés par nos clients sur Google, ou suivez la vie de l'atelier sur nos réseaux.</p>
+      <p class="lead rv">Lisez les avis laissés par nos clients sur Google, ou suivez la vie de l'atelier sur TikTok.</p>
       <div class="trust-cta rv" id="reviews-box"></div>
       <div class="pay rv" role="group" aria-labelledby="pay-ok">
         <span class="pay-label" id="pay-ok">Moyens de paiement</span>
         <ul class="badges" aria-labelledby="pay-ok">
           <li class="badge ok">Carte bancaire, avec ou sans contact</li>
+          <li class="badge ok">Apple Pay</li>
+          <li class="badge ok">Google Pay</li>
           <li class="badge ok">Espèces</li>
           <li class="badge ok">Virement bancaire</li>
         </ul>
@@ -1266,7 +1302,7 @@
         <details><summary>Combien coûte une réparation ou un dépannage ?</summary><p>Chaque moto et chaque panne sont différentes : le prix est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Pour un dépannage, le tarif dépend de la distance et de la situation : appelez-nous pour en parler. <a href="#devis">Prendre rendez-vous</a></p></details>
         <details><summary>Pas de prix à l'aveugle : comment ça marche ?</summary><p>Chaque moto est différente : nous ne donnons pas de prix à l'avance. Le tarif est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Aucun travail n'est engagé sans votre accord. <a href="#devis">Prendre rendez-vous</a></p></details>
         <details><summary>Réparez-vous à domicile ?</summary><p>Non : nous faisons du dépannage à domicile. Notre dépanneur vient chercher votre moto et l'amène à l'atelier de Vitry-sur-Seine, où elle est diagnostiquée puis réparée.</p></details>
-        <details><summary>Quels moyens de paiement acceptez-vous ?</summary><p>Nous acceptons la carte bancaire (avec ou sans contact), les espèces et le virement bancaire. <a href="#avis">Voir les moyens de paiement</a></p></details>
+        <details><summary>Quels moyens de paiement acceptez-vous ?</summary><p>Nous acceptons la carte bancaire (avec ou sans contact), Apple Pay, Google Pay, les espèces et le virement bancaire. <a href="#avis">Voir les moyens de paiement</a></p></details>
         <details><summary>Vos interventions sont-elles garanties ?</summary><p>Oui : en cas de souci lié à notre intervention, revenez nous voir, nous la reprenons. Les conditions sont précisées sur votre facture. <a href="#devis">Prendre rendez-vous</a></p></details>
       </div>
       <aside class="faq-side rv" aria-labelledby="faq-ask-title">
@@ -1295,6 +1331,7 @@
           <div class="status" id="status-contact"><span class="dot"></span><span id="status-contact-txt">Horaires</span></div>
           <div class="info-line"><svg aria-hidden="true"><use href="#i-pin"/></svg><address style="font-style:normal">15 ter avenue du Président Salvador Allende<br>94400 Vitry-sur-Seine</address></div>
           <div class="info-line"><svg aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+33143762638"><b>01 43 76 26 38</b></a></div>
+          <div class="info-line"><svg aria-hidden="true"><use href="#i-mail"/></svg><span><span class="mail" data-u="contact" data-d="motoscool.fr">contact [arobase] motoscool [point] fr</span><br><small class="mail-note">Pour vos demandes : rendez-vous, devis, questions.</small></span></div>
           <div class="info-line"><svg aria-hidden="true"><use href="#i-clock"/></svg>
             <table class="hours" id="hours" aria-label="Horaires d'ouverture">
               <tr data-d="1"><td>Lundi</td><td>9h30 – 13h00 · 14h00 – 18h30</td></tr>
@@ -1313,8 +1350,7 @@
         </div>
       </div>
     </div>
-    <div class="giant" aria-hidden="true" data-text="MOTO'S COOL"></div>
-    <div class="minimotos" aria-hidden="true"><svg class="mm" style="--d:18s;--t:-2s" viewBox="0 0 52 30"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><g class="w"><circle cx="10" cy="22" r="6"/><path d="M10 16v12M4 22h12"/></g><g class="w"><circle cx="42" cy="22" r="6"/><path d="M42 16v12M36 22h12"/></g><path d="M10 22l9-9h11l5 4 7 5M19 13l-3-5h7M30 13l4-6h5"/><circle cx="25" cy="9" r="2.4"/></g></svg><svg class="mm nm" style="--d:18s;--t:-7s" viewBox="0 0 52 30"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><g class="w"><circle cx="10" cy="22" r="6"/><path d="M10 16v12M4 22h12"/></g><g class="w"><circle cx="42" cy="22" r="6"/><path d="M42 16v12M36 22h12"/></g><path d="M10 22l9-9h11l5 4 7 5M19 13l-3-5h7M30 13l4-6h5"/><circle cx="25" cy="9" r="2.4"/></g></svg><svg class="mm nm" style="--d:18s;--t:-13s" viewBox="0 0 52 30"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><g class="w"><circle cx="10" cy="22" r="6"/><path d="M10 16v12M4 22h12"/></g><g class="w"><circle cx="42" cy="22" r="6"/><path d="M42 16v12M36 22h12"/></g><path d="M10 22l9-9h11l5 4 7 5M19 13l-3-5h7M30 13l4-6h5"/><circle cx="25" cy="9" r="2.4"/></g></svg></div>
+    <div class="giant lit" aria-hidden="true" data-text="MOTO'S COOL"></div>
   </section>
   </main>
 
@@ -1409,13 +1445,16 @@
     whatsappMessage: "Bonjour Moto's Cool, j'ai besoin d'un renseignement pour ma moto : ",
     // Mobile du dépanneur pour recevoir la position par SMS. Vide = bouton SMS masqué.
     sms: '0633660470',
+    // Carte : vue affichée par défaut, 'plan' (couleur) ou 'satellite'. Le visiteur peut toujours basculer.
+    mapStyle: 'plan',
+    // Photos de l'atelier (onglet Photos) : déposer les images dans assets/photos/ puis les lister ici,
+    // ex : { src: 'assets/photos/atelier-1.jpg', alt: "L'atelier vu de l'entrée" }. Vide = cadres « photo à venir ».
+    gallery: [],
     // Lien vers les avis Google du garage. Vide = bouton masqué.
     googleReviewsUrl: 'https://share.google/6iqXkrDpoP4qPNWKc',
     // Réseaux sociaux (liens complets). Un lien vide n'est pas affiché.
     socials: [
-      { name: 'Instagram', handle: '@moto_s_cool', url: 'https://www.instagram.com/moto_s_cool/' },
-      { name: 'TikTok', handle: '@motos.cool', url: 'https://www.tiktok.com/@motos.cool' },
-      { name: 'Facebook', handle: "Moto's Cool", url: 'https://www.facebook.com/p/Motos-cool-61592390813664/' }
+      { name: 'TikTok', handle: '@motos.cool', url: 'https://www.tiktok.com/@motos.cool' }
     ],
     // Service d'envoi des demandes de rendez-vous par email (voir booking-worker/README.md). Vide = mode démo.
     bookingEndpoint: '',
@@ -1441,6 +1480,32 @@
     const loadCss = href => new Promise((ok, ko) => { const l = document.createElement('link'); l.rel = 'stylesheet'; l.crossOrigin = 'anonymous'; if (SRI[href]) l.integrity = SRI[href]; l.href = href; l.onload = ok; l.onerror = ko; document.head.append(l); });
     const LEAFLET_JS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
     const LEAFLET_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+    // Fonds de carte : plan en couleur (OpenStreetMap) ou vue satellite (photos aériennes de l'IGN, libres d'usage).
+    // Vue par défaut : SITE.mapStyle ('plan' ou 'satellite'). Le visiteur peut basculer avec les boutons de la carte.
+    function mapBases(map) {
+      const layers = {
+        plan: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }),
+        satellite: L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', { maxZoom: 19, attribution: 'Photos aériennes &copy; <a href="https://www.ign.fr/">IGN</a>' })
+      };
+      let cur = layers[window.SITE && SITE.mapStyle === 'satellite' ? 'satellite' : 'plan'].addTo(map);
+      const ctl = L.control({ position: 'topright' });
+      ctl.onAdd = () => {
+        const box = L.DomUtil.create('div', 'map-style');
+        box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Type de carte');
+        [['plan', 'Plan'], ['satellite', 'Satellite']].forEach(([k, label]) => {
+          const b = L.DomUtil.create('button', '', box);
+          b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', String(layers[k] === cur));
+          b.addEventListener('click', () => {
+            if (layers[k] === cur) return;
+            map.removeLayer(cur); cur = layers[k].addTo(map); cur.bringToBack();
+            box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+          });
+        });
+        L.DomEvent.disableClickPropagation(box);
+        return box;
+      };
+      ctl.addTo(map);
+    }
 
     const PHONE = '01 43 76 26 38';
     const TEL = '<a href="tel:+33143762638">01 43 76 26 38</a>';
@@ -1568,7 +1633,7 @@
       // Ordinateur uniquement (pointeur précis), jamais en mouvement réduit ni sur écran tactile
       if (reduce || !hasG || lightMode || !matchMedia('(pointer: fine)').matches) return;
       load(LENIS_JS).then(() => {
-        lenis = new Lenis({ lerp: 0.12, smoothWheel: true });
+        lenis = new Lenis({ lerp: 0.16, wheelMultiplier: 1.15, smoothWheel: true });
         lenis.on('scroll', ScrollTrigger.update);
         gsap.ticker.add(t => lenis.raf(t * 1000));
         gsap.ticker.lagSmoothing(0);
@@ -1642,7 +1707,7 @@
       gsap.matchMedia().add('(min-width: 761px)', () => {
         sec.classList.add('on');
         const proxy = { p: 0 };
-        const tl = gsap.timeline({ scrollTrigger: { trigger: stage, start: 'top top', end: '+=290%', pin: true, scrub: 0.6, refreshPriority: 2 } });
+        const tl = gsap.timeline({ scrollTrigger: { trigger: stage, start: 'top top', end: '+=190%', pin: true, scrub: 0.4, refreshPriority: 2 } });
         tl.to(proxy, { p: 1, ease: 'none', onUpdate: () => { api.tour(proxy.p); setStep(Math.round(proxy.p * (steps.length - 1))); } });
         st = tl.scrollTrigger;
         ScrollTrigger.sort();
@@ -1775,6 +1840,35 @@
     const waLink = waNumber ? `https://wa.me/${waNumber}?text=${encodeURIComponent(SITE.whatsappMessage)}` : '';
     if (waLink) {
       document.body.insertAdjacentHTML('beforeend', `<a class="wa" href="${waLink}" target="_blank" rel="noopener" aria-label="Écrire à Moto's Cool sur WhatsApp"><svg aria-hidden="true"><use href="#i-whatsapp"/></svg></a>`);
+    }
+
+    // Email affiché au dernier moment (les robots qui collectent les adresses ne le voient pas dans le code)
+    document.querySelectorAll('.mail[data-u]').forEach(m => { const a = document.createElement('a'), e = m.dataset.u + '@' + m.dataset.d; a.href = 'mailto:' + e; a.textContent = e; m.replaceChildren(a); });
+
+    // ---------- Photos de l'atelier (SITE.gallery) ; cadres « photo à venir » tant que la liste est vide ----------
+    {
+      const list = $('#gallery'), photos = (SITE.gallery || []).filter(p => p && p.src);
+      if (!photos.length) {
+        for (let i = 0; i < 6; i++) {
+          const li = document.createElement('li'), box = document.createElement('div'), t = document.createElement('span');
+          box.className = 'ph-empty'; box.innerHTML = '<svg aria-hidden="true"><use href="#i-camera"/></svg>';
+          t.textContent = "Photo de l'atelier à venir"; box.append(t); li.append(box); list.append(li);
+        }
+      } else {
+        const dlg = $('#lightbox'), img = $('#lb-img'), cap = $('#lb-cap'); let cur = 0;
+        const show = i => { cur = (i + photos.length) % photos.length; img.src = photos[cur].src; img.alt = photos[cur].alt || ''; cap.textContent = photos[cur].alt || ''; };
+        photos.forEach((p, i) => {
+          const li = document.createElement('li'), b = document.createElement('button'), im = document.createElement('img');
+          b.type = 'button'; b.className = 'ph'; b.setAttribute('aria-label', 'Agrandir : ' + (p.alt || 'photo ' + (i + 1)));
+          im.src = p.src; im.alt = p.alt || ''; im.loading = 'lazy'; im.decoding = 'async';
+          b.append(im); b.addEventListener('click', () => { show(i); dlg.showModal(); }); li.append(b); list.append(li);
+        });
+        $('#lb-prev').addEventListener('click', () => show(cur - 1));
+        $('#lb-next').addEventListener('click', () => show(cur + 1));
+        $('#lb-close').addEventListener('click', () => dlg.close());
+        dlg.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(cur - 1); else if (e.key === 'ArrowRight') show(cur + 1); });
+        dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+      }
     }
 
     // ---------- FAQ : la question tapée est posée directement à l'assistant ----------
@@ -1926,9 +2020,7 @@
       el.innerHTML = '';
       // Europe seulement (le reste du monde n'a pas d'intérêt ici) ; rendu en canevas, plus fluide avec 1 276 communes
       map = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25, minZoom: 4, maxBounds: [[33, -26], [72, 46]], maxBoundsViscosity: 1, preferCanvas: true }).setView(SHOP, 10);
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(map);
+      mapBases(map);
       const zone = L.polygon(ZONE_LIMIT.map(([lng, lat]) => [lat, lng]), { color: '#e63027', weight: 3, fillColor: '#e63027', fillOpacity: 0.12, interactive: false }).addTo(map);
       // Communes (traits rouges fins) et départements, seulement en Île-de-France ; le reste de la carte reste gris
       Promise.all(['assets/communes-idf.json', 'assets/departements-idf.json'].map(u => fetch(u).then(r => r.ok ? r.json() : Promise.reject(r.status))))
@@ -1968,7 +2060,7 @@
         if (!window.L) { el.innerHTML = '<p class="map-fallback">Carte indisponible. 15 ter av. du Président Salvador Allende, 94400 Vitry-sur-Seine.</p>'; return; }
         el.innerHTML = '';
         const m = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25, minZoom: 4, maxBounds: [[33, -26], [72, 46]], maxBoundsViscosity: 1 }).setView([46.6, 2.4], 5.25);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(m);
+        mapBases(m);
         L.marker(SHOP, { icon: L.divIcon({ className: 'shop-pin', html: '<span></span>', iconSize: [20, 20], iconAnchor: [10, 10] }), title: "Atelier Moto's Cool", alt: "Atelier Moto's Cool" })
           .addTo(m).bindPopup("<b>Moto's Cool</b><br>15 ter av. du Président Salvador Allende<br>94400 Vitry-sur-Seine");
         const zoomIn = () => { if (reduce) m.setView(SHOP, 16); else m.flyTo(SHOP, 16, { duration: 3.2 }); };
@@ -1980,18 +2072,6 @@
         o.disconnect();
         Promise.all([loadCss(LEAFLET_CSS), load(LEAFLET_JS)]).then(initCmap).catch(() => initCmap());
       }, { rootMargin: '400px' }).observe(el);
-    }
-
-    // ---------- Grand « MOTO'S COOL » : néon qui s'allume en morse « SYZ » (S ···  Y −·−−  Z −−··) ----------
-    {
-      const g = document.querySelector('.giant'), U = 200; // unité morse : 200 ms (point = 1, trait = 3)
-      const code = ['...', '-.--', '--..'], seq = [];
-      code.forEach((l, i) => { [...l].forEach((c, j) => { seq.push([1, c === '.' ? 1 : 3]); if (j < l.length - 1) seq.push([0, 1]); }); seq.push([0, i < code.length - 1 ? 3 : 10]); });
-      let k = 0, timer = null;
-      const tick = () => { const [on, n] = seq[k]; g.classList.toggle('lit', !!on); k = (k + 1) % seq.length; timer = setTimeout(tick, n * U); };
-      if (g && !reduce && 'IntersectionObserver' in window) {
-        new IntersectionObserver(([e]) => { if (e.isIntersecting && !timer) tick(); else if (!e.isIntersecting && timer) { clearTimeout(timer); timer = null; k = 0; g.classList.remove('lit'); } }).observe(g);
-      }
     }
 
     // ---------- Formulaire de rendez-vous en 3 étapes ----------
@@ -2323,13 +2403,13 @@
 
       // Mots estompés seulement quand la section approche (texte lisible tant qu'elle n'est pas atteinte)
       ScrollTrigger.create({ trigger: '#manifeste', start: 'top bottom', once: true, onEnter: () => gsap.set('#mtext .w', { opacity: 0.12 }) });
-      gsap.fromTo('#mtext .w', { opacity: 0.12 }, { opacity: 1, stagger: 0.1, ease: 'none', immediateRender: false, scrollTrigger: { trigger: '#manifeste', start: 'top top', end: '+=130%', scrub: true, pin: true, refreshPriority: 3 } });
+      gsap.fromTo('#mtext .w', { opacity: 0.12 }, { opacity: 1, stagger: 0.1, ease: 'none', immediateRender: false, scrollTrigger: { trigger: '#manifeste', start: 'top 80%', end: 'center 45%', scrub: true } });
 
       // Chiffres géants (ordinateur) : un chiffre par écran, séquence épinglée courte. Mobile : simple liste.
       gsap.matchMedia().add('(min-width: 761px)', () => {
         $('#chiffres').classList.add('on');
         const figs = gsap.utils.toArray('.fig');
-        const tl = gsap.timeline({ scrollTrigger: { trigger: '#figs-stage', start: 'top top', end: '+=200%', pin: true, scrub: 0.5, refreshPriority: 1 } });
+        const tl = gsap.timeline({ scrollTrigger: { trigger: '#figs-stage', start: 'top top', end: '+=120%', pin: true, scrub: 0.4, refreshPriority: 1 } });
         tl.call(() => figs[0].classList.add('play'), null, 0.01);
         figs.forEach((f, i) => {
           const num = f.querySelector('[data-count]'), max = +num.dataset.count, o = { v: i ? 0 : max };

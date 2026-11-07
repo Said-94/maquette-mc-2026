@@ -227,7 +227,7 @@
         // Règle : aucun prix, fourchette, estimation ou « à partir de », pour quoi que ce soit.
         return { text: `Pour le prix, on voit ça ensemble : chaque moto est différente, donc nous ne donnons aucun tarif à l'avance, même approximatif. Le prix est fixé après un diagnostic à l'atelier, sur un devis que vous validez. Aucun travail n'est engagé sans votre accord.\n\nPour un dépannage, le tarif dépend de la distance et de la situation : appelez-nous pour en parler.\n\nLe plus simple : appelez-nous ou prenez rendez-vous.`, actions: ctas() };
       case 'paiement':
-        return { text: `Moyens de paiement acceptés : carte bancaire (avec ou sans contact), espèces et virement bancaire.`, actions: [A.book(prefill), A.call()] };
+        return { text: `Moyens de paiement acceptés : carte bancaire (avec ou sans contact), Apple Pay, Google Pay, espèces et virement bancaire.`, actions: [A.book(prefill), A.call()] };
       case 'garantie':
         return { text: `Oui, nos interventions sont garanties : en cas de souci lié à notre travail, revenez nous voir, nous le reprenons. Les conditions sont précisées sur votre facture. Pour une intervention déjà réalisée, appelez l'atelier : nous retrouverons votre dossier.`, actions: [A.call(), A.book(prefill)] };
       case 'horaires':
