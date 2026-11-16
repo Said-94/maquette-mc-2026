@@ -1343,11 +1343,10 @@
   <script>
     /**
      * ENVOI D'UNE DEMANDE DE RENDEZ-VOUS
-     * 1. La demande part par email à l'accueil (contact@motoscool.fr), via le petit service booking-worker/
+     * 1. La demande part par email à l'atelier, via le petit service booking-worker/
      *    (adresse à renseigner dans SITE.bookingEndpoint). Le service vérifie la demande, filtre les robots
-     *    et envoie l'email au format attendu par le garage, avec un bouton « Valider ce rendez-vous ».
-     * 2. L'accueil vérifie la demande et clique sur « Valider » : la page valider.html prépare la confirmation
-     *    au client et l'envoi vers le logiciel G8 (automatique dès qu'Orisha, l'éditeur de G8, ouvre l'accès).
+     *    et envoie l'email au format attendu par le garage.
+     * 2. L'atelier vérifie la demande et confirme le rendez-vous au client.
      * Mode démo (SITE.bookingEndpoint vide) : rien n'est envoyé ; l'écran de confirmation montre l'email
      * que l'accueil recevrait.
      */
@@ -2181,15 +2180,13 @@
         dt.textContent = k; dd.textContent = v;
         recap.append(dt, dd);
       });
-      // Mode démo : aperçu de l'email reçu par l'accueil et lien vers la page de validation
+      // Mode démo : aperçu de l'email reçu par l'atelier
       if (res.demo && window.MCMail) {
-        const box = $('#mail-demo'), p = document.createElement('p'), pre = document.createElement('pre'), a = document.createElement('a');
-        p.textContent = "Démonstration : voici l'email que recevra l'accueil à contact@motoscool.fr.";
+        const box = $('#mail-demo'), p = document.createElement('p'), pre = document.createElement('pre');
+        p.textContent = "Démonstration : voici l'email que recevra l'atelier.";
         const { site_web, duree, ...clean } = payload;
         pre.textContent = MCMail.text(clean);
-        a.className = 'btn btn-ghost'; a.textContent = 'Voir la page « Valider le RDV »'; a.target = '_blank'; a.rel = 'noopener';
-        a.href = MCMail.validateLink(clean, location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, ''));
-        box.replaceChildren(p, pre, a); box.hidden = false;
+        box.replaceChildren(p, pre); box.hidden = false;
       }
       form.hidden = true;
       $('#rdv-steps').hidden = true;
