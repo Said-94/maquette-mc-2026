@@ -1,7 +1,6 @@
 /**
  * Mise en forme d'une demande de rendez-vous, partagée par :
  *  - index.html : aperçu de l'email en mode démo ;
- *  - valider.html : page de validation de l'accueil ;
  *  - booking-worker/worker.js (copie du même texte) : email réellement envoyé à l'accueil.
  * Le texte reprend exactement le format attendu par le garage.
  */
@@ -52,7 +51,6 @@
   // Demande encodée dans le fragment (#…) de l'adresse : il n'est jamais envoyé à un serveur
   const encode = p => btoa(unescape(encodeURIComponent(JSON.stringify(p)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   const decode = s => JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g, '+').replace(/_/g, '/')))));
-  const validateLink = (p, base) => `${base}valider.html#d=${encode(p)}`;
 
-  window.MCMail = { text, encode, decode, validateLink, dateFr, dayFr, hourFr };
+  window.MCMail = { text, encode, decode, dateFr, dayFr, hourFr };
 })();

@@ -2,7 +2,7 @@
  * Service d'envoi des demandes de rendez-vous de Moto's Cool (Cloudflare Worker).
  *
  * Reçoit la demande du formulaire (POST JSON), la vérifie, écarte les robots, puis envoie à l'accueil
- * un email au format attendu par le garage, avec un bouton « Valider ce rendez-vous » (page valider.html).
+ * un email au format attendu par le garage.
  * L'email part via Brevo (Sendinblue, France, serveurs dans l'UE). Rien n'est stocké ici.
  *
  * Variables (Settings › Variables du Worker) :
@@ -179,13 +179,7 @@ export default {
     if (globalFull(Date.now())) return reply(429, { ok: false }, { 'Retry-After': String(GLOBAL_WINDOW / 1000) });
 
     const text = mailText(p);
-    const data = b64urlText(JSON.stringify(p));
-    const t = Math.floor(Date.now() / 1000);
-    const sig = env.SIGN_KEY ? `&t=${t}&s=${await sign(data + '.' + t, env.SIGN_KEY)}` : '';
-    const link = `${env.SITE_URL}valider.html#d=${data}${sig}`;
-    const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.55;color:#1d1d1f">${esc(text).replace(/\n/g, '<br>')}
-<p style="margin-top:22px"><a href="${esc(link)}" style="display:inline-block;background:#d42a21;color:#fff;font-weight:bold;text-decoration:none;padding:12px 22px;border-radius:999px">✅ Valider ce rendez-vous</a></p>
-<p style="color:#777;font-size:12px">Le bouton ouvre la fiche de validation : envoi dans G8 et confirmation au client.</p></div>`;
+    const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.55;color:#1d1d1f">${esc(text).replace(/\n/g, '<br>')}</div>`;
     let res;
     try {
       res = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -196,7 +190,7 @@ export default {
           to: [{ email: env.TO_EMAIL }],
           replyTo: { email: p.contact.email, name: p.contact.nom },
           subject: "🏍️ NOUVELLE DEMANDE DE RDV — Moto's Cool",
-          textContent: `${text}\n\n✅ Valider ce rendez-vous : ${link}`,
+          textContent: text,
           htmlContent: html
         })
       });

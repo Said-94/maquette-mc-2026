@@ -17,11 +17,6 @@
 /
   Cache-Control: public, max-age=0, must-revalidate
 
-# Fiche de validation des rendez-vous : jamais en cache, jamais indexée, aucun référent transmis
-/valider.html
-  Cache-Control: no-store
-  X-Robots-Tag: noindex, nofollow
-  Referrer-Policy: no-referrer
 
 # Fichiers statiques (polices, images, vidéos, modèles 3D, scripts) : cache d'une semaine, rafraîchi en arrière-plan
 /assets/*
