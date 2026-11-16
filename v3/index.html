@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-aVvZ+XNI4OR7T8J3q+mSPNhaNX0ea2tNCl0xQ5olJk0=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-/0QffrsB0P0Ua+EHqc8je/GwtaH2c97KHRAQivsk44o=' 'sha256-xfSI8QBLdGMxjj9glPy8sHkTw8MMRcJUxI8RsEr+a44=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -574,6 +574,7 @@
     .lightbox figcaption { color: #fff; margin-top: 10px; font-weight: 700; }
     .lb-btn { position: fixed; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(20,20,24,.8); color: #fff; font-size: 1.8rem; line-height: 1; cursor: pointer; }
     .lb-close { top: 18px; right: 18px; } .lb-prev { left: 18px; top: 50%; } .lb-next { right: 18px; top: 50%; }
+    @media (min-width: 761px) { .gallery li:nth-child(4):nth-last-child(4), .gallery li:nth-child(7):last-child { grid-column: span 2; } }
     @media (max-width: 760px) { .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 140px; gap: 8px; } }
     .faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 28px; align-items: start; }
     .faq-side { position: sticky; top: 96px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; padding: 24px; display: grid; gap: 12px; }
@@ -1468,7 +1469,15 @@
     mapStyle: 'plan',
     // Photos de l'atelier (onglet Photos) : déposer les images dans assets/photos/ puis les lister ici,
     // ex : { src: 'assets/photos/atelier-1.jpg', alt: "L'atelier vu de l'entrée" }. Vide = cadres « photo à venir ».
-    gallery: [],
+    gallery: [
+      { src: '../assets/photos/atelier-1.jpg', alt: "L'atelier Moto's Cool à Vitry-sur-Seine : les ponts et les établis" },
+      { src: '../assets/photos/atelier-2.jpg', alt: "L'accueil et les casques" },
+      { src: '../assets/photos/atelier-3.jpg', alt: "Un mécanicien au travail sur un pont" },
+      { src: '../assets/photos/atelier-4.jpg', alt: "L'atelier sous ses néons hexagonaux" },
+      { src: '../assets/photos/atelier-5.jpg', alt: "Le stock de pièces et d'huiles" },
+      { src: '../assets/photos/atelier-6.jpg', alt: "Courroies, batteries et pièces détachées" },
+      { src: '../assets/photos/atelier-7.jpg', alt: "Une moto prête à repartir" }
+    ],
     // Lien vers les avis Google du garage. Vide = bouton masqué.
     googleReviewsUrl: 'https://share.google/6iqXkrDpoP4qPNWKc',
     // Réseaux sociaux (liens complets). Un lien vide n'est pas affiché.
