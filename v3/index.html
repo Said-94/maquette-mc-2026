@@ -567,10 +567,10 @@
     .ph-empty { display: grid; place-items: center; align-content: center; gap: 10px; color: var(--muted); font-size: .9rem; font-weight: 700; border-style: dashed;
       background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(255,255,255,.03) 14px 28px), var(--bg-2); }
     .ph-empty svg { width: 34px; height: 34px; color: var(--red); }
-    .lightbox { border: 0; padding: 0; background: transparent; max-width: 94vw; max-height: 92vh; overflow: visible; }
+    .lightbox { border: 0; padding: 0; margin: auto; inset: 0; background: transparent; max-width: 94vw; max-height: 92vh; overflow: visible; }
     .lightbox::backdrop { background: rgba(10,10,12,.9); }
     .lightbox figure { margin: 0; text-align: center; }
-    .lightbox img { max-width: 94vw; max-height: 82vh; border-radius: 12px; }
+    .lightbox img { display: block; margin: 0 auto; max-width: 94vw; max-height: 82vh; border-radius: 12px; }
     .lightbox figcaption { color: #fff; margin-top: 10px; font-weight: 700; }
     .lb-btn { position: fixed; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(20,20,24,.8); color: #fff; font-size: 1.8rem; line-height: 1; cursor: pointer; }
     .lb-close { top: 18px; right: 18px; } .lb-prev { left: 18px; top: 50%; } .lb-next { right: 18px; top: 50%; }
