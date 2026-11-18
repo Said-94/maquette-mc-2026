@@ -798,7 +798,7 @@ export async function init(opts = {}) {
   const hv = makeView(hero, model, 'hero', tier, T);
   views.push(hv);
   let tv = null;
-  const canTour = !!tourCanvas && !reduce && !mobile;
+  const canTour = !!tourCanvas && !reduce;
 
   // ---------- Révélation signature : ordinateur + GLB, une fois par session, sautée au moindre geste ----------
   let reveal = null, sway = 1;
@@ -1109,7 +1109,9 @@ function makeView(canvas, object, kind, tier, T) {
       camera.aspect = w / h;
       // Décalage du sujet : accueil → à droite du titre ; visite → à gauche des cartes ; mobile → plus bas
       if (kind === 'hero') camera.setViewOffset(w, h, w > 960 ? -0.24 * w : 0, w > 960 ? -0.02 * h : -0.1 * h, w, h);
-      else camera.setViewOffset(w, h, 0.17 * w, 0, w, h);
+      else camera.setViewOffset(w, h, w > 760 ? 0.17 * w : 0, w > 760 ? 0 : 0.2 * h, w, h);
+      // Écran en hauteur (téléphone) : on recule la caméra pour garder la moto entière dans le cadre
+      camera.zoom = kind !== 'hero' && w < h ? Math.max(0.55, (w / h) * 1.2) : 1;
       camera.updateProjectionMatrix();
       return true;
     },

@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-xud9EduzR1ZND3rDhgSLRHiifQBaHAa/F46Ai/NDz78=' 'sha256-reOdq2REfS4zKEv2HIzanrGzWW5DXqIGogEWx5h0cEE=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-xud9EduzR1ZND3rDhgSLRHiifQBaHAa/F46Ai/NDz78=' 'sha256-VZ/PZCxoKhamvqsnOdWQmAl+n3fQv17vJIKYXrkfTYs=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -897,6 +897,27 @@
       *, *::before, *::after { animation: none !important; transition: none !important; }
       html { scroll-behavior: auto; }
     }
+/* Téléphone : visite 3D (moto en haut, carte en bas) et chiffres géants, en hauteur d'écran stable */
+    @media (max-width: 760px) {
+      .tour.on .tour-stage, .figs.on .figs-stage { height: 100svh; }
+      .tour.on .tour-stage::after { background: linear-gradient(0deg, rgba(48,48,54,.96) 0%, rgba(48,48,54,.7) 38%, rgba(48,48,54,0) 62%); }
+      .tour.on .tour-steps { left: 12px; right: 12px; width: auto; top: auto; bottom: calc(88px + env(safe-area-inset-bottom)); height: 46%; }
+      .tour.on .tour-step { top: auto; bottom: 0; transform: translateY(12px); }
+      .tour.on .tour-step.active { transform: none; }
+      .tour.on .tour-step .hpanel { padding: 18px; border-radius: 18px; }
+      .tour.on .tour-step .hpanel .num { font-size: 2.6rem; }
+      .tour.on .tour-step .hpanel h3 { font-size: 1.3rem; margin-bottom: 6px; }
+      .tour.on .tour-step .hpanel p { font-size: .92rem; margin-bottom: 12px; }
+      .tour.on .tour-step .hpanel .more { display: none; }
+      .tour.on .tour-intro { font-size: .95rem; }
+      .tour.on .tour-intro b { font-size: 1.15rem; }
+      .tour.on .tour-nav { left: 12px; right: 12px; top: 84px; bottom: auto; }
+      .tour.on .tour-dots, .tour.on .tour-hint { display: none; }
+      .tour.on .tour-arrows { justify-content: flex-end; }
+      .tour.on .tour-arrows button { width: 40px; height: 40px; }
+      .figs.on .fig b { font-size: min(calc(84vw / var(--n, 2)), 34vh); }
+      .figs.on .fig-art { width: min(70vw, 42vh); }
+    }
   </style>
 </head>
 <body>
@@ -1494,7 +1515,7 @@
     const $ = s => document.querySelector(s);
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasG = !!(window.gsap && window.ScrollTrigger);
-    if (hasG) gsap.registerPlugin(ScrollTrigger);
+    if (hasG) { gsap.registerPlugin(ScrollTrigger); ScrollTrigger.config({ ignoreMobileResize: true }); }
 
     // Chargement à la demande d'un script / d'une feuille de style externe
     // Empreintes (SRI) des bibliothèques externes : un fichier modifié sur le CDN est refusé par le navigateur
@@ -1686,7 +1707,7 @@
           $('#paint-name').textContent = api.paints[b.dataset.paint].label;
         }));
       }
-      if (api.canTour && hasG && !reduce && desktop) enableTour(api);
+      if (api.canTour && hasG && !reduce) enableTour(api);
     }
     // Visite des services (ordinateur) : épinglage court, les cartes restent au premier plan
     function enableTour(api) {
@@ -1729,7 +1750,7 @@
         if (lenis) lenis.scrollTo(y, { immediate: true }); else scrollTo(0, y);
       }));
       // Ordinateur uniquement : sous 761 px (fenêtre réduite, rotation), retour à la liste simple
-      gsap.matchMedia().add('(min-width: 761px)', () => {
+      gsap.matchMedia().add('all', () => {
         sec.classList.add('on');
         const proxy = { p: 0 };
         const tl = gsap.timeline({ scrollTrigger: { trigger: stage, start: 'top top', end: '+=190%', pin: true, scrub: 0.4, refreshPriority: 2 } });
@@ -1742,7 +1763,7 @@
     }
     function start3D() {
       return import('./assets/bike3d.js')
-        .then(m => m.init({ hero: $('#bike3d'), tourCanvas: desktop ? $('#tour3d') : null, reduce, mobile: lightMode, site: SITE }))
+        .then(m => m.init({ hero: $('#bike3d'), tourCanvas: $('#tour3d'), reduce, mobile: lightMode, site: SITE }))
         .then(onBike)
         .catch(() => heroFilm()); // WebGL ou CDN indisponible : le film remplace la moto 3D
     }
@@ -1771,7 +1792,7 @@
     // Mobile, appareil modeste ou WebGL absent : pas de moto 3D (3,7 à 5,8 Mo) ; le film en boucle la remplace (≈ 1 Mo)
     const webgl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })();
     const motoSec = $('#services');
-    const startMoto = () => { if (lightMode || midEnd || !webgl) heroFilm(); else start3D(); };
+    const startMoto = () => { if (midEnd || !webgl) heroFilm(); else start3D(); };
     // Défilement doux tout de suite sur ordinateur ; moto 3D ou film seulement à l'approche de leur section
     if (!lightMode) idle(startLenis, { timeout: 2500 });
     if ('IntersectionObserver' in window) {
@@ -2429,7 +2450,7 @@
       gsap.fromTo('#mtext .w', { opacity: 0.12 }, { opacity: 1, stagger: 0.1, ease: 'none', immediateRender: false, scrollTrigger: { trigger: '#manifeste', start: 'top 80%', end: 'center 45%', scrub: true } });
 
       // Chiffres géants (ordinateur) : un chiffre par écran, séquence épinglée courte. Mobile : simple liste.
-      gsap.matchMedia().add('(min-width: 761px)', () => {
+      gsap.matchMedia().add('all', () => {
         $('#chiffres').classList.add('on');
         const figs = gsap.utils.toArray('.fig');
         const tl = gsap.timeline({ scrollTrigger: { trigger: '#figs-stage', start: 'top top', end: '+=120%', pin: true, scrub: 0.4, refreshPriority: 1 } });
