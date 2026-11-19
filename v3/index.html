@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-xud9EduzR1ZND3rDhgSLRHiifQBaHAa/F46Ai/NDz78=' 'sha256-LZOg72UPVFPE6rNfi/ROauYGtkRXQToDQbOW0rCT5Mo=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-CfZTwYB+YpDe0eZ6sCZrKpvfzeojBxKFTxmxrOQ66ws=' 'sha256-HxmRFsRfuubzT2cFSnotbaTrglfDFEF/j54zPeriDEc=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -544,6 +544,7 @@
     .slot { padding: 8px 14px; font-weight: 700; font-size: .9rem; }
     .day:hover, .slot:hover { border-color: var(--red); }
     .day.active, .slot.active { background: var(--red-ui); border-color: var(--red-ui); }
+    .slot.full, .slot.full:hover { opacity: .38; text-decoration: line-through; cursor: not-allowed; border-color: var(--line); }
     .day.active small { color: #fff; }
     .slots:empty::before { content: "Choisissez d'abord un jour"; color: var(--muted); font-weight: 600; font-size: .9rem; }
     .consent { display: flex; gap: 12px; align-items: flex-start; font-weight: 600; }
@@ -1462,12 +1463,19 @@
      * Mode démo (SITE.bookingEndpoint vide) : rien n'est envoyé ; l'écran de confirmation montre l'email
      * que l'accueil recevrait.
      */
+    // Créneaux complets (3 clients déjà inscrits), lus auprès du service ; vide en mode démo ou en cas d'erreur
+    function fullSlots() {
+      const url = (typeof SITE !== 'undefined' && SITE.bookingEndpoint) || '';
+      if (!url) return Promise.resolve([]);
+      return fetch(url.replace(/\/+$/, '') + '/creneaux', { credentials: 'omit', cache: 'no-store' })
+        .then(r => (r.ok ? r.json() : { complets: [] })).then(j => (Array.isArray(j.complets) ? j.complets : [])).catch(() => []);
+    }
     function sendRequest(payload) {
-      const url = (window.SITE && SITE.bookingEndpoint) || '';
+      const url = (typeof SITE !== 'undefined' && SITE.bookingEndpoint) || '';
       if (!url) return new Promise(resolve => setTimeout(() => resolve({ ok: true, demo: true }), 500));
       const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 12000);
       return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl.signal, credentials: 'omit' })
-        .then(r => { if (!r.ok) throw new Error('http ' + r.status); return { ok: true }; })
+        .then(r => { if (r.status === 409) { const e = new Error('complet'); e.complet = true; throw e; } if (!r.ok) throw new Error('http ' + r.status); return { ok: true }; })
         .finally(() => clearTimeout(timer));
     }
   </script>
@@ -1533,7 +1541,7 @@
         plan: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }),
         satellite: L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', { maxZoom: 19, attribution: 'Photos aériennes &copy; <a href="https://www.ign.fr/">IGN</a>' })
       };
-      let cur = layers[window.SITE && SITE.mapStyle === 'satellite' ? 'satellite' : 'plan'].addTo(map);
+      let cur = layers[typeof SITE !== 'undefined' && SITE.mapStyle === 'satellite' ? 'satellite' : 'plan'].addTo(map);
       const ctl = L.control({ position: 'topright' });
       ctl.onAdd = () => {
         const box = L.DomUtil.create('div', 'map-style');
@@ -2293,6 +2301,18 @@
     const pad = n => String(n).padStart(2, '0');
     const now0 = new Date();
     const pick = (box, b) => { box.querySelectorAll('button').forEach(x => { x.classList.toggle('active', x === b); x.setAttribute('aria-pressed', String(x === b)); }); };
+    const FULL = new Set();
+    let activeDay = null;
+    // Mise à jour des créneaux complets sans perdre l'heure déjà choisie (si elle est encore libre)
+    const refreshFull = () => fullSlots().then(list => {
+      FULL.clear(); list.forEach(k => FULL.add(k));
+      if (!activeDay) return;
+      const keep = rdv.heure;
+      activeDay.click();
+      const again = keep && [...slotsBox.querySelectorAll('.slot:not(.full)')].find(s => s.textContent === keep.replace(/^0/, '').replace(':', 'h'));
+      if (again) again.click();
+    });
+    refreshFull();
     for (let i = 1, added = 0; added < 12; i++) {
       const d = new Date(now0.getFullYear(), now0.getMonth(), now0.getDate() + i);
       if (!HOURS[d.getDay()]) continue;
@@ -2302,6 +2322,7 @@
       b.setAttribute('aria-label', d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }));
       b.innerHTML = `<small>${DAY_NAMES[d.getDay()]}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString('fr-FR', { month: 'short' })}</small>`;
       b.addEventListener('click', () => {
+        activeDay = b;
         pick(daysBox, b);
         rdv.date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
         rdv.label = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -2313,6 +2334,9 @@
             const s = document.createElement('button');
             s.type = 'button'; s.className = 'slot'; s.setAttribute('aria-pressed', 'false');
             s.textContent = hm(m);
+            if (FULL.has(`${rdv.date} ${pad(Math.floor(m / 60))}:${pad(m % 60)}`)) {
+              s.disabled = true; s.classList.add('full'); s.title = 'Complet'; s.setAttribute('aria-label', `${hm(m)}, complet`);
+            }
             s.addEventListener('click', () => { pick(slotsBox, s); rdv.heure = `${pad(Math.floor(m / 60))}:${pad(m % 60)}`; setHint(rdvHint, '', 'ko'); });
             slotsBox.appendChild(s);
           }
@@ -2396,6 +2420,15 @@
         if (!bot) res = await sendRequest(payload);
       } catch (err) {
         btnSend.disabled = false; btnSend.textContent = 'Envoyer ma demande';
+        if (err && err.complet) {
+          FULL.add(`${rdv.date} ${rdv.heure}`);
+          rdv.heure = '';
+          showStep(2, true);
+          if (activeDay) activeDay.click();
+          refreshFull();
+          setHint(rdvHint, 'Ce créneau vient d\'être complet. Choisissez une autre heure.', 'ko');
+          return;
+        }
         setHint(formHint, `L'envoi n'a pas abouti. Réessayez ou appelez-nous au ${PHONE}.`, 'ko');
         return;
       }

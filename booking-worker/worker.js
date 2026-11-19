@@ -3,16 +3,22 @@
  *
  * Reçoit la demande du formulaire (POST JSON), la vérifie, écarte les robots, puis envoie à l'accueil
  * un email au format attendu par le garage.
- * L'email part via Brevo (Sendinblue, France, serveurs dans l'UE). Rien n'est stocké ici.
+ * L'email part via Brevo (Sendinblue, France, serveurs dans l'UE). Seuls le jour et l'heure des créneaux pris
+ * sont gardés (aucune donnée personnelle), pour compter les places.
+ *
+ * Places par créneau : avec une base D1 liée sous le nom « DB », chaque demande occupe une place ;
+ * un créneau est complet à CAPACITE demandes (3 par défaut). Le site lit les créneaux complets (GET /creneaux)
+ * et l'email de l'accueil contient un lien pour libérer la place (annulation ou déplacement).
  *
  * Variables (Settings › Variables du Worker) :
+ *   CAPACITE         nombre de clients maximum par créneau (défaut : 3)
  *   BREVO_API_KEY    (secret) clé API Brevo
  *   TO_EMAIL         adresse de l'accueil, ex : contact@motoscool.fr
  *   FROM_EMAIL       expéditeur validé dans Brevo, ex : rdv@motoscool.fr
  *   SITE_URL         adresse du site, avec « / » final, ex : https://motoscool.fr/
  *   ALLOWED_ORIGINS  origines autorisées, séparées par des virgules, ex : https://motoscool.fr,https://said-94.github.io
- *   SIGN_KEY         (secret, conseillé) clé de signature des liens « Valider » : un lien fabriqué ou modifié
- *                    est refusé par la future route G8. Générer une longue chaîne aléatoire (32 caractères ou plus).
+ *   SIGN_KEY         (secret, conseillé) clé de signature des liens « Libérer la place » : un lien fabriqué ou modifié
+ *                    est refusé. Générer une longue chaîne aléatoire (32 caractères ou plus).
  *   TURNSTILE_SECRET (secret, facultatif) clé Cloudflare Turnstile : si elle est renseignée, la demande doit
  *                    contenir un jeton Turnstile valide (champ « turnstile »). NE PAS la renseigner tant que le widget
  *                    Turnstile n'est pas ajouté au formulaire (et autorisé dans sa CSP) : sinon toutes les demandes sont refusées.
@@ -95,7 +101,7 @@ function clean(b) {
   const today = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
   const dateOk = d && day.getUTCFullYear() === +d[1] && day.getUTCMonth() === +d[2] - 1 && day.getUTCDate() === +d[3]
     && day.getTime() >= today - 86400000 && day.getTime() <= today + 366 * 86400000;
-  const hourOk = h && +h[1] <= 23 && +h[2] <= 59;
+  const hourOk = h && +h[1] <= 23 && (h[2] === '00' || h[2] === '30'); // créneaux de 30 minutes
   const ok = p.vehicule.immatriculation && p.vehicule.marque && p.vehicule.modele && p.vehicule.intervention
     && dateOk && hourOk
     && p.contact.nom && /^(\+33|0)\s?[1-9]([\s.-]?\d{2}){4}$/.test(p.contact.telephone)
@@ -148,15 +154,69 @@ async function turnstileOk(token, ip, secret) {
   } catch (e) { return false; }
 }
 
+// ---------- Places par créneau (base D1 « DB », facultative) ----------
+// Chaque demande occupe une place sur son créneau (jour + heure). Au-delà de CAPACITE places, le créneau est complet.
+// L'accueil libère une place depuis l'email (annulation ou déplacement). Sans base « DB », rien n'est limité.
+const capacity = env => Math.max(1, Math.min(20, parseInt(env.CAPACITE, 10) || 3));
+const isoDay = t => new Date(t).toISOString().slice(0, 10);
+async function ensureTable(db) {
+  await db.prepare('CREATE TABLE IF NOT EXISTS resa (id TEXT PRIMARY KEY, jour TEXT NOT NULL, heure TEXT NOT NULL, cree INTEGER NOT NULL, libere INTEGER NOT NULL DEFAULT 0)').run();
+  await db.prepare('CREATE INDEX IF NOT EXISTS resa_creneau ON resa (jour, heure, libere)').run();
+}
+// Réserve une place si le créneau n'est pas complet (une seule requête : pas de double réservation simultanée)
+async function takeSeat(db, cap, jour, heure) {
+  const id = crypto.randomUUID();
+  const r = await db.prepare('INSERT INTO resa (id, jour, heure, cree) SELECT ?1, ?2, ?3, ?4 WHERE (SELECT COUNT(*) FROM resa WHERE jour = ?2 AND heure = ?3 AND libere = 0) < ?5')
+    .bind(id, jour, heure, Date.now(), cap).run();
+  return r.meta && r.meta.changes === 1 ? id : null;
+}
+async function fullSlots(db, cap) {
+  const today = isoDay(Date.now());
+  const { results } = await db.prepare('SELECT jour, heure FROM resa WHERE libere = 0 AND jour >= ?1 GROUP BY jour, heure HAVING COUNT(*) >= ?2')
+    .bind(today, cap).all();
+  return (results || []).map(r => `${r.jour} ${r.heure}`);
+}
+// Page simple pour l'accueil (lien de l'email) : un bouton, pour qu'un antivirus qui « visite » le lien ne libère rien
+const page = (title, body) => new Response(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(title)}</title><style>body{font-family:Arial,sans-serif;background:#2b2b31;color:#fff;display:grid;place-items:center;min-height:100vh;margin:0;padding:20px;box-sizing:border-box}main{max-width:460px;text-align:center}h1{font-size:1.4rem}p{color:#cfcfd6;line-height:1.5}button{font:inherit;font-weight:700;background:#d92b22;color:#fff;border:0;border-radius:999px;padding:14px 26px;cursor:pointer}</style></head><body><main><h1>${esc(title)}</h1>${body}</main></body></html>`,
+  { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Robots-Tag': 'noindex', 'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'" } });
+
+async function releaseRoute(req, env, url) {
+  if (!env.DB || !env.SIGN_KEY) return page('Lien indisponible', '<p>Ce lien ne fonctionne pas.</p>');
+  let id = url.searchParams.get('id') || '', s = url.searchParams.get('s') || '';
+  if (req.method === 'POST') {
+    const form = await req.formData().catch(() => null);
+    if (form) { id = String(form.get('id') || ''); s = String(form.get('s') || ''); }
+  }
+  if (!/^[0-9a-f-]{36}$/.test(id) || s !== await sign('liberer.' + id, env.SIGN_KEY)) return page('Lien invalide', '<p>Ce lien est incorrect ou incomplet.</p>');
+  await ensureTable(env.DB);
+  const row = await env.DB.prepare('SELECT jour, heure, libere FROM resa WHERE id = ?1').bind(id).first();
+  if (!row) return page('Rendez-vous introuvable', '<p>Ce rendez-vous est trop ancien ou n\'existe plus.</p>');
+  const when = `le ${dateFr(row.jour)} à ${hourFr(row.heure)}`;
+  if (row.libere) return page('Place déjà libérée', `<p>La place du créneau ${esc(when)} est déjà libre.</p>`);
+  if (req.method !== 'POST') {
+    return page('Libérer ce créneau ?', `<p>Le client a annulé ou déplacé son rendez-vous ${esc(when)} ?<br>Libérez sa place pour qu'un autre client puisse la réserver sur le site.</p><form method="post"><input type="hidden" name="id" value="${esc(id)}"><input type="hidden" name="s" value="${esc(s)}"><button type="submit">Libérer la place</button></form>`);
+  }
+  await env.DB.prepare('UPDATE resa SET libere = 1 WHERE id = ?1').bind(id).run();
+  return page('Place libérée', `<p>Le créneau ${esc(when)} a de nouveau une place disponible sur le site.</p>`);
+}
+
 export default {
   async fetch(req, env) {
+    const url = new URL(req.url);
+    if (url.pathname === '/liberer' && (req.method === 'GET' || req.method === 'POST')) return releaseRoute(req, env, url);
     const origin = req.headers.get('Origin') || '';
     const allowed = String(env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
-    const cors = { 'Access-Control-Allow-Origin': allowed.includes(origin) ? origin : 'null', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Max-Age': '86400', 'Vary': 'Origin' };
+    const cors = { 'Access-Control-Allow-Origin': allowed.includes(origin) ? origin : 'null', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Max-Age': '86400', 'Vary': 'Origin' };
     const sec = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'", 'Referrer-Policy': 'no-referrer' };
     const reply = (status, body, extra) => new Response(JSON.stringify(body), { status, headers: { ...cors, ...sec, 'Content-Type': 'application/json', ...extra } });
     if (req.method === 'OPTIONS') return new Response(null, { status: allowed.includes(origin) ? 204 : 403, headers: { ...cors, ...sec } });
-    if (req.method !== 'POST') return reply(405, { ok: false }, { Allow: 'POST, OPTIONS' });
+    // Créneaux complets (lecture seule) : le site les grise
+    if (req.method === 'GET' && url.pathname === '/creneaux') {
+      if (!allowed.includes(origin)) return reply(403, { ok: false });
+      if (!env.DB) return reply(200, { ok: true, complets: [] });
+      try { await ensureTable(env.DB); return reply(200, { ok: true, complets: await fullSlots(env.DB, capacity(env)) }); } catch (e) { return reply(200, { ok: true, complets: [] }); }
+    }
+    if (req.method !== 'POST') return reply(405, { ok: false }, { Allow: 'GET, POST, OPTIONS' });
     if (!allowed.includes(origin)) return reply(403, { ok: false });
     if (!/^application\/json\b/i.test(req.headers.get('Content-Type') || '')) return reply(415, { ok: false });
     // Taille vérifiée avant de lire le corps (annoncée), puis après lecture (réelle)
@@ -178,8 +238,24 @@ export default {
     if (!p) return reply(422, { ok: false });
     if (globalFull(Date.now())) return reply(429, { ok: false }, { 'Retry-After': String(GLOBAL_WINDOW / 1000) });
 
-    const text = mailText(p);
-    const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.55;color:#1d1d1f">${esc(text).replace(/\n/g, '<br>')}</div>`;
+    // Place sur le créneau (si la base existe) : refus « complet » si les places sont déjà prises
+    let seat = null;
+    if (env.DB) {
+      try {
+        await ensureTable(env.DB);
+        await env.DB.prepare('DELETE FROM resa WHERE jour < ?1').bind(isoDay(Date.now() - 2 * 86400000)).run(); // ménage : créneaux passés
+        seat = await takeSeat(env.DB, capacity(env), p.rdv.date, p.rdv.heure);
+      } catch (e) { return reply(503, { ok: false }); }
+      if (!seat) return reply(409, { ok: false, complet: true });
+    }
+    let text = mailText(p), freeLink = '';
+    if (seat && env.SIGN_KEY) {
+      freeLink = `${url.origin}/liberer?id=${seat}&s=${await sign('liberer.' + seat, env.SIGN_KEY)}`;
+      text += `\n\n—\nRendez-vous annulé ou déplacé ? Libérez la place sur le site : ${freeLink}`;
+    }
+    let html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.55;color:#1d1d1f">${esc(freeLink ? text.slice(0, text.lastIndexOf('\n\n—')) : text).replace(/\n/g, '<br>')}</div>`;
+    if (freeLink) html += `<p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin-top:22px">Rendez-vous annulé ou déplacé ?</p><p><a href="${esc(freeLink)}" style="display:inline-block;background:#d92b22;color:#fff;text-decoration:none;font-family:Arial,sans-serif;font-weight:bold;padding:12px 22px;border-radius:999px">Libérer la place de ce créneau</a></p>`;
+    const undo = async () => { if (seat) { try { await env.DB.prepare('DELETE FROM resa WHERE id = ?1').bind(seat).run(); } catch (e) {} } };
     let res;
     try {
       res = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -194,8 +270,9 @@ export default {
           htmlContent: html
         })
       });
-    } catch (e) { return reply(502, { ok: false }); }
-    return res.ok ? reply(200, { ok: true }) : reply(502, { ok: false });
+    } catch (e) { await undo(); return reply(502, { ok: false }); }
+    if (!res.ok) { await undo(); return reply(502, { ok: false }); }
+    return reply(200, { ok: true });
   }
 };
 

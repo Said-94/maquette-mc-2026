@@ -4,9 +4,10 @@ Le formulaire du site envoie chaque demande à ce petit service. Le service :
 
 1. vérifie la demande ;
 2. écarte les robots (champ piège, durée de saisie, 5 demandes maximum par adresse IP toutes les 10 minutes, 60 emails maximum par heure) ;
-3. envoie un email à l'accueil (`contact@motoscool.fr`), au format du garage, avec un bouton **« Valider ce rendez-vous »**.
+3. réserve une place sur le créneau : **3 clients maximum par créneau de 30 minutes**. Au-delà, le créneau apparaît grisé (« complet ») sur le site ;
+4. envoie un email à l'accueil (`contact@motoscool.fr`), au format du garage, avec un bouton **« Libérer la place de ce créneau »** à utiliser si le client annule ou déplace son rendez-vous.
 
-Le service ne stocke rien.
+Le service garde seulement le jour et l'heure des créneaux pris (aucune donnée personnelle).
 
 Tant que `SITE.bookingEndpoint` est vide dans `index.html`, le site est en **mode démo**. Rien n'est envoyé. L'écran de confirmation montre l'email que l'accueil recevrait.
 
@@ -22,7 +23,12 @@ Tant que `SITE.bookingEndpoint` est vide dans `index.html`, le site est en **mod
 - Aller dans **Workers & Pages › Create › Worker**.
 - Coller le contenu de `worker.js`, puis cliquer sur **Deploy**.
 
-### 3. Renseigner les variables du Worker
+### 3. Créer la base des créneaux (gratuit)
+- Dans **Workers & Pages › D1**, créer une base, par exemple `rdv-creneaux`.
+- Dans le Worker, **Settings › Bindings › Add › D1 database** : nom de la liaison **`DB`**, base `rdv-creneaux`.
+- La table se crée toute seule à la première demande.
+
+### 4. Renseigner les variables du Worker
 Elles se trouvent dans **Settings › Variables** :
 
 | Variable | Exemple |
@@ -32,21 +38,15 @@ Elles se trouvent dans **Settings › Variables** :
 | `FROM_EMAIL` | `rdv@motoscool.fr` (adresse du domaine validé) |
 | `SITE_URL` | `https://motoscool.fr/` (avec le `/` final) |
 | `ALLOWED_ORIGINS` | `https://motoscool.fr,https://said-94.github.io` |
-| `SIGN_KEY` | une longue chaîne aléatoire (type *Secret*) : signe et date chaque lien « Valider » |
+| `SIGN_KEY` | une longue chaîne aléatoire (type *Secret*) : signe chaque lien « Libérer la place » |
+| `CAPACITE` | `3` (clients maximum par créneau) |
 
 Ne pas renseigner `TURNSTILE_SECRET` tant que le widget Turnstile n'est pas ajouté au formulaire, sinon toutes les demandes seront refusées.
 
-### 4. Brancher le site
+### 5. Brancher le site
 - Dans `index.html`, mettre l'adresse du Worker dans `SITE.bookingEndpoint`, par exemple `https://rdv-motoscool.xxx.workers.dev`.
 - Changer `VERSION` dans `sw.js`.
 
-## Validation par l'accueil, puis G8
+## Annulation ou déplacement
 
-1. L'accueil clique sur **« Valider ce rendez-vous »** dans l'email.
-2. La page `valider.html` s'ouvre avec la fiche.
-3. Depuis cette page, l'accueil peut :
-   - appeler le client ;
-   - le confirmer par SMS ou par email, avec un texte prérempli ;
-   - **valider et envoyer dans G8**.
-
-L'envoi automatique dans G8 demande un accès technique (API) fourni par **Orisha**, l'éditeur de G8. Quand cet accès existe, on renseigne `G8_ENDPOINT` dans `valider.html` (et la route correspondante dans ce service). En attendant, « Valider » copie la fiche pour la coller dans G8.
+Si un client annule ou déplace son rendez-vous, l'accueil clique sur **« Libérer la place de ce créneau »** dans l'email de la demande, puis confirme. La place redevient disponible sur le site.
