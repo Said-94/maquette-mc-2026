@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-CfZTwYB+YpDe0eZ6sCZrKpvfzeojBxKFTxmxrOQ66ws=' 'sha256-HxmRFsRfuubzT2cFSnotbaTrglfDFEF/j54zPeriDEc=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-CfZTwYB+YpDe0eZ6sCZrKpvfzeojBxKFTxmxrOQ66ws=' 'sha256-LqdksrfsbVYLKScDZ5XV2g/XOv6n2gfaMGKN3YcTKjk=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -2307,8 +2307,9 @@
     const refreshFull = () => fullSlots().then(list => {
       FULL.clear(); list.forEach(k => FULL.add(k));
       if (!activeDay) return;
-      const keep = rdv.heure;
+      const keep = rdv.heure, note = rdvHint.textContent;
       activeDay.click();
+      if (note) setHint(rdvHint, note, 'ko'); // le message affiché (ex : « complet ») reste visible
       const again = keep && [...slotsBox.querySelectorAll('.slot:not(.full)')].find(s => s.textContent === keep.replace(/^0/, '').replace(':', 'h'));
       if (again) again.click();
     });
