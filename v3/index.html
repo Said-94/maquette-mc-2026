@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-CfZTwYB+YpDe0eZ6sCZrKpvfzeojBxKFTxmxrOQ66ws=' 'sha256-5Zyx9yJAo8kYpFMntfTcnAvKjsX3AkaF3sXH942lwbI=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-gE+3iKocisM6+qw0BGbeCPHND3dw1Jo0Wrc3bxpbYE0=' 'sha256-BMlp6q4EjvbjTTvsRkNUyLwIcyeQFRGfSvhyLbDkCyo=' 'sha256-GtgnrGyYm/yPrsKJ6WiC6w0O6gt3FVw2uEYEQmYtPC0=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://data.geopf.fr https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -211,6 +211,9 @@
     .cursor-dot { width: 6px; height: 6px; background: var(--red); }
     .has-cursor .cursor, .has-cursor .cursor-dot { display: block; }
     .has-cursor body, .has-cursor a, .has-cursor button, .has-cursor summary { cursor: none; }
+    .has-cursor .lightbox, .has-cursor .lightbox * { cursor: auto; }
+    .has-cursor .lightbox button { cursor: pointer; }
+    #devis { scroll-margin-top: 84px; }
 
     /* Barre de progression */
     .progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--red); z-index: 70; box-shadow: 0 0 12px var(--red); }
@@ -322,7 +325,7 @@
     .more li svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; color: var(--red); }
     .hpanel.hl .more summary, .hpanel.hl .more ul { color: #fff; }
     .hpanel.hl .more li svg { color: #fff; }
-    .tour.on .tour-stage { height: 100vh; overflow: hidden; }
+    .tour.on .tour-stage { height: 100vh; height: 100svh; overflow: hidden; }
     .tour.on .tour-3d { display: block; position: absolute; inset: 0; }
     .tour.on .tour-3d canvas { display: block; width: 100%; height: 100%; }
     .tour.on .tour-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(270deg, rgba(48,48,54,.85) 0%, rgba(48,48,54,.35) 38%, rgba(48,48,54,0) 60%); }
@@ -419,7 +422,7 @@
     @keyframes ring { 0%, 100% { opacity: 0; } 20% { opacity: 1; } 55% { opacity: 0; } }
     .fig .idx { display: block; font-family: 'Orbitron', sans-serif; font-size: .7rem; letter-spacing: .3em; color: var(--muted); margin-bottom: 10px; }
     .figs.on { padding: 0; }
-    .figs.on .figs-stage { position: relative; height: 100vh; }
+    .figs.on .figs-stage { position: relative; height: 100vh; height: 100svh; }
     .figs.on .figs-list { display: block; position: absolute; inset: 0; }
     .figs.on .fig { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; }
     .figs.on .fig b { font-size: min(calc(80vw / var(--n, 2)), 52vh, 20rem); }
@@ -1070,12 +1073,12 @@
               <legend class="sr-only">Étape 3 sur 3 : vos coordonnées</legend>
               <div class="row">
                 <label>Nom<input name="nom" required autocomplete="name" maxlength="80" placeholder="Votre nom"></label>
-                <label>Téléphone<input name="telephone" type="tel" required autocomplete="tel" pattern="(\+33|0)\s?[1-9]([\s.\-]?\d{2}){4}" title="Numéro français, ex : 06 12 34 56 78" placeholder="06 12 34 56 78"></label>
+                <label>Téléphone<input name="telephone" id="telephone" type="tel" required autocomplete="tel" maxlength="30" placeholder="06 12 34 56 78"></label>
               </div>
               <label>Email<input name="email" type="email" required autocomplete="email" maxlength="120" placeholder="vous@exemple.fr"></label>
               <label>Message <span class="opt">(facultatif)</span><textarea name="message" maxlength="1000" placeholder="Ex : révision des 30 000 km, bruit au freinage…"></textarea></label>
               <!-- Piège à robots : champ invisible, laissé vide par les humains -->
-              <label class="hp" aria-hidden="true">Ne pas remplir<input name="site_web" tabindex="-1" autocomplete="off"></label>
+              <label class="hp" aria-hidden="true">Ne pas remplir<input name="hp_x7" tabindex="-1" autocomplete="off"></label>
               <label class="consent"><input type="checkbox" name="consentement" required><span>J'accepte que mes données soient utilisées pour traiter ma demande, selon la <a href="confidentialite.html">politique de confidentialité</a>.</span></label>
             </fieldset>
             <span class="hint ko" id="form-hint" aria-live="polite"></span>
@@ -1475,7 +1478,7 @@
       if (!url) return new Promise(resolve => setTimeout(() => resolve({ ok: true, demo: true }), 500));
       const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 12000);
       return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctrl.signal, credentials: 'omit' })
-        .then(r => { if (r.status === 409) { const e = new Error('complet'); e.complet = true; throw e; } if (!r.ok) throw new Error('http ' + r.status); return { ok: true }; })
+        .then(r => { if (r.status === 409) { const e = new Error('complet'); e.complet = true; throw e; } if (r.status === 429) { const e = new Error('limite'); e.limite = true; throw e; } if (!r.ok) throw new Error('http ' + r.status); return { ok: true }; })
         .finally(() => clearTimeout(timer));
     }
   </script>
@@ -1532,6 +1535,8 @@
       "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js":"sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed"};
     const load = src => new Promise((ok, ko) => { const s = document.createElement('script'); s.src = src; if (/^https:/.test(src)) { s.crossOrigin = 'anonymous'; if (SRI[src]) s.integrity = SRI[src]; } s.onload = ok; s.onerror = ko; document.head.append(s); });
     const loadCss = href => new Promise((ok, ko) => { const l = document.createElement('link'); l.rel = 'stylesheet'; l.crossOrigin = 'anonymous'; if (SRI[href]) l.integrity = SRI[href]; l.href = href; l.onload = ok; l.onerror = ko; document.head.append(l); });
+    let leafletP = null; // Leaflet chargé une seule fois, même si les deux cartes le demandent en même temps
+    const loadLeaflet = () => leafletP || (leafletP = Promise.all([loadCss(LEAFLET_CSS), load(LEAFLET_JS)]).catch(e => { leafletP = null; throw e; }));
     const LEAFLET_JS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
     const LEAFLET_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
     // Fonds de carte : plan en couleur (OpenStreetMap) ou vue satellite (photos aériennes de l'IGN, libres d'usage).
@@ -1787,7 +1792,7 @@
         if (staticOnly) return;
         const name = tall ? 'hero-portrait' : 'hero-1080';
         av1Ok(tall ? 720 : 1920, tall ? 1280 : 1080).then(ok => {
-          hv.src = `assets/video/${name}${ok ? '.av1' : ''}.mp4`;
+          hv.src = `../assets/video/${name}${ok ? '.av1' : ''}.mp4`;
           // Vidéo illisible : on garde l'image fixe
           hv.addEventListener('error', () => { hv.removeAttribute('src'); hv.load(); }, { once: true });
           const sync = vis => { if (vis && !document.hidden) { const p = hv.play(); if (p) p.catch(() => {}); } else hv.pause(); };
@@ -1798,7 +1803,7 @@
       }, { timeout: 2500 });
     }
     // Mobile, appareil modeste ou WebGL absent : pas de moto 3D (3,7 à 5,8 Mo) ; le film en boucle la remplace (≈ 1 Mo)
-    const webgl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })();
+    const webgl = (() => { try { const c = document.createElement('canvas'), g = c.getContext('webgl2') || c.getContext('webgl'); if (g) { const x = g.getExtension('WEBGL_lose_context'); if (x) x.loseContext(); } return !!g; } catch (e) { return false; } })(); // contexte de test libéré aussitôt
     const motoSec = $('#services');
     const startMoto = () => { if (midEnd || !webgl) heroFilm(); else start3D(); };
     // Défilement doux tout de suite sur ordinateur ; moto 3D ou film seulement à l'approche de leur section
@@ -1811,8 +1816,11 @@
     const spdEl = $('#spd'), gearEl = $('#gear'), spdBar = $('#spd-bar');
     const progress = $('#progress'), toTop = $('#to-top'), ring = $('#ring'), header = $('#top'), heroEl = $('#accueil');
     let lastY = scrollY, spd = 0;
-    (function hud() {
-      requestAnimationFrame(hud);
+    // Boucle active seulement pendant le défilement (et jusqu'au retour à zéro du compteur) : économise la batterie
+    let hudOn = false;
+    const wakeHud = () => { if (!hudOn) { hudOn = true; requestAnimationFrame(hud); } };
+    addEventListener('scroll', wakeHud, { passive: true });
+    function hud() {
       const d = Math.abs(scrollY - lastY);
       lastY = scrollY;
       spd += (Math.min(d * 2.2, 299) - spd) * 0.08;
@@ -1822,7 +1830,9 @@
       spdEl.textContent = String(Math.round(spd)).padStart(3, '0');
       gearEl.textContent = spd < 5 ? 'N' : Math.min(6, 1 + Math.floor(spd / 45));
       spdBar.style.width = spd / 299 * 100 + '%';
-    })();
+      if (spd > 0 || d > 0) requestAnimationFrame(hud); else hudOn = false;
+    }
+    hudOn = true; hud();
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - innerHeight;
       const p = max > 0 ? scrollY / max : 0;
@@ -1915,13 +1925,14 @@
           const li = document.createElement('li'), b = document.createElement('button'), im = document.createElement('img');
           b.type = 'button'; b.className = 'ph'; b.setAttribute('aria-label', 'Agrandir : ' + (p.alt || 'photo ' + (i + 1)));
           im.src = p.src; im.alt = p.alt || ''; im.loading = 'lazy'; im.decoding = 'async';
-          b.append(im); b.addEventListener('click', () => { show(i); dlg.showModal(); }); li.append(b); list.append(li);
+          b.append(im); b.addEventListener('click', () => { show(i); dlg.showModal(); if (lenis) lenis.stop(); }); li.append(b); list.append(li);
         });
         $('#lb-prev').addEventListener('click', () => show(cur - 1));
         $('#lb-next').addEventListener('click', () => show(cur + 1));
         $('#lb-close').addEventListener('click', () => dlg.close());
         dlg.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(cur - 1); else if (e.key === 'ArrowRight') show(cur + 1); });
         dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+        dlg.addEventListener('close', () => { if (lenis) lenis.start(); }); // la page ne défile pas derrière la photo
       }
     }
 
@@ -1956,10 +1967,14 @@
     }
 
     // ---------- Statut ouvert / fermé (heure de Paris), avec la pause déjeuner ----------
-    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
-    const get = t => parts.find(p => p.type === t).value;
-    const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
-    const mins = (+get('hour') % 24) * 60 + +get('minute');
+    // Recalculé chaque minute et au retour sur l'onglet : une page laissée ouverte reste juste
+    let day = 0, mins = 0;
+    const clock = () => {
+      const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+      const get = t => parts.find(p => p.type === t).value;
+      day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
+      mins = (+get('hour') % 24) * 60 + +get('minute');
+    };
     const DAY_FULL = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
     const statusText = () => {
       const today = HOURS[day] || [];
@@ -1973,13 +1988,18 @@
       }
       return { open: false, txt: 'Fermé' };
     };
-    const st = statusText();
-    $('#status').classList.add(st.open ? 'open' : 'closed');
-    $('#status-txt').textContent = st.txt;
-    $('#status-contact').classList.add(st.open ? 'open' : 'closed');
-    $('#status-contact-txt').textContent = st.txt;
-    const row = document.querySelector(`#hours tr[data-d="${day}"]`);
-    if (row) row.classList.add('today');
+    const refreshStatus = () => {
+      clock();
+      const st = statusText();
+      for (const [box, t] of [['#status', '#status-txt'], ['#status-contact', '#status-contact-txt']]) {
+        $(box).classList.toggle('open', st.open); $(box).classList.toggle('closed', !st.open);
+        $(t).textContent = st.txt;
+      }
+      document.querySelectorAll('#hours tr[data-d]').forEach(r => r.classList.toggle('today', +r.dataset.d === day));
+    };
+    refreshStatus();
+    setInterval(refreshStatus, 60000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshStatus(); });
 
     // ---------- Menu mobile ----------
     const menu = $('#menu'), burger = $('#burger');
@@ -1999,7 +2019,7 @@
     async function lookupCommune(q) {
       const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 5000);
       try {
-        const r = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&type=municipality&limit=1`, { signal: ctrl.signal });
+        const r = await fetch(`https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(q)}&type=municipality&limit=1`, { signal: ctrl.signal });
         if (!r.ok) throw new Error('api');
         const f = (await r.json()).features[0];
         if (!f || f.properties.score < 0.4) return null;
@@ -2073,7 +2093,7 @@
       const el = $('#map');
       el.innerHTML = '';
       // Europe seulement (le reste du monde n'a pas d'intérêt ici) ; rendu en canevas, plus fluide avec 1 276 communes
-      map = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25, minZoom: 4, maxBounds: [[33, -26], [72, 46]], maxBoundsViscosity: 1, preferCanvas: true }).setView(SHOP, 10);
+      map = L.map(el, { scrollWheelZoom: false, dragging: !L.Browser.mobile, zoomSnap: 0.25, minZoom: 4, maxBounds: [[33, -26], [72, 46]], maxBoundsViscosity: 1, preferCanvas: true }).setView(SHOP, 10);
       mapBases(map);
       const zone = L.polygon(ZONE_LIMIT.map(([lng, lat]) => [lat, lng]), { color: '#e63027', weight: 3, fillColor: '#e63027', fillOpacity: 0.12, interactive: false }).addTo(map);
       // Communes (traits rouges fins) et départements, seulement en Île-de-France ; le reste de la carte reste gris
@@ -2103,9 +2123,9 @@
       new IntersectionObserver(([e], o) => {
         if (!e.isIntersecting) return;
         o.disconnect();
-        Promise.all([loadCss(LEAFLET_CSS), load(LEAFLET_JS)]).then(initMap).catch(showMapFallback);
+        loadLeaflet().then(initMap).catch(showMapFallback);
       }, { rootMargin: '400px' }).observe($('#map'));
-    } else Promise.all([loadCss(LEAFLET_CSS), load(LEAFLET_JS)]).then(initMap).catch(showMapFallback);
+    } else loadLeaflet().then(initMap).catch(showMapFallback);
 
     // ---------- Carte du Contact : la France, puis zoom automatique jusqu'à la rue de l'atelier ----------
     {
@@ -2113,7 +2133,7 @@
       const initCmap = () => {
         if (!window.L) { el.innerHTML = '<p class="map-fallback">Carte indisponible. 15 ter av. du Président Salvador Allende, 94400 Vitry-sur-Seine.</p>'; return; }
         el.innerHTML = '';
-        const m = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25, minZoom: 4, maxBounds: [[33, -26], [72, 46]], maxBoundsViscosity: 1 }).setView([46.6, 2.4], 5.25);
+        const m = L.map(el, { scrollWheelZoom: false, dragging: !L.Browser.mobile, zoomSnap: 0.25, minZoom: 4, maxBounds: [[33, -26], [72, 46]], maxBoundsViscosity: 1 }).setView([46.6, 2.4], 5.25);
         mapBases(m);
         L.marker(SHOP, { icon: L.divIcon({ className: 'shop-pin', html: '<span></span>', iconSize: [20, 20], iconAnchor: [10, 10] }), title: "Atelier Moto's Cool", alt: "Atelier Moto's Cool" })
           .addTo(m).bindPopup("<b>Moto's Cool</b><br>15 ter av. du Président Salvador Allende<br>94400 Vitry-sur-Seine");
@@ -2124,7 +2144,7 @@
       new IntersectionObserver(([e], o) => {
         if (!e.isIntersecting) return;
         o.disconnect();
-        Promise.all([loadCss(LEAFLET_CSS), load(LEAFLET_JS)]).then(initCmap).catch(() => initCmap());
+        loadLeaflet().then(initCmap).catch(() => initCmap());
       }, { rootMargin: '400px' }).observe(el);
     }
 
@@ -2150,6 +2170,11 @@
       if (!v) { plaque.setCustomValidity('Indiquez la plaque d\'immatriculation.'); plaque.classList.add('bad'); setHint(plaqueHint, 'Indiquez la plaque d\'immatriculation.', 'ko'); return false; }
       const n = normPlate(v);
       if (!n) {
+        // Plaque étrangère, W garage, collection… : acceptée telle quelle, l'accueil vérifiera
+        if (/^[A-Z0-9][A-Z0-9 .\-]{2,11}$/i.test(v)) {
+          plaque.value = v.toUpperCase(); plaque.setCustomValidity(''); plaque.classList.remove('bad');
+          setHint(plaqueHint, 'Format inhabituel : l\'accueil vérifiera.'); return true;
+        }
         const msg = 'Format attendu : AA-123-AA (ou 123-ABC-75).';
         plaque.setCustomValidity(msg); plaque.classList.add('bad'); setHint(plaqueHint, msg, 'ko'); return false;
       }
@@ -2212,7 +2237,7 @@
     async function reverseGeocode(pos) {
       const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 5000);
       try {
-        const r = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${pos.lng}&lat=${pos.lat}&limit=1`, { signal: ctrl.signal });
+        const r = await fetch(`https://data.geopf.fr/geocodage/reverse?lon=${pos.lng}&lat=${pos.lat}&limit=1`, { signal: ctrl.signal });
         if (!r.ok) return null;
         const f = (await r.json()).features[0];
         return f && /^\d{5}$/.test(f.properties.postcode || '') ? f.properties : null;
@@ -2242,7 +2267,7 @@
             sh.addEventListener('click', () => navigator.share({ title: "Ma position – Moto's Cool", text: msg }).catch(() => {}));
           }
           const sms = String(SITE.sms || '').replace(/[^0-9+]/g, '');
-          if (sms) acts.append(act('Envoyer par SMS', `sms:${sms}?body=${encodeURIComponent(msg)}`));
+          if (sms) acts.append(act('Envoyer par SMS', `sms:${sms}?&body=${encodeURIComponent(msg)}`));
           const wa = String(SITE.whatsapp || '').replace(/[^0-9]/g, '');
           if (wa) acts.append(act('WhatsApp', `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, 'i-whatsapp'));
           const copy = act('Copier'); acts.append(copy);
@@ -2356,7 +2381,16 @@
     const stepDots = [...document.querySelectorAll('#rdv-steps li')];
     const btnBack = $('#step-back'), btnNext = $('#step-next'), btnSend = $('#submit-btn');
     let step = 1, startedAt = 0;
-    form.addEventListener('focusin', () => { if (!startedAt) startedAt = Date.now(); });
+    // Identifiant de la demande : si l'envoi est relancé après une coupure, l'accueil ne reçoit pas de doublon
+    const newId = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, ch => { const r = crypto.getRandomValues(new Uint8Array(1))[0] & 15; return (ch === 'x' ? r : (r & 3) | 8).toString(16); }));
+    let reqId = newId();
+    // Début de saisie : toute première interaction avec le formulaire (clic, toucher, clavier, saisie)
+    ['focusin', 'pointerdown', 'keydown', 'input'].forEach(t => form.addEventListener(t, () => { if (!startedAt) startedAt = Date.now(); }, true));
+    // Téléphone : français (06…, +33…, 0033…) ou étranger au format international ; espaces, points, tirets acceptés
+    const normTel = s => String(s || '').replace(/[\s.\-()/]/g, '').replace(/^00/, '+').replace(/^\+330/, '+33');
+    const telOk = s => /^(?:0[1-9]\d{8}|\+33[1-9]\d{8}|\+(?!33)[1-9]\d{6,14})$/.test(normTel(s));
+    const telIn = $('#telephone');
+    telIn.addEventListener('input', () => telIn.setCustomValidity(''));
     function showStep(n, focus) {
       step = n;
       stepSets.forEach(fs => { fs.hidden = +fs.dataset.step !== n; });
@@ -2378,6 +2412,8 @@
     async function stepOk(n) {
       if (n === 1) return checkPlate() && stepFieldsOk(1);
       if (n === 2) return (await checkCp()) && stepFieldsOk(2) && checkRdv();
+      telIn.value = telIn.value.trim();
+      telIn.setCustomValidity(!telIn.value || telOk(telIn.value) ? '' : 'Numéro invalide, ex : 06 12 34 56 78');
       return stepFieldsOk(3);
     }
     btnNext.addEventListener('click', async () => {
@@ -2397,7 +2433,12 @@
       const num = n => (txt(n) === '' ? null : Number(txt(n)));
       const dom = isDomicile();
       btnSend.disabled = true; btnSend.textContent = 'Envoi en cours…';
+      // Formulaire rempli très vite (saisie automatique) : on attend simplement la durée minimale au lieu d'écarter la demande
+      if (!startedAt) startedAt = Date.now();
+      const wait = 4300 - (Date.now() - startedAt);
+      if (wait > 0 && txt('hp_x7') === '') await new Promise(r => setTimeout(r, wait));
       const payload = {
+        id: reqId,
         vehicule: {
           type: txt('type'), immatriculation: txt('immatriculation'), marque: txt('marque'), modele: txt('modele', 60),
           cylindree: num('cylindree'), annee: num('annee'), kilometrage: num('kilometrage'),
@@ -2412,10 +2453,10 @@
         contact: { nom: txt('nom', 80), telephone: txt('telephone', 30), email: txt('email', 120) },
         message: txt('message', 1000),
         // Anti-robots, vérifiés aussi par le service d'envoi : champ piège et durée de saisie
-        site_web: txt('site_web'), duree: startedAt ? Math.round((Date.now() - startedAt) / 1000) : 0
+        site_web: txt('hp_x7'), duree: Math.round((Date.now() - startedAt) / 1000)
       };
-      // Robot probable (champ piège rempli ou formulaire rempli en moins de 4 s) : rien n'est envoyé
-      const bot = payload.site_web !== '' || payload.duree < 4;
+      // Robot probable (champ piège rempli) : rien n'est envoyé
+      const bot = payload.site_web !== '';
       let res = { ok: true };
       try {
         if (!bot) res = await sendRequest(payload);
@@ -2430,9 +2471,11 @@
           setHint(rdvHint, 'Ce créneau vient d\'être complet. Choisissez une autre heure.', 'ko');
           return;
         }
+        if (err && err.limite) { setHint(formHint, `Trop d'essais depuis votre connexion. Réessayez dans 10 minutes ou appelez-nous au ${PHONE}.`, 'ko'); return; }
         setHint(formHint, `L'envoi n'a pas abouti. Réessayez ou appelez-nous au ${PHONE}.`, 'ko');
         return;
       }
+      reqId = newId(); // demande reçue : une prochaine demande aura son propre identifiant
       // Écran de confirmation avec récapitulatif
       const heureTxt = rdv.heure.replace(/^0/, '').replace(':', 'h');
       $('#ok-name').textContent = payload.contact.nom;
@@ -2455,7 +2498,7 @@
       if (res.demo && window.MCMail) {
         const box = $('#mail-demo'), p = document.createElement('p'), pre = document.createElement('pre');
         p.textContent = "Démonstration : voici l'email que recevra l'atelier.";
-        const { site_web, duree, ...clean } = payload;
+        const { site_web, duree, id, ...clean } = payload;
         pre.textContent = MCMail.text(clean);
         box.replaceChildren(p, pre); box.hidden = false;
       }
@@ -2515,6 +2558,17 @@
 
       gsap.utils.toArray('.rv').forEach(el => gsap.from(el, { y: 60, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } }));
       addEventListener('load', () => ScrollTrigger.refresh());
+      // Les sections épinglées (visite, chiffres) sont recalculées quand un bloc placé au-dessus change de hauteur
+      // (étapes du formulaire, carte « Envoyer ma position »…) : sinon l'épinglage se décale
+      if ('ResizeObserver' in window) {
+        let rt = 0; const seen = new Map();
+        const ro = new ResizeObserver(list => {
+          let changed = false;
+          list.forEach(e => { const h = Math.round(e.contentRect.height); if (seen.has(e.target) && seen.get(e.target) !== h) changed = true; seen.set(e.target, h); });
+          if (changed) { clearTimeout(rt); rt = setTimeout(() => ScrollTrigger.refresh(), 200); }
+        });
+        ['#accueil', '#depannage'].forEach(sel => { const el = document.querySelector(sel); if (el) ro.observe(el); });
+      }
     }
 
     // Chiffres en liste (mobile, sans animation épinglée) : chaque dessin démarre en arrivant à l'écran
@@ -2609,6 +2663,13 @@
       book(message, intervention) {
         if (message) form.elements.message.value = message.slice(0, 1000);
         if (intervention && [...$('#intervention').options].some(o => o.value === intervention)) $('#intervention').value = intervention;
+        // Après une première demande envoyée : le formulaire réapparaît, prêt pour une nouvelle demande
+        if (form.hidden) {
+          form.hidden = false; $('#rdv-steps').hidden = false; $('#form-ok').hidden = true; $('#mail-demo').hidden = true;
+          btnSend.disabled = false; btnSend.textContent = 'Envoyer ma demande';
+          rdv.heure = ''; slotsBox.querySelectorAll('.slot').forEach(s => { s.classList.remove('active'); s.setAttribute('aria-pressed', 'false'); });
+          startedAt = 0;
+        }
         showStep(1);
         goTo('#devis', () => $('#plaque').focus({ preventScroll: true }));
       }

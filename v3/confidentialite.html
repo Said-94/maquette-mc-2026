@@ -86,18 +86,18 @@
     <h2>Données collectées par le formulaire de rendez-vous</h2>
     <p>Le site ne collecte des données personnelles que lorsque vous remplissez le formulaire de rendez-vous. Les champs sont :</p>
     <ul>
-      <li><b>Véhicule</b> : type (moto, scooter, quad, autre), plaque d'immatriculation, marque, modèle, cylindrée, année, kilométrage, intervention souhaitée ;</li>
+      <li><b>Véhicule</b> : type (moto, scooter, autre), plaque d'immatriculation, marque, modèle, cylindrée, année, kilométrage, intervention souhaitée ;</li>
       <li><b>Rendez-vous</b> : lieu (atelier ou dépannage à domicile), adresse (uniquement pour un dépannage à domicile), date et heure souhaitées ;</li>
       <li><b>Contact</b> : nom, téléphone, adresse email ;</li>
       <li><b>Message</b> libre (facultatif) : merci de n'y indiquer aucune donnée sensible ;</li>
       <li><b>Position géographique</b> (facultatif) : seulement si vous utilisez le bouton « Me localiser » pour un dépannage à domicile et que vous l'autorisez dans votre navigateur. Les coordonnées (latitude, longitude et précision) sont jointes à la demande pour aider le dépanneur à vous trouver.</li>
     </ul>
-    <p>Le vérificateur de zone de dépannage (commune, code postal ou clic sur la carte) n'enregistre rien : le texte saisi ou le point cliqué est envoyé à l'API Adresse de l'État (api-adresse.data.gouv.fr) uniquement pour trouver la commune correspondante.</p>
+    <p>Le vérificateur de zone de dépannage (commune, code postal ou clic sur la carte) n'enregistre rien : le texte saisi ou le point cliqué est envoyé au service de géocodage de l'État (Géoplateforme IGN, data.geopf.fr) uniquement pour trouver la commune correspondante.</p>
     <h3 id="envoi">Envoi de votre demande</h3>
     <p>Votre demande est envoyée par email à l'accueil de Moto's Cool, qui la vérifie puis l'enregistre dans le logiciel de gestion de l'atelier G8 et vous rappelle pour confirmer le rendez-vous. L'email passe par un relais technique hébergé par Cloudflare, qui ne conserve rien, et par le service d'envoi d'emails Brevo (Sendinblue SAS, France, serveurs situés dans l'Union européenne). Un champ invisible et la durée de saisie servent à écarter les envois automatiques (robots) ; ils ne sont pas conservés.</p>
 
     <h3 id="localisation">Bouton « Me localiser »</h3>
-    <p>La localisation n'est jamais demandée automatiquement : elle ne l'est que si vous cliquez sur « Me localiser », et votre navigateur vous demande alors votre accord. Votre position est envoyée à l'API Adresse de l'État (api-adresse.data.gouv.fr) pour retrouver l'adresse correspondante et vérifier que vous êtes dans notre zone de dépannage. Elle n'est ni conservée sur le site ni transmise à un tiers. Elle n'est jointe à votre demande de rendez-vous que si vous choisissez un dépannage à domicile et envoyez le formulaire. Vous pouvez refuser : la vérification par code postal fonctionne sans localisation.</p>
+    <p>La localisation n'est jamais demandée automatiquement : elle ne l'est que si vous cliquez sur « Me localiser », et votre navigateur vous demande alors votre accord. Votre position est envoyée au service de géocodage de l'État (Géoplateforme IGN, data.geopf.fr) pour retrouver l'adresse correspondante et vérifier que vous êtes dans notre zone de dépannage. Elle n'est ni conservée sur le site ni transmise à un tiers. Elle n'est jointe à votre demande de rendez-vous que si vous choisissez un dépannage à domicile et envoyez le formulaire. Vous pouvez refuser : la vérification par code postal fonctionne sans localisation.</p>
 
     <h3 id="assistant">Assistant « Une question ? »</h3>
     <p>L'assistant est un outil automatique, sans conseiller humain. Dans sa version actuelle, il répond uniquement à partir des informations du site : vos messages restent dans votre navigateur et ne sont ni envoyés ni enregistrés.</p>
@@ -148,17 +148,13 @@
 
     <h2 id="cookies">Cookies et traceurs</h2>
     <p><b>Ce site ne dépose aucun cookie publicitaire, de mesure d'audience ou de réseau social, et n'utilise aucun traceur.</b> Il n'y a donc rien à accepter ni à refuser : aucun bandeau de consentement n'est nécessaire.</p>
-    <p>Seul un stockage strictement technique peut intervenir, nécessaire au fonctionnement du site. Il est exempté de consentement (article 82 de la loi Informatique et Libertés) :</p>
-    <ul>
-      <li>la mise en cache habituelle des fichiers par votre navigateur ;</li>
-      <li>un <b>service worker</b> (fonction « application installable ») qui enregistre dans votre navigateur les pages, polices, icônes et bibliothèques du site, pour accélérer les visites suivantes et permettre la consultation hors ligne. Il ne contient aucune donnée personnelle, aucun identifiant ni aucun cookie ; vous pouvez le supprimer depuis les paramètres de votre navigateur (« Cookies et données de site »).</li>
-    </ul>
+    <p>Seul un stockage strictement technique peut intervenir, nécessaire au fonctionnement du site : la mise en cache habituelle des fichiers par votre navigateur. Il ne contient aucune donnée personnelle et est exempté de consentement (article 82 de la loi Informatique et Libertés).</p>
     <h3>Ressources externes</h3>
     <p>Les polices de caractères sont hébergées sur le site lui-même : aucune requête n'est faite vers Google. Pour afficher certaines fonctions, le site charge des ressources depuis des serveurs tiers, qui reçoivent à cette occasion votre adresse IP, comme pour toute page web :</p>
     <ul>
       <li>cdnjs / Cloudflare et jsDelivr (bibliothèques GSAP, Three.js, Lenis et Leaflet) ;</li>
       <li>OpenStreetMap (fonds de carte de la zone de dépannage et plan d'accès) ;</li>
-      <li>API Adresse de l'État (recherche de commune ou bouton « Me localiser », uniquement si vous les utilisez) ;</li>
+      <li>Service de géocodage de l'État, Géoplateforme IGN (recherche de commune ou bouton « Me localiser », uniquement si vous les utilisez) ;</li>
       <li>en mode IA uniquement : Cloudflare et Anthropic (assistant, voir ci-dessus).</li>
     </ul>
     <h3>Gestion des cookies</h3>
@@ -166,7 +162,7 @@
     <p>Si des outils de mesure d'audience ou des contenus tiers déposant des cookies étaient ajoutés à l'avenir, un bandeau de consentement serait mis en place et cette page mise à jour.</p>
 
     <h2>Mise à jour</h2>
-    <p>Cette politique peut évoluer. Dernière mise à jour : 2 novembre 2026.</p>
+    <p>Cette politique peut évoluer. Dernière mise à jour : 19 novembre 2026.</p>
   </main>
 
   <footer>

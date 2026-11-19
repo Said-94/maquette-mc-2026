@@ -17,8 +17,9 @@
  *   FROM_EMAIL       expéditeur validé dans Brevo, ex : rdv@motoscool.fr
  *   SITE_URL         adresse du site, avec « / » final, ex : https://motoscool.fr/
  *   ALLOWED_ORIGINS  origines autorisées, séparées par des virgules, ex : https://motoscool.fr,https://said-94.github.io
- *   SIGN_KEY         (secret, conseillé) clé de signature des liens « Libérer la place » : un lien fabriqué ou modifié
- *                    est refusé. Générer une longue chaîne aléatoire (32 caractères ou plus).
+ *   SIGN_KEY         (secret, OBLIGATOIRE avec la base DB) clé de signature des liens « Libérer la place » : un lien
+ *                    fabriqué ou modifié est refusé. Sans elle, les places ne sont pas comptées (on ne pourrait pas
+ *                    les libérer). Générer une longue chaîne aléatoire (32 caractères ou plus).
  *   TURNSTILE_SECRET (secret, facultatif) clé Cloudflare Turnstile : si elle est renseignée, la demande doit
  *                    contenir un jeton Turnstile valide (champ « turnstile »). NE PAS la renseigner tant que le widget
  *                    Turnstile n'est pas ajouté au formulaire (et autorisé dans sa CSP) : sinon toutes les demandes sont refusées.
@@ -37,6 +38,10 @@ const LINK_TTL_DAYS = 60; // durée de validité conseillée d'un lien « Valide
 
 const DAYS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
 const dateFr = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? `${m[3]}/${m[2]}/${m[1]}` : ''; };
+const dayFr = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? DAYS[new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).getUTCDay()] : ''; };
+// Téléphone : séparateurs retirés, 0033 / +33 (0) ramenés à +33 ; numéros français, ou étrangers au format international
+const normTel = s => String(s || '').replace(/[\s.\-()/]/g, '').replace(/^00/, '+').replace(/^\+330/, '+33');
+const telOk = s => /^(?:0[1-9]\d{8}|\+33[1-9]\d{8}|\+(?!33)[1-9]\d{6,14})$/.test(normTel(s));
 const hourFr = h => (/^\d{2}:\d{2}$/.test(h || '') ? `${+h.slice(0, 2)}:${h.slice(3)}` : '');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // Texte sur une ligne : caractères de contrôle et retours à la ligne retirés (pas d'injection d'en-têtes ou de lignes)
@@ -56,7 +61,9 @@ function mailText(p) {
     `Cylindrée : ${ve.cylindree ? ve.cylindree + 'cc' : ''}`, `Année : ${ve.annee ?? ''}`, `Kilométrage : ${ve.kilometrage != null ? ve.kilometrage + ' km' : ''}`,
     `Intervention : ${ve.interventionLabel || ve.intervention}`, '',
     '— RENDEZ-VOUS —',
-    `Lieu : ${r.lieu}`, `Adresse : ${r.adresse}`, `Date : ${dateFr(r.date)}`, `Heure : ${hourFr(r.heure)}`, '',
+    `Lieu : ${r.lieu}`, `Adresse : ${r.adresse}`,
+    ...(r.position ? [`Position GPS : https://maps.google.com/?q=${r.position.lat},${r.position.lng} (précision ± ${r.position.accuracy} m)`] : []),
+    `Date : ${dayFr(r.date)} ${dateFr(r.date)}`, `Heure : ${hourFr(r.heure)}`, '',
     '— CONTACT —',
     `Nom : ${c.nom}`, `Téléphone : ${c.telephone}`, `Email : ${c.email}`, '',
     'Message :', p.message
@@ -94,7 +101,9 @@ function clean(b) {
       position: lat != null && lng != null ? { lat: +lat.toFixed(6), lng: +lng.toFixed(6), accuracy: Math.min(100000, Math.max(0, Math.round(+pos.accuracy || 0))) } : null
     },
     contact: { nom: str(c.nom, 80), telephone: str(c.telephone, 30), email: str(c.email, 120) },
-    message: txt(b.message, 1000)
+    message: txt(b.message, 1000),
+    // Identifiant de la demande : un renvoi après coupure réseau n'envoie pas un 2e email
+    id: typeof b.id === 'string' && /^[0-9a-f-]{36}$/i.test(b.id) ? b.id.toLowerCase() : null
   };
   const d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(p.rdv.date), h = /^(\d{2}):(\d{2})$/.exec(p.rdv.heure);
   const day = d && new Date(Date.UTC(+d[1], +d[2] - 1, +d[3]));
@@ -106,7 +115,7 @@ function clean(b) {
   const hourOk = h && +h[1] >= 8 && +h[1] <= 19 && (h[2] === '00' || h[2] === '30');
   const ok = p.vehicule.immatriculation && p.vehicule.marque && p.vehicule.modele && p.vehicule.intervention
     && dateOk && hourOk
-    && p.contact.nom && /^(\+33|0)\s?[1-9]([\s.-]?\d{2}){4}$/.test(p.contact.telephone)
+    && p.contact.nom && telOk(p.contact.telephone)
     && /^[^\s@<>()",;:\\]+@[^\s@<>()",;:\\]+\.[a-z]{2,}$/i.test(p.contact.email)
     && (p.rdv.lieu === "A l'atelier" || p.rdv.adresse);
   return ok ? p : null;
@@ -166,8 +175,8 @@ async function ensureTable(db) {
   await db.prepare('CREATE INDEX IF NOT EXISTS resa_creneau ON resa (jour, heure, libere)').run();
 }
 // Réserve une place si le créneau n'est pas complet (une seule requête : pas de double réservation simultanée)
-async function takeSeat(db, cap, jour, heure) {
-  const id = crypto.randomUUID();
+async function takeSeat(db, cap, jour, heure, given) {
+  const id = given || crypto.randomUUID();
   const r = await db.prepare('INSERT INTO resa (id, jour, heure, cree) SELECT ?1, ?2, ?3, ?4 WHERE (SELECT COUNT(*) FROM resa WHERE jour = ?2 AND heure = ?3 AND libere = 0) < ?5')
     .bind(id, jour, heure, Date.now(), cap).run();
   return r.meta && r.meta.changes === 1 ? id : null;
@@ -226,7 +235,6 @@ export default {
     if (len > MAX_BYTES) return reply(413, { ok: false });
 
     const ip = req.headers.get('CF-Connecting-IP') || '?';
-    if (ipLimited(ip, Date.now())) return reply(429, { ok: false }, { 'Retry-After': String(IP_WINDOW / 1000) });
 
     let raw;
     try { raw = await readCapped(req, MAX_BYTES); } catch (e) { return reply(400, { ok: false }); }
@@ -238,15 +246,19 @@ export default {
     if (env.TURNSTILE_SECRET && !(await turnstileOk(body.turnstile, ip, env.TURNSTILE_SECRET))) return reply(403, { ok: false });
     const p = clean(body);
     if (!p) return reply(422, { ok: false });
+    // Limite par adresse IP, comptée sur les demandes valides seulement (une erreur de saisie ne bloque pas le client)
+    if (ipLimited(ip, Date.now())) return reply(429, { ok: false }, { 'Retry-After': String(IP_WINDOW / 1000) });
     if (globalFull(Date.now())) return reply(429, { ok: false }, { 'Retry-After': String(GLOBAL_WINDOW / 1000) });
 
     // Place sur le créneau (si la base existe) : refus « complet » si les places sont déjà prises
     let seat = null;
-    if (env.DB) {
+    if (env.DB && env.SIGN_KEY) { // sans clé de signature, une place prise ne pourrait jamais être libérée
       try {
         await ensureTable(env.DB);
+        // Même demande renvoyée (coupure réseau pendant l'envoi) : déjà reçue, pas de 2e email ni de 2e place
+        if (p.id && await env.DB.prepare('SELECT 1 FROM resa WHERE id = ?1').bind(p.id).first()) return reply(200, { ok: true });
         await env.DB.prepare('DELETE FROM resa WHERE jour < ?1').bind(isoDay(Date.now() - 2 * 86400000)).run(); // ménage : créneaux passés
-        seat = await takeSeat(env.DB, capacity(env), p.rdv.date, p.rdv.heure);
+        seat = await takeSeat(env.DB, capacity(env), p.rdv.date, p.rdv.heure, p.id);
       } catch (e) { return reply(503, { ok: false }); }
       if (!seat) return reply(409, { ok: false, complet: true });
     }
@@ -258,20 +270,23 @@ export default {
     let html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.55;color:#1d1d1f">${esc(freeLink ? text.slice(0, text.lastIndexOf('\n\n—')) : text).replace(/\n/g, '<br>')}</div>`;
     if (freeLink) html += `<p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin-top:22px">Rendez-vous annulé ou déplacé ?</p><p><a href="${esc(freeLink)}" style="display:inline-block;background:#d92b22;color:#fff;text-decoration:none;font-family:Arial,sans-serif;font-weight:bold;padding:12px 22px;border-radius:999px">Libérer la place de ce créneau</a></p>`;
     const undo = async () => { if (seat) { try { await env.DB.prepare('DELETE FROM resa WHERE id = ?1').bind(seat).run(); } catch (e) {} } };
+    // Objet propre à chaque demande : les boîtes mail ne regroupent pas toutes les demandes dans une seule conversation
+    const subject = `🏍️ NOUVELLE DEMANDE DE RDV — ${dayFr(p.rdv.date)} ${dateFr(p.rdv.date)} à ${hourFr(p.rdv.heure)} — ${p.contact.nom}`;
+    const send = withReply => fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({
+        sender: { name: "Moto's Cool", email: env.FROM_EMAIL },
+        to: [{ email: env.TO_EMAIL }],
+        ...(withReply ? { replyTo: { email: p.contact.email, name: p.contact.nom } } : {}),
+        subject, textContent: text, htmlContent: html
+      })
+    });
     let res;
     try {
-      res = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json', accept: 'application/json' },
-        body: JSON.stringify({
-          sender: { name: "Moto's Cool", email: env.FROM_EMAIL },
-          to: [{ email: env.TO_EMAIL }],
-          replyTo: { email: p.contact.email, name: p.contact.nom },
-          subject: "🏍️ NOUVELLE DEMANDE DE RDV — Moto's Cool",
-          textContent: text,
-          htmlContent: html
-        })
-      });
+      res = await send(true);
+      // Adresse du client refusée par Brevo (format rare) : nouvel envoi sans « répondre à » ; l'email du client reste dans le texte
+      if (res.status === 400) res = await send(false);
     } catch (e) { await undo(); return reply(502, { ok: false }); }
     if (!res.ok) { await undo(); return reply(502, { ok: false }); }
     return reply(200, { ok: true });
@@ -279,4 +294,4 @@ export default {
 };
 
 // Exposé pour les tests locaux (security-tests) ; sans effet sur Cloudflare
-export const _test = { clean, mailText, esc, sign, reset: () => { hits.clear(); globalHits = []; }, size: () => hits.size, LINK_TTL_DAYS };
+export const _test = { clean, mailText, telOk, esc, sign, reset: () => { hits.clear(); globalHits = []; }, size: () => hits.size, LINK_TTL_DAYS };

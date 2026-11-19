@@ -678,12 +678,13 @@ async function loadGLB(url, rotY, U, tintNames) {
 function makeStops(obj) {
   const box = obj.userData.box, size = box.getSize(V3(0, 0, 0)), k = size.x / BIKE_LEN, P = obj.userData.parts || {};
   const S = STOPS.map(st => ({ t: [box.min.x + st.f[0] * size.x, box.min.y + st.f[1] * size.y, box.min.z + st.f[2] * size.z], az: st.az, el: st.el, d: st.d * k }));
-  if (P.front) S[1].t = P.front;
-  if (P.cockpit) S[4].t = P.cockpit;
+  // Indices de STOPS : 0 ensemble, 1 dépannage, 2 roue avant, 3 moteur, 4 chaîne, 5 pilotage, 6 arrière
+  if (P.front) S[2].t = P.front;
+  if (P.cockpit) S[5].t = P.cockpit;
   if (P.chain) {
-    S[3].t = P.chain;
+    S[4].t = P.chain;
     // Chaîne du côté droit (+Z) : la caméra reste de ce côté, trajet sans traverser la moto
-    if (P.chain[2] > (box.min.z + box.max.z) / 2) { S[3].az = -28; S[4].az = 65; S[5].az = -45; }
+    if (P.chain[2] > (box.min.z + box.max.z) / 2) { S[4].az = -28; S[5].az = 65; S[6].az = -45; }
   }
   return S;
 }
@@ -814,7 +815,8 @@ export async function init(opts = {}) {
     SKIP.forEach(ev => removeEventListener(ev, finishReveal));
   };
   const SKIP = ['wheel', 'pointerdown', 'keydown', 'touchstart', 'scroll'];
-  if (glb && !mobile && !reduce && !seen) {
+  // hero.offsetParent : rien à révéler si la moto de l'accueil est masquée (le film la remplace)
+  if (glb && !mobile && !reduce && !seen && hero.offsetParent) {
     try {
       reveal = await buildReveal(hv, model, tier === 'high' ? 52000 : 30000, U);
       try { sessionStorage.setItem('mc-reveal', '1'); } catch (e) { /* stockage indisponible */ }

@@ -1,11 +1,11 @@
 # Envoi des demandes de rendez-vous par email
 
 Le formulaire du site envoie chaque demande à ce petit service. Le service :
-1. vérifie la demande (date valide, pas de dimanche, heure en :00 ou :30 entre 8h et 20h) ;
-1. vérifie la demande ;
+
+1. vérifie la demande (date valide, pas de dimanche, heure en :00 ou :30 entre 8h et 20h, téléphone français ou international) ; une même demande renvoyée après une coupure réseau n'est envoyée qu'une fois ;
 2. écarte les robots (champ piège, durée de saisie, 5 demandes maximum par adresse IP toutes les 10 minutes, 60 emails maximum par heure) ;
 3. réserve une place sur le créneau : **3 clients maximum par créneau de 30 minutes**. Au-delà, le créneau apparaît grisé (« complet ») sur le site ;
-4. envoie un email à l'accueil (`contact@motoscool.fr`), au format du garage, avec un bouton **« Libérer la place de ce créneau »** à utiliser si le client annule ou déplace son rendez-vous.
+4. envoie un email à l'accueil (`contact@motoscool.fr`), au format du garage, avec en objet le jour, l'heure et le nom du client (et la position GPS pour un dépannage si le client l'a partagée), avec un bouton **« Libérer la place de ce créneau »** à utiliser si le client annule ou déplace son rendez-vous.
 
 Le service garde seulement le jour et l'heure des créneaux pris (aucune donnée personnelle).
 
@@ -37,8 +37,8 @@ Elles se trouvent dans **Settings › Variables** :
 | `TO_EMAIL` | `contact@motoscool.fr` |
 | `FROM_EMAIL` | `rdv@motoscool.fr` (adresse du domaine validé) |
 | `SITE_URL` | `https://motoscool.fr/` (avec le `/` final) |
-| `ALLOWED_ORIGINS` | `https://motoscool.fr,https://said-94.github.io` |
-| `SIGN_KEY` | une longue chaîne aléatoire (type *Secret*) : signe chaque lien « Libérer la place » |
+| `ALLOWED_ORIGINS` | `https://motoscool.fr,https://www.motoscool.fr` (sans « / » final ; les deux adresses, avec et sans www) |
+| `SIGN_KEY` | une longue chaîne aléatoire (type *Secret*) : signe chaque lien « Libérer la place ». **Obligatoire** : sans elle, les places ne sont pas comptées |
 | `CAPACITE` | `3` (clients maximum par créneau) |
 
 Ne pas renseigner `TURNSTILE_SECRET` tant que le widget Turnstile n'est pas ajouté au formulaire, sinon toutes les demandes seront refusées.
