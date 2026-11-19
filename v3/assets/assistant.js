@@ -102,7 +102,7 @@
   const opener = document.getElementById('chat-btn');
 
   // ---------- Normalisation et correspondance approximative ----------
-  const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’']/g, ' ').replace(/[^a-z0-9\s-]/g, ' ').replace(/\s+/g, ' ').trim();
+  const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’']/g, ' ').replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
   const lev = (a, b) => {
     if (Math.abs(a.length - b.length) > 1) return 2;
     const d = Array.from({ length: a.length + 1 }, (_, i) => [i]);
@@ -171,7 +171,7 @@
     { id: 'paiement', kw: ['paiement', 'payer', 'carte', 'cb', 'especes', 'liquide', 'cheque', 'paypal', 'plusieurs fois', 'revolut', 'virement', 'sans contact', 'credit'] },
     { id: 'garantie', kw: ['garantie', 'garanti', 'garanties', 'sav'] },
     { id: 'horaires', kw: ['horaire', 'horaires', 'heure', 'ouvert', 'ouverture', 'ferme', 'fermeture', 'dimanche', 'samedi', 'aujourd hui', 'demain', 'quand'] },
-    { id: 'adresse', kw: ['adresse', 'ou etes', 'ou se trouve', 'situe', 'itineraire', 'venir', 'acces', 'metro', 'rer', 'bus', 'garer', 'plan', 'vitry'] },
+    { id: 'adresse', kw: ['adresse', 'ou etes', 'ou se trouve', 'c est ou', 'ou est l atelier', 'ou est le garage', 'ou est votre', 'ou vous trouver', 'localisation', 'situe', 'itineraire', 'venir', 'acces', 'metro', 'rer', 'bus', 'garer', 'plan', 'vitry'] },
     { id: 'sansrdv', kw: ['sans rendez', 'sans rdv', 'passer directement', 'venir directement', 'directement', 'improviste'] },
     { id: 'rdv', kw: ['rendez vous', 'rdv', 'reserver', 'reservation', 'prendre un creneau', 'creneau', 'disponibilite', 'dispo'] },
     { id: 'marques', kw: ['marque', 'marques', 'toutes marques', 'yamaha', 'honda', 'suzuki', 'kawasaki', 'piaggio', 'vespa', 'ducati', 'guzzi', 'triumph', 'bmw', 'ktm', 'harley', 'kymco', 'sym', 'peugeot', 'aprilia', 'royal enfield', 'husqvarna', 'mv agusta', 'benelli', 'cfmoto'] },
@@ -215,7 +215,8 @@
         : `Merci de nous avoir décrit le problème, c'est bien de ne pas le laisser traîner.`;
       return { text: `${intro}\n\nEn général, ce type de symptôme peut venir de plusieurs choses : ${s.causes}. Mais seul un contrôle par un technicien permet de poser un diagnostic fiable.\n\n${REASONS}`, actions: safety ? [A.call('Appeler pour un dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) : ctas(s.inter, [A.visit()]) };
     }
-    const best = Object.entries(score).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1])[0];
+    // « sans rendez-vous » est plus précis que « rendez-vous » ou « venir » : il passe en premier
+    const best = score.sansrdv ? ['sansrdv', score.sansrdv] : Object.entries(score).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1])[0];
     const id = best ? best[0] : null;
     const o = openNow();
     switch (id) {

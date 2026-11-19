@@ -1,7 +1,7 @@
 # Envoi des demandes de rendez-vous par email
 
 Le formulaire du site envoie chaque demande à ce petit service. Le service :
-
+1. vérifie la demande (date valide, pas de dimanche, heure en :00 ou :30 entre 8h et 20h) ;
 1. vérifie la demande ;
 2. écarte les robots (champ piège, durée de saisie, 5 demandes maximum par adresse IP toutes les 10 minutes, 60 emails maximum par heure) ;
 3. réserve une place sur le créneau : **3 clients maximum par créneau de 30 minutes**. Au-delà, le créneau apparaît grisé (« complet ») sur le site ;

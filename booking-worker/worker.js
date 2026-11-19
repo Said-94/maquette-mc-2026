@@ -100,8 +100,10 @@ function clean(b) {
   const day = d && new Date(Date.UTC(+d[1], +d[2] - 1, +d[3]));
   const today = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
   const dateOk = d && day.getUTCFullYear() === +d[1] && day.getUTCMonth() === +d[2] - 1 && day.getUTCDate() === +d[3]
-    && day.getTime() >= today - 86400000 && day.getTime() <= today + 366 * 86400000;
-  const hourOk = h && +h[1] <= 23 && (h[2] === '00' || h[2] === '30'); // créneaux de 30 minutes
+    && day.getTime() >= today - 86400000 && day.getTime() <= today + 366 * 86400000
+    && day.getUTCDay() !== 0; // fermé le dimanche
+  // Créneaux de 30 minutes, dans une plage large (8h-20h) pour rester valable si les horaires du site changent un peu
+  const hourOk = h && +h[1] >= 8 && +h[1] <= 19 && (h[2] === '00' || h[2] === '30');
   const ok = p.vehicule.immatriculation && p.vehicule.marque && p.vehicule.modele && p.vehicule.intervention
     && dateOk && hourOk
     && p.contact.nom && /^(\+33|0)\s?[1-9]([\s.-]?\d{2}){4}$/.test(p.contact.telephone)
