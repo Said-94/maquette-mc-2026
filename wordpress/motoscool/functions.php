@@ -143,7 +143,8 @@ function mc_send_page($f) {
     if (preg_match('/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/', $html, $csp)) {
         preg_match_all('#<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)</script>#', $html, $m);
         $hashes = [];
-        foreach ($m[1] as $i => $body) { if (preg_match('#type="application/ld\+json"#', $m[0][$i])) continue; $hashes[] = "'sha256-" . base64_encode(hash('sha256', $body, true)) . "'"; }
+        // Le navigateur calcule l'empreinte après avoir ramené les fins de ligne Windows (CRLF) à LF : même calcul ici
+        foreach ($m[1] as $i => $body) { if (preg_match('#type="application/ld\+json"#', $m[0][$i])) continue; $hashes[] = "'sha256-" . base64_encode(hash('sha256', str_replace(["\r\n", "\r"], "\n", $body), true)) . "'"; }
         $new = preg_replace("/'sha256-[A-Za-z0-9+\/=]+'\s*/", '', $csp[1]);
         $new = preg_replace('/script-src /', 'script-src ' . implode(' ', $hashes) . ' ', $new, 1);
         // Le service de rendez-vous est ce WordPress : plus besoin d'autoriser les services Cloudflare Workers
