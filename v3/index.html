@@ -1075,7 +1075,7 @@
                 <label>Nom<input name="nom" required autocomplete="name" maxlength="80" placeholder="Votre nom"></label>
                 <label>Téléphone<input name="telephone" id="telephone" type="tel" required autocomplete="tel" maxlength="30" placeholder="06 12 34 56 78"></label>
               </div>
-              <label>Email<input name="email" type="email" required autocomplete="email" maxlength="120" placeholder="vous@exemple.fr"></label>
+              <label>Email<input name="email" type="email" required autocomplete="email" maxlength="120" placeholder="vous@exemple.fr" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Adresse email complète, ex : vous@exemple.fr"></label>
               <label>Message <span class="opt">(facultatif)</span><textarea name="message" maxlength="1000" placeholder="Ex : révision des 30 000 km, bruit au freinage…"></textarea></label>
               <!-- Piège à robots : champ invisible, laissé vide par les humains -->
               <label class="hp" aria-hidden="true">Ne pas remplir<input name="hp_x7" tabindex="-1" autocomplete="off"></label>

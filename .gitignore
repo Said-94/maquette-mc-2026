@@ -3,3 +3,7 @@ _bmad/render/
 ai-proxy/node_modules/
 ai-proxy/.wrangler/
 frames/
+
+# Thème WordPress : copie du site et zip générés par wordpress/build.sh
+wordpress/motoscool/site/
+wordpress/motoscool-theme.zip

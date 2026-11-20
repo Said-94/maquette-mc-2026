@@ -1,0 +1,45 @@
+MOTO'S COOL : INSTALLER LE SITE DANS LE WORDPRESS DU GARAGE (OVH)
+=================================================================
+
+Fichier à installer : motoscool-theme.zip (environ 57 Mo), dans ce dossier.
+Ne pas le décompresser : WordPress le prend tel quel.
+
+AVANT DE COMMENCER
+- Avoir un compte administrateur du WordPress du garage (adresse : motoscool.fr/wp-admin).
+- Dans Apparence > Thèmes, noter le nom du thème actuel. Pour revenir à l'ancien site,
+  il suffit de réactiver ce thème : rien n'est supprimé.
+
+INSTALLATION (5 minutes)
+1. Aller sur motoscool.fr/wp-admin et se connecter.
+2. Apparence > Thèmes > Ajouter > Téléverser un thème.
+3. Choisir motoscool-theme.zip > Installer maintenant > Activer.
+4. Si une extension de cache est installée (WP Rocket, LiteSpeed Cache, W3 Total Cache...) :
+   cliquer sur « Vider le cache ».
+5. Réglages > Moto's Cool RDV :
+   - vérifier l'adresse email de l'accueil (contact@motoscool.fr par défaut),
+     la remplacer si le garage utilise une autre adresse, puis Enregistrer ;
+   - cliquer sur « Envoyer un email de test à l'accueil » et vérifier la boîte
+     de réception (et le dossier des indésirables).
+
+VÉRIFICATION (2 minutes)
+6. Ouvrir motoscool.fr : la page d'accueil Moto's Cool s'affiche.
+7. Faire une vraie demande de rendez-vous sur le site.
+   L'accueil reçoit un email « NOUVELLE DEMANDE DE RDV — jour date à heure — nom ».
+   « Répondre » à cet email écrit directement au client.
+8. Dans cet email, cliquer sur « Libérer la place de ce créneau », puis sur le bouton
+   « Libérer la place » : le créneau de test redevient disponible.
+
+SI QUELQUE CHOSE BLOQUE
+- « Le fichier téléversé dépasse la taille maximale » : c'est une limite de l'hébergement OVH.
+  Ne rien forcer : prévenir SYZ, une autre méthode d'installation sera donnée.
+- L'email de test n'arrive pas, ou arrive dans les indésirables : installer l'extension
+  gratuite « WP Mail SMTP » et la relier à la boîte email du garage, puis refaire le test.
+- Une page du site s'affiche sans mise en forme : vider le cache (étape 4), puis ouvrir
+  une fois Réglages > Permaliens et cliquer sur Enregistrer.
+
+BON À SAVOIR
+- Les anciennes pages du WordPress (par exemple /contact/) renvoient automatiquement
+  vers la nouvelle page d'accueil : les anciens liens et Google ne tombent pas dans le vide.
+- Maximum 3 clients par créneau de 30 minutes (modifiable dans Réglages > Moto's Cool RDV).
+- Aucune donnée client n'est gardée sur le site : seuls le jour et l'heure des créneaux
+  pris sont enregistrés, pour compter les places. Les demandes sont dans les emails.
