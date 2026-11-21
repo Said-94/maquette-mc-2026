@@ -54,6 +54,7 @@
     .todo { color: #ffb84d; font-weight: 800; }
     footer { border-top: 1px solid var(--line); padding: 26px 0 40px; color: var(--muted); font-size: .9rem; }
     footer ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0; }
+    footer .credit { margin: 18px 0 0; font-size: .72rem; opacity: .55; }
     @media (max-width: 560px) { dl { grid-template-columns: 1fr; gap: 2px; } dd { margin-bottom: 10px; } }
     body::before { content: ""; position: fixed; right: -40px; bottom: 0; z-index: -1; width: min(48vw, 640px); aspect-ratio: 960 / 600; background: url(../assets/video/bike-ducati.jpg) no-repeat center / contain; opacity: .22; -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 52%, #000 55%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 52%, #000 55%, transparent 100%); pointer-events: none; }
     body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20115'%3E%3Cfilter%20id%3D'g'%3E%3CfeGaussianBlur%20stdDeviation%3D'2.2'%2F%3E%3C%2Ffilter%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'3'%20opacity%3D'.55'%20filter%3D'url(%23g)'%2F%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'1.6'%20opacity%3D'.5'%2F%3E%3C%2Fsvg%3E") 6% 22% / 46px auto no-repeat, url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20115'%3E%3Cfilter%20id%3D'g'%3E%3CfeGaussianBlur%20stdDeviation%3D'2.2'%2F%3E%3C%2Ffilter%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'3'%20opacity%3D'.55'%20filter%3D'url(%23g)'%2F%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'1.6'%20opacity%3D'.5'%2F%3E%3C%2Fsvg%3E") 88% 14% / 34px auto no-repeat; opacity: .55; }
@@ -96,9 +97,6 @@
       <dt>Site</dt><dd><a href="https://www.ovhcloud.com/fr/" rel="noopener">ovhcloud.com</a></dd>
     </dl>
 
-    <h2>Conception du site</h2>
-    <p>Moto's Cool.</p>
-
     <h2>Propriété intellectuelle</h2>
     <p>L'ensemble des contenus de ce site (textes, logo, mise en page, illustrations, animations) est la propriété de Moto's Cool et est protégé par le Code de la propriété intellectuelle. Toute reproduction, représentation ou adaptation, totale ou partielle, sans autorisation écrite préalable est interdite.</p>
     <p>Les marques de constructeurs citées (Yamaha, Honda, Suzuki, Kawasaki, Piaggio, Vespa, Ducati, Moto Guzzi, Triumph, BMW) appartiennent à leurs propriétaires respectifs ; elles sont citées uniquement pour indiquer les véhicules entretenus. Moto's Cool n'est pas un concessionnaire officiel de ces marques.</p>
@@ -139,6 +137,7 @@
         <li><a href="confidentialite.html">Politique de confidentialité</a></li>
         <li><a href="confidentialite.html#cookies">Gestion des cookies</a></li>
       </ul>
+      <p class="credit">Conception du site : SYZ Agency</p>
     </div>
   </footer>
   <!-- Crédit du modèle 3D (licence CC-BY) : affiché seulement si SITE_BIKE.bikeCredit est renseigné dans assets/site-bike.js -->
