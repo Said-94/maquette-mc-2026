@@ -6,36 +6,43 @@ Ne pas le décompresser : WordPress le prend tel quel.
 
 AVANT DE COMMENCER
 - Avoir un compte administrateur du WordPress du garage (adresse : motoscool.fr/wp-admin).
-- Demander au patron quelle adresse email il lit tous les jours : c'est là qu'arriveront
-  les demandes de rendez-vous (par défaut : contact@motoscool.fr).
+- Adresse qui recevra les demandes de rendez-vous : contact@motoscool.fr (déjà réglée par
+  défaut). Une autre adresse est possible UNIQUEMENT en @motoscool.fr. Pour toute autre adresse
+  (Gmail, Hotmail, Outlook, Orange, Yahoo, iCloud...), prévenir SYZ avant : l'envoi des emails
+  et la page Confidentialité sont alors à adapter.
 - Dans Apparence > Thèmes, noter le nom du thème actuel. Pour revenir à l'ancien site,
   il suffit de réactiver ce thème : rien n'est supprimé.
 
 INSTALLATION (5 minutes)
-1. Aller sur motoscool.fr/wp-admin et se connecter.
-2. Apparence > Thèmes > Ajouter > Téléverser un thème.
-3. Choisir motoscool-theme.zip > Installer maintenant > Activer.
-   (Si WordPress refuse le fichier car il est trop gros : voir « PLAN B » plus bas.)
+1. Aller sur motoscool.fr/wp-admin et se connecter (bouton « Se connecter »).
+2. Menu de gauche : Apparence > Thèmes, puis en haut : « Ajouter un thème »,
+   puis en haut : « Téléverser un thème ».
+3. « Choisir un fichier » > motoscool-theme.zip > « Installer maintenant » (attendre 1 à 2 minutes)
+   > quand « Thème installé avec succès » s'affiche : « Activer ».
+   (Si WordPress refuse le fichier, par exemple avec « Le lien que vous avez suivi a expiré »
+   ou un message parlant de « upload_max_filesize » : voir « PLAN B » plus bas.)
 4. Si une extension de cache est installée (WP Rocket, LiteSpeed Cache, W3 Total Cache...) :
    cliquer sur « Vider le cache ».
-5. Réglages > Moto's Cool RDV :
-   - « Email de l'accueil » : mettre l'adresse que le garage lit tous les jours, puis Enregistrer.
-     Laisser le champ « Expéditeur » vide : les emails partent de rdv@motoscool.fr,
-     une adresse du domaine du site comme OVH l'exige.
+5. Menu de gauche : Réglages > Moto's Cool RDV :
+   - « Email de l'accueil » : vérifier contact@motoscool.fr (ou taper l'adresse COMPLÈTE choisie),
+     puis cliquer sur « Enregistrer les modifications ». Une adresse vide ou incomplète est
+     refusée avec un message : l'ancienne est alors gardée.
+   - Laisser le champ « Expéditeur » vide : les emails partent de l'adresse de l'accueil
+     (OVH exige une adresse du domaine du site).
    - Cliquer sur « Envoyer un email de test à l'accueil » et vérifier la boîte de réception
      (et le dossier des indésirables).
 
 RECOMMANDÉ PAR OVH : ENVOI PAR LA BOÎTE EMAIL DU GARAGE (10 minutes)
 Les emails arrivent plus sûrement (moins de risque d'indésirables). À faire avec le patron,
 qui tape lui-même le mot de passe de sa boîte.
-a. Extensions > Ajouter : chercher « WP Mail SMTP », Installer, Activer.
+a. Menu de gauche : Extensions > Ajouter : chercher « WP Mail SMTP », Installer, Activer.
 b. Dans ses réglages, choisir « Autre SMTP » et remplir :
    - Hôte SMTP : smtp.mail.ovh.net
    - Chiffrement : SSL     - Port : 465
    - Authentification : activée
-   - Identifiant : l'adresse de l'accueil (ex. contact@motoscool.fr)
+   - Identifiant : l'adresse de l'accueil (contact@motoscool.fr)
    - Mot de passe : celui de cette boîte email
-   - Adresse d'expédition : la même adresse, et cocher la case qui force l'adresse d'expédition.
+   - E-mail d'expédition : la même adresse, et cocher la case « Forcer... » juste en dessous.
    (Si la boîte du garage est une offre OVH « Email Pro » ou « Exchange », le serveur SMTP
    est différent : il est indiqué dans l'espace client OVH.)
 c. Enregistrer, puis refaire « Envoyer un email de test à l'accueil » (étape 5).
@@ -49,34 +56,37 @@ VÉRIFICATION (2 minutes)
    « Libérer la place » : le créneau de test redevient disponible.
 
 SI QUELQUE CHOSE BLOQUE
-- L'email de test n'arrive pas, ou arrive dans les indésirables : faire la partie
-  « RECOMMANDÉ PAR OVH » ci-dessus, puis refaire le test.
+- L'email de test n'arrive pas, ou arrive dans les indésirables : vérifier d'abord l'adresse
+  de l'accueil (étape 5), puis faire la partie « RECOMMANDÉ PAR OVH » ci-dessus et refaire le test.
 - La demande de rendez-vous de l'étape 7 affiche « L'envoi n'a pas abouti » alors que
   l'email de test arrive : vérifier que le pare-feu applicatif d'OVH est désactivé
   (il l'est par défaut). Espace client OVH > Web Cloud > Hébergements web > l'hébergement :
   - Vue d'ensemble > PHP > « Modifier la version de PHP » > Options avancées >
-    Pare-feu applicatif : « désactivé » ;
-  - onglet « Mes sites » > motoscool.fr (puis www.motoscool.fr) > Gérer mes domaines >
-    Gérer mes options : « Activer le firewall » décoché.
+    Pare-feu applicatif : « désactivé » > « Valider » ;
+  - puis onglet « Mes sites » > motoscool.fr > Gérer mes domaines > Gérer mes options :
+    décocher « Activer le firewall » > « Confirmer ». Refaire de même pour www.motoscool.fr.
 - Une page du site s'affiche sans mise en forme : vider le cache (étape 4), puis ouvrir
-  une fois Réglages > Permaliens et cliquer sur Enregistrer.
+  une fois Réglages > Permaliens et cliquer sur « Enregistrer les modifications ».
 
-PLAN B : SI WORDPRESS REFUSE LE FICHIER (« dépasse la taille maximale »)
+PLAN B : SI WORDPRESS REFUSE LE FICHIER (« Le lien que vous avez suivi a expiré »
+ou un message parlant de « upload_max_filesize »)
 C'est une limite de l'hébergement OVH. On installe alors le thème par FTP :
 1. Espace client OVH > Web Cloud > Hébergements web > l'hébergement > onglet « FTP - SSH » :
    noter le serveur FTP et l'identifiant ; si besoin, changer le mot de passe FTP.
-2. Installer le logiciel gratuit FileZilla sur le PC, et s'y connecter avec ces informations.
+2. Installer le logiciel gratuit FileZilla sur le PC, et s'y connecter avec ces informations
+   (Hôte = serveur FTP, Nom d'utilisateur = identifiant, Port = 21, puis « Connexion rapide »).
 3. Sur le PC : clic droit sur motoscool-theme.zip > « Extraire tout » : on obtient un dossier
    « motoscool ».
 4. Dans FileZilla, côté serveur, ouvrir le dossier www > wp-content > themes, puis y glisser
    le dossier « motoscool ». Attendre la fin du transfert (environ 120 fichiers).
-5. Dans WordPress : Apparence > Thèmes > « Moto's Cool » > Activer.
+5. Dans WordPress : Apparence > Thèmes > « Moto's Cool » > « Activer ».
    Puis reprendre à l'étape 4 de l'installation.
 
 BON À SAVOIR
 - Les anciennes pages du WordPress (par exemple /contact/) renvoient automatiquement
   vers la nouvelle page d'accueil : les anciens liens et Google ne tombent pas dans le vide.
 - Maximum 3 clients par créneau de 30 minutes (modifiable dans Réglages > Moto's Cool RDV).
-- Aucune donnée client n'est gardée sur le site : seuls le jour et l'heure des créneaux
-  pris sont enregistrés, pour compter les places. Les demandes sont dans les emails.
+- Aucune coordonnée client n'est gardée sur le site : seuls le jour et l'heure des créneaux
+  pris sont enregistrés, pour compter les places (et, 24 heures au plus, une empreinte de
+  l'adresse IP, contre les envois en masse). Les demandes sont dans les emails.
 - Pour revenir à l'ancien site : Apparence > Thèmes > réactiver l'ancien thème.

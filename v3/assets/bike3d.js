@@ -555,12 +555,13 @@ function patchMaterial(m, U, kind) {
       }`);
     f = f.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
       if (uScanOn > 0.5) totalEmissiveRadiance += vec3(1.0, 0.42, 0.32) * (1.0 - smoothstep(0.0, 0.028, uScanX - vMcPos.x)) * 7.0;`);
-    if (xray) f = f.replace('#include <opaque_fragment>', `if (uXray > 0.001) {
+    // Après opaque_fragment : un matériau compilé « opaque » (#define OPAQUE force l'alpha à 1) ne se recompile pas
+    // quand material.transparent bascule ; la couleur finale des rayons X est donc réécrite ici
+    if (xray) f = f.replace('#include <opaque_fragment>', `#include <opaque_fragment>
+      if (uXray > 0.001) {
         float fr = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 2.2);
-        outgoingLight = mix(outgoingLight, vec3(0.55, 0.78, 1.0) * (0.12 + 1.8 * fr), uXray);
-        diffuseColor.a = mix(diffuseColor.a, 0.04 + 0.75 * fr, uXray);
-      }
-      #include <opaque_fragment>`);
+        gl_FragColor = vec4(mix(outgoingLight, vec3(0.55, 0.78, 1.0) * (0.12 + 1.8 * fr), uXray), mix(diffuseColor.a, 0.04 + 0.75 * fr, uXray));
+      }`);
     sh.fragmentShader = f;
   };
   m.customProgramCacheKey = () => 'mc-' + kind;
@@ -796,8 +797,9 @@ export async function init(opts = {}) {
   let paintName = 'noir';
 
   const views = [];
-  const hv = makeView(hero, model, 'hero', tier, T);
-  views.push(hv);
+  // Moto d'accueil masquée (#ta-moto hidden) : pas de contexte WebGL pour elle, seule la visite en crée un
+  const hv = hero && hero.offsetParent ? makeView(hero, model, 'hero', tier, T) : null;
+  if (hv) views.push(hv);
   let tv = null;
   const canTour = !!tourCanvas && !reduce;
 
@@ -811,12 +813,12 @@ export async function init(opts = {}) {
     reveal.done = true;
     scan.on = 0; scan.x = 99;
     reveal.points.parent.remove(reveal.points); reveal.points.geometry.dispose(); reveal.mat.dispose();
-    hv.setShadows(true);
+    if (hv) hv.setShadows(true);
     SKIP.forEach(ev => removeEventListener(ev, finishReveal));
   };
   const SKIP = ['wheel', 'pointerdown', 'keydown', 'touchstart', 'scroll'];
   // hero.offsetParent : rien à révéler si la moto de l'accueil est masquée (le film la remplace)
-  if (glb && !mobile && !reduce && !seen && hero.offsetParent) {
+  if (hv && glb && !mobile && !reduce && !seen) {
     try {
       reveal = await buildReveal(hv, model, tier === 'high' ? 52000 : 30000, U);
       try { sessionStorage.setItem('mc-reveal', '1'); } catch (e) { /* stockage indisponible */ }
@@ -877,7 +879,7 @@ export async function init(opts = {}) {
     const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016); last = now;
     // Qualité adaptative : au-delà de 20 ms par image en moyenne, on baisse la définition, puis le halo
     // Sonde de démarrage : sous 50 images/s pendant les 2 premières secondes → moins de particules, plus de halo, DPR réduit
-    if (!probed && (hv.visible || (tv && tv.visible))) {
+    if (!probed && views.some(v => v.visible)) {
       probeN++;
       if (probeN > 10) probeT += dt;
       if (probeT >= 2) {
@@ -898,7 +900,7 @@ export async function init(opts = {}) {
     spin += (target - spin) * Math.min(1, dt * 2.5);
     chainOff += spin * dt * CHAIN.rr;
     mouse.sx += (mouse.x - mouse.sx) * Math.min(1, dt * 2); mouse.sy += (mouse.y - mouse.sy) * Math.min(1, dt * 2);
-    if (hv.visible) {
+    if (hv && hv.visible) {
       if (reveal && !reveal.done) {
         const r = reveal, T1 = 1.8, T2 = 1.3;
         r.t += dt;
@@ -932,15 +934,13 @@ export async function init(opts = {}) {
     if (reduce) return;
     if (!running && !document.hidden && views.some(v => v.visible)) { running = true; last = 0; requestAnimationFrame(loop); }
   };
-  const still = () => { if (reduce && hv.w) { heroCamera(hv, 0); renderHero(); } };
+  const still = () => { if (reduce && hv && hv.w) { heroCamera(hv, 0); renderHero(); } };
   document.addEventListener('visibilitychange', wake);
   const watch = v => {
     new IntersectionObserver(([e]) => { v.visible = e.isIntersecting; wake(); }, { rootMargin: '100px' }).observe(v.canvas);
     new ResizeObserver(() => { if (v.size()) { if (v === hv) still(); wake(); } }).observe(v.canvas);
   };
-  watch(hv);
-  hv.size(); heroCamera(hv, 0);
-  if (reduce) renderHero();
+  if (hv) { watch(hv); hv.size(); heroCamera(hv, 0); if (reduce) renderHero(); }
   let smoke = null;
   // Vue de la visite créée à la demande (second contexte WebGL, post-traitement, copie du modèle)
   function startTour() {
@@ -1034,6 +1034,13 @@ function makeView(canvas, object, kind, tier, T) {
   const pm = new THREE.PMREMGenerator(renderer), room = new RoomEnvironment();
   scene.environment = pm.fromScene(room, 0.04).texture;
   pm.dispose(); if (room.dispose) room.dispose();
+  // Contexte WebGL perdu puis rétabli (pilote réinitialisé, onglet repris) : three.js recrée tout sauf le contenu
+  // des cibles de rendu ; l'éclairage d'ambiance (PMREM) est donc régénéré ici
+  canvas.addEventListener('webglcontextrestored', () => {
+    const pm2 = new THREE.PMREMGenerator(renderer), room2 = new RoomEnvironment();
+    scene.environment = pm2.fromScene(room2, 0.04).texture;
+    pm2.dispose(); if (room2.dispose) room2.dispose();
+  });
   if (bloom) scene.background = studioBackground(kind);
   scene.fog = new THREE.FogExp2(0x303036, 0.055);
 

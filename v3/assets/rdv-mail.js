@@ -1,7 +1,8 @@
 /**
  * Mise en forme d'une demande de rendez-vous, partagée par :
  *  - index.html : aperçu de l'email en mode démo ;
- *  - booking-worker/worker.js (copie du même texte) : email réellement envoyé à l'accueil.
+ *  - wordpress/motoscool/functions.php, mc_mail_text() (copie du même texte) : email réellement envoyé
+ *    à l'accueil par le thème WordPress ; booking-worker/worker.js = ancienne version. Modifier les copies ensemble.
  * Le texte reprend exactement le format attendu par le garage.
  */
 (function () {

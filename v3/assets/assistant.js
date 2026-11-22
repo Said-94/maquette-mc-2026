@@ -113,10 +113,12 @@
     return d[a.length][b.length];
   };
   // Un mot-clé correspond s'il est contenu dans le texte (expressions) ou proche d'un mot (fautes de frappe)
+  // Mots courants trop proches d'un mot-clé (claque/chèque, bougie, remise, remorquer, vendre) : pas de correspondance approximative
+  const NOFUZZ = new Set(['chaque', 'bouge', 'remis', 'revise', 'remarquer', 'vendredi', 'clique', 'choque', 'manque', 'masque', 'vivement']);
   const has = (text, words, kw) => {
     if (kw.includes(' ')) return (' ' + text + ' ').includes(' ' + kw + ' ');
     return words.some(w => w === kw || w === kw + 's' || w === kw + 'x' ||
-      (kw.length >= 6 && w[0] === kw[0] && ((w.startsWith(kw) && w.length - kw.length <= 2) || lev(w, kw) <= 1)));
+      (kw.length >= 6 && !NOFUZZ.has(w) && w[0] === kw[0] && ((w.startsWith(kw) && w.length - kw.length <= 2) || lev(w, kw) <= 1)));
   };
 
   // ---------- Faits du site ----------
@@ -135,7 +137,9 @@
   const HOURS_TXT = 'du lundi au vendredi de 9h30 à 13h00 et de 14h00 à 18h30, et le samedi de 10h00 à 13h00 et de 14h00 à 19h00';
   const ZONE_TXT = MC.ZONE_TXT || "toute l'Île-de-France";
   // Symptômes critiques pour la sécurité : ne pas rouler, appeler le dépannage
-  const SAFETY = /\bfrein(e|ent) (mal|plus|pas|moins)\b|\bne frein(e|ent)\b|\bplus de frein|\bfrein\w* (lache|mou|molle|spongieux|bloque|ne marche|ne repond)|\bfrein\w*( avant| arriere)? (est|sont|devient|deviennent|reste|restent) (tout |trop |un peu )?(mou|mous|molle|molles|spongieux|lache)|\blevier( de frein)?( avant| arriere)?( (est|devient|reste))? (tout |trop |un peu )?(mou|spongieux|qui s enfonce|s enfonce)|\bdirection (dure|bloquee|bloque|qui tire|qui tremble|floue)\b|\bguidon (dur|bloque|qui tremble|qui vibre)\b|\btire (a gauche|a droite)\b|\bodeur d essence\b|\bsent (de )?l essence\b|\bodeur de carburant\b|\bfuite d essence\b|\bessence qui coule\b|\bfumee\b|\b(ca|qui|moto|moteur|scooter|elle|il) fume\b|\bflammes?\b|\bsent le brule\b|\baccident\b|\bchute\b|\b(suis|est) tombee?\b/;
+  const SAFETY = /\bfrein(e|ent) (mal|plus|pas|moins)\b|\bne frein(e|ent)\b|\bplus de frein|\bperdu (mes |les |le |son |ses )?frein|\b(liquide de frein (qui )?fui|fuite (du |de )?liquide de frein)|\bfrein\w*( avant| arriere)? (lache|ont lache|a lache|mou|molle|spongieux|bloque|ne marche|ne fonctionne|ne repond)|\bfrein\w*( avant| arriere)? (est|sont|devient|deviennent|reste|restent) (tout |trop |un peu )?(mou|mous|molle|molles|spongieux|lache)|\blevier( de frein)?( avant| arriere)?( (est|devient|reste))? (tout |trop |un peu )?(mou|spongieux|qui s enfonce|s enfonce)|\bdirection (dure|bloquee|bloque|qui tire|qui tremble|floue)\b|\bguidon (dur|bloque|(qui )?tremble|(qui )?vibre)\b|\btire (a gauche|a droite)\b|\bodeur d essence\b|\bsen[st] (de )?l essence\b|\bodeur de carburant\b|\bfuite d essence\b|\bessence qui coule\b|\bfumee\b|\b(ca|qui|moto|moteur|scooter|elle|il) fume\b|\bflammes?\b|\bpris (le )?feu\b|\ben feu\b|\bpren(d|nent) feu\b|\bil y a le feu\b(?! (avant|arriere|stop|de|clignotant))|\bincendie\b|\bsent le brule\b|\baccident\b|\bchute\b|\b(suis|est) tombee?\b(?! en (panne|rade)| a plat)/;
+  // Personne en danger (accident, chute, blessure, feu) : le 112 d'abord. « Tomber en panne » ou « ça tombe bien » ne sont pas une chute.
+  const DANGER = /\b(accident|chute|blessee?s?|blessure|flammes?|incendie|pris (le )?feu|en feu|pren(d|nent) feu|percutee?s?|percuter|collision)\b|\bil y a le feu\b(?! (avant|arriere|stop|de|clignotant))|\b(fait|ete|suis|est|m a) renverse(e|r)?\b|\b(suis|est|sommes|sont) tombee?s?\b(?! en (panne|rade)| a plat)|\btombee?s? de (la |ma |mon |sa |son )?(moto|scooter)\b|\b(viens|vient|venons|venez) de (tomber|chuter)\b(?! en (panne|rade)| sur)|\btomber de (la |ma |mon |sa |son )?(moto|scooter)\b/;
 
   // Actions proposées sous les réponses
   const A = {
@@ -151,22 +155,22 @@
   const SYMPTOMS = [
     { kw: ['frein', 'freine', 'freinent', 'freinage', 'plaquette', 'disque', 'levier mou', 'levier qui s enfonce', 'levier s enfonce', 'freine mal', 'ne freine'], causes: 'plaquettes usées, liquide de frein à remplacer, disque ou étrier à contrôler', inter: 'Freinage' },
     { kw: ['direction dure', 'direction bloquee', 'direction qui tire', 'direction floue', 'tire a gauche', 'tire a droite', 'guidon dur', 'guidon tremble', 'guidon qui tremble', 'guidon vibre', 'guidon qui vibre', 'shimmy', 'louvoie'], causes: 'pneus, pression, roulements de direction ou suspension', inter: 'Diagnostic' },
-    { kw: ['odeur d essence', 'odeur de carburant', 'fuite d essence', 'essence qui coule', 'sent l essence'], causes: 'fuite sur le circuit d\'alimentation (durite, raccord, réservoir)', inter: 'Diagnostic' },
+    { kw: ['odeur d essence', 'odeur de carburant', 'fuite d essence', 'essence qui coule', 'sent l essence', 'sens l essence'], causes: 'fuite sur le circuit d\'alimentation (durite, raccord, réservoir)', inter: 'Diagnostic' },
     { kw: ['fumee', 'ca fume', 'qui fume', 'moteur fume', 'moto fume', 'sent le brule', 'surchauffe', 'chauffe trop', 'chauffe beaucoup'], causes: 'fuite d\'huile ou de liquide de refroidissement, surchauffe moteur', inter: 'Diagnostic' },
     { kw: ['demarre pas', 'demarre plus', 'demarrer', 'demarrage', 'batterie', 'cale', 'starter', 'tousse'], causes: 'batterie, démarreur, alimentation, allumage ou un simple faux contact', inter: 'Diagnostic' },
     { kw: ['bruit', 'claque', 'cliquetis', 'grince', 'siffle', 'cogne', 'vibre', 'vibration'], causes: 'transmission, freins, moteur ou une pièce desserrée', inter: 'Diagnostic' },
-    { kw: ['fuite', 'huile', 'goutte', 'flaque'], causes: 'joint, durite ou bouchon de vidange', inter: 'Diagnostic' },
+    { kw: ['fuite', 'fuit', 'goutte', 'flaque', 'perd de l huile', 'perte d huile', 'huile qui coule', 'huile sous', 'huile sur', 'huile par terre', 'trace d huile', 'traces d huile', 'tache d huile', 'consomme de l huile', 'perds de l huile', 'perd son huile', 'huile partout', 'crache de l huile', 'huile au sol', 'probleme d huile', 'niveau d huile'], causes: 'joint, durite ou bouchon de vidange', inter: 'Diagnostic' },
     { kw: ['voyant', 'temoin', 'allume', 'tableau de bord', 'code erreur'], causes: 'un capteur, l\'injection, la charge de la batterie ou un entretien à faire', inter: 'Diagnostic' },
     { kw: ['embrayage', 'patine', 'broute', 'vitesse', 'boite', 'passe mal', 'point mort'], causes: 'embrayage, câble ou commande, ou boîte de vitesses', inter: 'Réparation' },
     { kw: ['chaine', 'kit chaine', 'couronne', 'pignon', 'saute'], causes: 'chaîne détendue ou usée, pignon ou couronne', inter: 'Entretien' },
     { kw: ['pneu', 'crevaison', 'creve', 'creve', 'degonfle', 'a plat', 'roue'], causes: 'crevaison, valve, pneu usé ou abîmé', inter: 'Pneus' },
-    { kw: ['puissance', 'accelere mal', 'trou a l acceleration', 'n avance', 'perd de la', 'courroie', 'variateur'], causes: 'alimentation, filtre à air, bougies ou, sur un scooter, la transmission (courroie, variateur)', inter: 'Diagnostic' },
-    { kw: ['electrique', 'phare', 'feu', 'clignotant', 'klaxon', 'ampoule', 'fusible'], causes: 'ampoule, fusible, faisceau ou régulateur', inter: 'Réparation' }
+    { kw: ['puissance', 'baisse de regime', 'accelere mal', 'trou a l acceleration', 'n avance', 'perd de la', 'courroie', 'variateur'], causes: 'alimentation, filtre à air, bougies ou, sur un scooter, la transmission (courroie, variateur)', inter: 'Diagnostic' },
+    { kw: ['electrique', 'phare', 'feu avant', 'feu arriere', 'feu stop', 'feu de', 'feux', 'mon feu', 'feu ne', 'feu grille', 'feu casse', 'feu est grille', 'feu est casse', 'clignotant', 'klaxon', 'ampoule', 'fusible'], causes: 'ampoule, fusible, faisceau ou régulateur', inter: 'Réparation' }
   ];
 
   const INTENTS = [
     { id: 'diy', kw: ['tuto', 'tutoriel', 'moi meme', 'soi meme', 'tout seul', 'toute seule', 'couple de serrage', 'reference', 'ref piece', 'comment reparer', 'comment changer', 'comment remplacer', 'comment demonter', 'comment regler', 'comment purger', 'comment faire pour reparer', 'je peux reparer', 'etapes'] },
-    { id: 'panne', kw: ['panne', 'en panne', 'depanner', 'depannage', 'remorquer', 'remorquage', 'bloque', 'immobilise', 'accident', 'chute', 'tombe', 'tombee', 'au bord de la route', 'urgence', 'urgent', 'chez moi', 'a domicile', 'venir chercher'] },
+    { id: 'panne', kw: ['panne', 'en panne', 'en rade', 'depanner', 'depannage', 'remorquer', 'remorquage', 'bloque', 'immobilise', 'accident', 'chute', 'suis tombe', 'suis tombee', 'est tombe', 'est tombee', 'tombe de', 'tombee de', 'au bord de la route', 'urgence', 'urgent', 'chez moi', 'a domicile', 'venir chercher'] },
     { id: 'zone', kw: ['zone', 'departement', 'secteur', 'intervenez', 'vous venez', 'jusqu a', 'paris', 'essonne', 'seine et marne', 'val de marne', 'hauts de seine', 'seine saint denis', 'yvelines', 'val d oise'] },
     { id: 'prix', kw: ['prix', 'tarif', 'cout', 'coute', 'combien', 'cher', 'devis', 'estimation', 'promo', 'promotion', 'reduction', 'remise'] },
     { id: 'paiement', kw: ['paiement', 'payer', 'carte bancaire', 'carte bleue', 'cb', 'en liquide', 'en especes', 'especes', 'cheque', 'paypal', 'plusieurs fois', 'revolut', 'virement', 'sans contact', 'credit'] },
@@ -176,7 +180,7 @@
     { id: 'sansrdv', kw: ['sans rendez', 'sans rdv', 'passer directement', 'venir directement', 'improviste'] },
     { id: 'rdv', kw: ['rendez vous', 'rdv', 'reserver', 'reservation', 'prendre un creneau', 'creneau', 'disponibilite', 'dispo'] },
     { id: 'marques', kw: ['marque', 'marques', 'toutes marques', 'yamaha', 'honda', 'suzuki', 'kawasaki', 'piaggio', 'vespa', 'ducati', 'guzzi', 'triumph', 'bmw', 'ktm', 'harley', 'kymco', 'sym', 'peugeot', 'aprilia', 'royal enfield', 'husqvarna', 'mv agusta', 'benelli', 'cfmoto'] },
-    { id: 'entretien', kw: ['entretien', 'revision', 'vidange', 'filtre', 'bougie', 'carnet', 'controle', 'kilometres'] },
+    { id: 'entretien', kw: ['entretien', 'changer l huile', 'changement d huile', 'revision', 'vidange', 'filtre', 'bougie', 'carnet', 'controle', 'kilometres'] },
     { id: 'scooter', kw: ['scooter', 'scoot', '50cc', '125', 'maxi scooter', 'tmax'] },
     { id: 'quad', kw: ['quad'] },
     { id: 'vente', kw: ['vendre', 'vente', 'occasion', 'acheter', 'achat', 'equipement', 'casque', 'blouson', 'pieces detachees'] },
@@ -186,7 +190,7 @@
   ];
 
   function answer(raw) {
-    const text = norm(raw);
+    const text = norm(raw).replace(/\bchutes? de (regime|puissance|tension|pression|compression)\b/g, 'baisse de $1');
     const words = text.split(' ');
     // Code postal : 5 chiffres plausibles (01 à 95, 97, 98) et pas un kilométrage (« 12000 km », « 25000 bornes »)
     const cpm = text.match(/\b(\d{5})\b(?!\s*(km|kms|kilometre|borne))/);
@@ -197,34 +201,43 @@
     const prefill = `Message envoyé depuis l'assistant : ${raw.trim()}`;
     const ctas = (inter, extra) => [A.call(), A.book(prefill, inter), ...(extra || []), A.wa()].filter(Boolean);
 
+    const danger = DANGER.test(text), safety = danger || SAFETY.test(text);
+    const urgent = danger ? 'Blessé ou en danger ? Appelez d\'abord le 112.\n\n' : '';
+    const stop = safety ? 'Par sécurité, ne roulez pas avec la moto dans cet état : mettez-vous à l\'abri de la circulation.\n\n' : '';
     // 1. Demande de réparation « à faire soi-même » : réorientation polie
+    // Quads : jamais pris en charge, même décrits avec un symptôme, une panne ou un code postal
+    if (score.quad) return { text: `${urgent}Désolé, Moto's Cool ne prend pas en charge les quads : l'atelier s'occupe des motos et des scooters, toutes marques. Pour une moto ou un scooter, nous sommes là !`, actions: [A.call(), A.book(prefill)] };
     if (score.diy) {
-      return { text: `Je comprends l'envie de vous en occuper vous-même, mais je ne donne pas de procédure de réparation, de références de pièces ni de couples de serrage : une erreur sur une moto peut coûter cher, ou être dangereuse.\n\n${REASONS} Le plus simple est de nous la confier : nous vous dirons précisément ce qu'il faut faire, et combien cela coûte, avant toute intervention.`, actions: ctas(sym[0] && sym[0].inter) };
+      return { text: `${urgent}${stop}Je comprends l'envie de vous en occuper vous-même, mais je ne donne pas de procédure de réparation, de références de pièces ni de couples de serrage : une erreur sur une moto peut coûter cher, ou être dangereuse.\n\n${REASONS} Le plus simple est de nous la confier : nous vous dirons précisément ce qu'il faut faire, et combien cela coûte, avant toute intervention.`, actions: ctas(sym[0] && sym[0].inter) };
     }
-    // 2. Code postal : vérification de la zone de dépannage
-    if (cp) {
+    // 2. Code postal : vérification de la zone de dépannage, sauf si le message pose une autre question (horaires, prix…)
+    const asks = Object.keys(score).filter(k => score[k] > 0 && !['panne', 'zone', 'adresse', 'bonjour', 'merci'].includes(k) && !(sym.length && (k === 'scooter' || k === 'marques')));
+    if (cp && (score.panne || score.zone || safety || !asks.length)) {
       const code = cp.slice(0, 2);
-      if ((MC.ZONE_FULL || []).includes(code)) return { text: `Oui, ${cp} est dans notre zone de dépannage. Intervention express pendant nos horaires d'ouverture : nous venons chercher la moto et nous l'amenons à l'atelier. Le tarif dépend de la distance et de la situation.`, actions: [A.call('Appeler le dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) };
-      return { text: `${cp} n'est pas dans notre zone de dépannage, qui couvre ${ZONE_TXT}. Appelez-nous quand même : nous vous orienterons. Pour un entretien ou une réparation, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.visit()] };
+      if ((MC.ZONE_FULL || []).includes(code)) return { text: `${urgent}${stop}Oui, ${cp} est dans notre zone de dépannage. Intervention express pendant nos horaires d'ouverture : nous venons chercher la moto et nous l'amenons à l'atelier. Le tarif dépend de la distance et de la situation.`, actions: [A.call('Appeler le dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) };
+      return { text: `${urgent}${stop}${cp} n'est pas dans notre zone de dépannage, qui couvre ${ZONE_TXT}. Appelez-nous quand même : nous vous orienterons. Pour un entretien ou une réparation, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.visit()] };
     }
     // 3. Symptôme décrit : écoute, causes générales, sécurité, puis atelier
-    const safety = SAFETY.test(text);
     // Question sur un service (« vous faites les pneus ? ») : ce n'est pas un symptôme décrit
-    const service = /\b(vous faites|vous reparez|faire monter|monter des)\b/.test(text);
+    const service = /\b(vous faites|faites vous|vous reparez|reparez vous|vous changez|changez vous|vous montez|montez vous|vous remplacez|remplacez vous|vous proposez|proposez vous|faire monter|faire changer|monter des)\b/.test(text);
     if (sym.length && !(service && !safety) && !(score.prix && !safety) && !(score.panne && !safety)) {
       const s = sym[0];
       const intro = safety
-        ? `Merci de nous avoir décrit le problème. Par sécurité, ne roulez pas avec la moto dans cet état : mettez-vous à l'abri de la circulation et appelez-nous, nous organisons le dépannage (${ZONE_TXT}).`
+        ? `${urgent}Merci de nous avoir décrit le problème. Par sécurité, ne roulez pas avec la moto dans cet état : mettez-vous à l'abri de la circulation. Pendant nos horaires d'ouverture, appelez-nous : notre dépanneur vient chercher la moto dans ${ZONE_TXT}.`
         : `Merci de nous avoir décrit le problème, c'est bien de ne pas le laisser traîner.`;
       return { text: `${intro}\n\nEn général, ce type de symptôme peut venir de plusieurs choses : ${s.causes}. Mais seul un contrôle par un technicien permet de poser un diagnostic fiable.\n\n${REASONS}`, actions: safety ? [A.call('Appeler pour un dépannage'), A.book(prefill, 'Dépannage'), A.wa()].filter(Boolean) : ctas(s.inter, [A.visit()]) };
     }
+    // Danger sans symptôme reconnu (feu, blessé…) : consignes de sécurité, jamais « je ne comprends pas »
+    if (safety && !score.panne) return { text: `${urgent}${stop}Pendant nos horaires d'ouverture, appelez-nous au ${PHONE} : notre dépanneur vient chercher la moto dans ${ZONE_TXT}.`, actions: [A.call('Appeler pour un dépannage'), A.wa()].filter(Boolean) };
+    // Question sur un service (« vous faites les pneus ? ») : réponse générale, sans prix
+    if (service && !score.prix && !score.panne && !['adresse', 'horaires', 'sansrdv', 'rdv', 'paiement', 'garantie', 'contact', 'zone'].some(k => score[k]) && (sym.length || !Object.values(score).some(v => v > 0))) return { text: `L'atelier entretient et répare les motos et scooters toutes marques : entretien, freinage, pneus et réparation mécanique sur rendez-vous ; contrôles et diagnostics aussi sans rendez-vous, pendant nos horaires d'ouverture. Pour votre cas précis, appelez-nous ou prenez rendez-vous : le prix est fixé après un contrôle à l'atelier, sur un devis que vous validez.`, actions: ctas(sym[0] && sym[0].inter, [A.visit()]) };
     // « sans rendez-vous » est plus précis que « rendez-vous » ou « venir » : il passe en premier
     const best = score.sansrdv && !score.panne ? ['sansrdv', score.sansrdv] : Object.entries(score).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1])[0];
     const id = best ? best[0] : null;
     const o = openNow();
     switch (id) {
       case 'panne':
-        return { text: `${safety || /\b(accident|chute|tombee?)\b/.test(text) ? 'Blessé ou en danger ? Appelez d\'abord le 112.\n\n' : ''}Vous êtes en panne ? Mettez-vous d'abord en sécurité, à l'écart de la circulation. Appelez-nous au ${PHONE} pendant nos horaires d'ouverture : nous évaluons la situation au téléphone, puis notre dépanneur vient chercher la moto et l'amène à l'atelier, où elle est diagnostiquée.\n\nZone de dépannage : ${ZONE_TXT}. Donnez-moi votre code postal si vous voulez vérifier.`, actions: [A.call('Appeler le dépannage'), A.zone(), A.wa()].filter(Boolean) };
+        return { text: `${urgent}Vous êtes en panne ? Mettez-vous d'abord en sécurité, à l'écart de la circulation. Appelez-nous au ${PHONE} pendant nos horaires d'ouverture : nous évaluons la situation au téléphone, puis notre dépanneur vient chercher la moto et l'amène à l'atelier, où elle est diagnostiquée.\n\nZone de dépannage : ${ZONE_TXT}. Donnez-moi votre code postal si vous voulez vérifier.`, actions: [A.call('Appeler le dépannage'), A.zone(), A.wa()].filter(Boolean) };
       case 'zone':
         return { text: `Nous dépannons dans ${ZONE_TXT}. Indiquez-moi votre code postal ou vérifiez votre commune sur la carte.\n\nPour l'entretien et les réparations, l'atelier de Vitry-sur-Seine accueille tout le monde, sur rendez-vous.`, actions: [A.call(), A.zone()] };
       case 'prix':
@@ -364,6 +377,7 @@
   let greeted = false, inerted = [];
   const onDocKey = e => { if (e.key === 'Escape' && !box.hidden) { e.preventDefault(); close(true); } };
   function open() {
+    if (!box.hidden) { input.focus(); return; } // déjà ouvert : ne pas recalculer la liste des éléments inertes
     box.hidden = false;
     // Fenêtre modale : le reste de la page devient inerte tant que l'assistant est ouvert
     inerted = [...document.body.children].filter(el => el !== box && !el.inert && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE');

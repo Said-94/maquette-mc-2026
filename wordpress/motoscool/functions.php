@@ -56,29 +56,46 @@ add_filter('wp_sitemaps_enabled', '__return_false');
 add_filter('robots_txt', function ($out) {
     $out = preg_replace('/^Sitemap:.*$/mi', '', (string) $out);
     return rtrim($out) . "\nSitemap: " . home_url('/sitemap.xml') . "\n";
-}, 99);
+}, PHP_INT_MAX); // après les extensions de référencement (Yoast…), dont on retire la ligne Sitemap
 
 /* ---------- Réglages ---------- */
 add_action('admin_menu', function () {
     add_options_page("Moto's Cool RDV", "Moto's Cool RDV", 'manage_options', 'mc-rdv', 'mc_settings_page');
 });
 add_action('admin_init', function () {
-    register_setting('mc_rdv', 'mc_to_email', ['sanitize_callback' => 'sanitize_email']);
-    register_setting('mc_rdv', 'mc_from_email', ['sanitize_callback' => 'sanitize_email']);
-    register_setting('mc_rdv', 'mc_capacite', ['sanitize_callback' => function ($v) { return max(1, min(20, (int) $v)); }]);
+    // Adresse vide ou mal tapée : refusée, l'adresse précédente est conservée (sinon plus aucune demande n'arriverait)
+    register_setting('mc_rdv', 'mc_to_email', ['sanitize_callback' => function ($v) {
+        $e = sanitize_email((string) $v);
+        if (is_email($e)) return $e;
+        add_settings_error('mc_to_email', 'mc_to_email', "Adresse de l'accueil invalide : l'adresse précédente est conservée.");
+        return get_option('mc_to_email');
+    }]);
+    register_setting('mc_rdv', 'mc_from_email', ['sanitize_callback' => function ($v) {
+        if (trim((string) $v) === '') return '';
+        $e = sanitize_email((string) $v);
+        if (is_email($e)) return $e;
+        add_settings_error('mc_from_email', 'mc_from_email', "Adresse d'expéditeur invalide : l'adresse précédente est conservée.");
+        return get_option('mc_from_email');
+    }]);
+    register_setting('mc_rdv', 'mc_capacite', ['sanitize_callback' => function ($v) {
+        $n = (int) $v; if ($n >= 1) return min(20, $n);
+        add_settings_error('mc_capacite', 'mc_capacite', 'Nombre de clients par créneau invalide : la valeur précédente est conservée.');
+        return max(1, (int) get_option('mc_capacite', 3));
+    }]);
 });
 function mc_settings_page() { ?>
 <div class="wrap"><h1>Moto's Cool : demandes de rendez-vous</h1>
 <form method="post" action="options.php"><?php settings_fields('mc_rdv'); ?>
 <table class="form-table">
 <tr><th>Email de l'accueil (reçoit les demandes)</th><td><input type="email" class="regular-text" name="mc_to_email" value="<?php echo esc_attr(get_option('mc_to_email')); ?>"></td></tr>
-<tr><th>Expéditeur (facultatif)</th><td><input type="email" class="regular-text" name="mc_from_email" value="<?php echo esc_attr(get_option('mc_from_email')); ?>" placeholder="rdv@<?php echo esc_attr(wp_parse_url(home_url(), PHP_URL_HOST)); ?>"><p class="description">Une adresse du domaine du site. Vide : rdv@ + le domaine.</p></td></tr>
-<tr><th>Clients maximum par créneau</th><td><input type="number" min="1" max="20" name="mc_capacite" value="<?php echo (int) get_option('mc_capacite', 3); ?>"></td></tr>
+<tr><th>Expéditeur (facultatif)</th><td><input type="email" class="regular-text" name="mc_from_email" value="<?php echo esc_attr(get_option('mc_from_email')); ?>" placeholder="<?php echo esc_attr(mc_from()); ?>"><p class="description">À laisser vide en général. OVH n'accepte qu'une adresse du domaine du site (et, avec WP Mail SMTP, celle de la boîte connectée). Vide : l'adresse de l'accueil si elle est en @<?php echo esc_html(mc_site_domain()); ?>, sinon rdv@<?php echo esc_html(mc_site_domain()); ?>.</p></td></tr>
+<tr><th>Clients maximum par créneau</th><td><input type="number" min="1" max="20" required name="mc_capacite" value="<?php echo (int) get_option('mc_capacite', 3); ?>"></td></tr>
 </table><?php submit_button(); ?></form>
 <form method="post"><?php wp_nonce_field('mc_test'); ?><input type="hidden" name="mc_test" value="1"><?php submit_button("Envoyer un email de test à l'accueil", 'secondary'); ?></form>
 <?php if (!empty($_POST['mc_test']) && check_admin_referer('mc_test')) {
-    $ok = wp_mail(get_option('mc_to_email'), "Test Moto's Cool", "Si vous lisez ce message, les demandes de rendez-vous du site arriveront bien ici.", mc_headers(null));
-    echo $ok ? '<div class="notice notice-success"><p>Email de test envoyé. Vérifiez la boîte (et les indésirables).</p></div>' : '<div class="notice notice-error"><p>L\'envoi a échoué : installez l\'extension « WP Mail SMTP » et reliez-la à la boîte email du garage.</p></div>';
+    $to = mc_to();
+    $ok = wp_mail($to, "Test Moto's Cool", "Si vous lisez ce message, les demandes de rendez-vous du site arriveront bien ici.", mc_headers(null));
+    echo $ok ? '<div class="notice notice-success"><p>Email de test envoyé à <b>' . esc_html($to) . '</b> (expéditeur : ' . esc_html(mc_from()) . '). Vérifiez la boîte de réception, et le dossier des indésirables.</p></div>' : '<div class="notice notice-error"><p>L\'envoi a échoué : installez l\'extension « WP Mail SMTP » et reliez-la à la boîte email du garage.</p></div>';
 } ?></div>
 <?php }
 
@@ -135,6 +152,9 @@ function mc_send_static($f) {
 function mc_send_page($f) {
     mc_raw();
     $html = file_get_contents($f);
+    // Adresses complètes (canonical, og:url, og:image, données structurées) : adresse réelle du site WordPress,
+    // la même que dans sitemap.xml (ex. www.motoscool.fr si le site est réglé ainsi)
+    $html = str_replace('https://motoscool.fr/', esc_url(home_url('/')), $html);
     // Adresse du service de rendez-vous : ce WordPress
     $html = str_replace("bookingEndpoint: ''", "bookingEndpoint: '" . esc_js((string) wp_parse_url(home_url('/mc-rdv'), PHP_URL_PATH)) . "'", $html);
     // Site réel : visible par Google
@@ -166,6 +186,8 @@ function mc_send_page($f) {
 add_action('parse_request', function () {
     if (is_admin() || isset($_GET['rest_route'])) return; // API WordPress (éditeur, extensions) : non touchée
     $p = mc_path();
+    // Icône du site : celle de Moto's Cool (sinon WordPress renverrait l'icône de l'ancien site ou son logo)
+    if ($p === '/favicon.ico' && is_file(MC_DIR . '/assets/icons/icon-192.png')) mc_send_static(MC_DIR . '/assets/icons/icon-192.png');
     if ($p === '/sitemap.xml' && is_file(MC_DIR . '/sitemap.xml')) {
         mc_raw(); status_header(200); header('Content-Type: application/xml; charset=utf-8'); header('X-Content-Type-Options: nosniff');
         echo str_replace('https://motoscool.fr/', esc_url(home_url('/')), file_get_contents(MC_DIR . '/sitemap.xml')); exit;
@@ -249,8 +271,22 @@ function mc_mail_text($p) {
         'Nom : ' . $c['nom'], 'Téléphone : ' . $c['telephone'], 'Email : ' . $c['email'], '', 'Message :', $p['message']);
     return implode("\n", $l);
 }
+// Domaine du site, sans « www. »
+function mc_site_domain() { return preg_replace('/^www\./', '', strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST))); }
+// Adresse de l'accueil ; en secours (réglage vide ou invalide), l'adresse de l'administrateur WordPress
+function mc_to() { $to = (string) get_option('mc_to_email'); return is_email($to) ? $to : (string) get_option('admin_email'); }
+// Expéditeur : OVH n'accepte qu'une adresse du domaine du site (et, en SMTP, celle de la boîte connectée) :
+// réglage « Expéditeur » s'il est rempli, sinon l'adresse de l'accueil si elle est du domaine, sinon rdv@domaine
+function mc_from() {
+    $from = (string) get_option('mc_from_email');
+    if (is_email($from)) return $from;
+    $to = mc_to(); $site = mc_site_domain();
+    $at = strrchr($to, '@');
+    if ($site !== '' && $at !== false && strtolower(substr($at, 1)) === $site) return $to;
+    return 'rdv@' . $site;
+}
 function mc_headers($p) {
-    $from = get_option('mc_from_email') ?: 'rdv@' . preg_replace('/^www\./', '', (string) wp_parse_url(home_url(), PHP_URL_HOST));
+    $from = mc_from();
     $h = ['Content-Type: text/html; charset=UTF-8', "From: Moto's Cool <$from>"];
     if ($p) $h[] = 'Reply-To: ' . str_replace(['"', "\r", "\n"], '', $p['contact']['nom']) . ' <' . $p['contact']['email'] . '>';
     return $h;
@@ -277,7 +313,7 @@ function mc_limited($key, $limit, $window) {
 }
 function mc_full_slots() {
     global $wpdb; $t = mc_table();
-    $rows = $wpdb->get_results($wpdb->prepare("SELECT jour, heure FROM $t WHERE libere = 0 AND jour >= %s GROUP BY jour, heure HAVING COUNT(*) >= %d", gmdate('Y-m-d'), (int) get_option('mc_capacite', 3)));
+    $rows = $wpdb->get_results($wpdb->prepare("SELECT jour, heure FROM $t WHERE libere = 0 AND jour >= %s AND NOT (cree < 0 AND cree > %d) GROUP BY jour, heure HAVING COUNT(*) >= %d", gmdate('Y-m-d'), 900 - time(), (int) get_option('mc_capacite', 3)));
     return array_map(function ($r) { return $r->jour . ' ' . $r->heure; }, (array) $rows);
 }
 function mc_page($title, $body) {
@@ -323,19 +359,29 @@ function mc_api($sub) {
 
     // Même demande encore en cours d'envoi (nouvel essai après une coupure) : on attend qu'elle se termine
     // (verrou rendu automatiquement à la fin de la requête), pour répondre selon son vrai résultat
-    if ($p['id'] && $wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 8)', 'mc_rdv_' . $p['id'])) === '0') mc_json(503, ['ok' => false]);
-    // Même demande renvoyée (coupure réseau) : déjà reçue et envoyée
-    if ($p['id'] && $wpdb->get_var($wpdb->prepare("SELECT 1 FROM $t WHERE id = %s", $p['id']))) mc_json(200, ['ok' => true]);
-    $wpdb->query($wpdb->prepare("DELETE FROM $t WHERE jour < %s", gmdate('Y-m-d', time() - 2 * 86400)));
+    $idLock = $p['id'] ? $wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 8)', 'mc_rdv_' . $p['id'])) : null;
+    if ($idLock === '0') mc_json(503, ['ok' => false]);
+    // Même demande renvoyée (coupure réseau). Colonne « cree » : > 0 = email parti, < 0 = place prise, email en cours.
+    // Email parti : déjà reçue, on répond OK. Encore « en cours » alors que l'essai précédent est terminé (il s'est
+    // arrêté avant l'email) : on la reprend, pour que la demande arrive vraiment au garage.
+    $prev = $p['id'] ? $wpdb->get_var($wpdb->prepare("SELECT cree FROM $t WHERE id = %s", $p['id'])) : null;
+    if ($prev !== null) {
+        if ((int) $prev > 0) mc_json(200, ['ok' => true]);
+        $ended = $idLock === '1' || ($idLock === null && time() + (int) $prev > 120);
+        if (!$ended) mc_json(503, ['ok' => false]);
+        $wpdb->delete($t, ['id' => $p['id']]);
+    }
+    // Ménage : créneaux passés, et places restées « en cours » plus de 15 minutes (envoi interrompu)
+    $wpdb->query($wpdb->prepare("DELETE FROM $t WHERE jour < %s OR (cree < 0 AND cree > %d)", gmdate('Y-m-d', time() - 2 * 86400), 900 - time()));
     $seat = $p['id'] ?: wp_generate_uuid4();
     $cap = (int) get_option('mc_capacite', 3);
     // Verrou : deux clients au même instant ne prennent pas la même dernière place
     $lock = $wpdb->get_var("SELECT GET_LOCK('" . esc_sql($t) . "_lock', 10)");
     $n = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $t WHERE jour = %s AND heure = %s AND libere = 0", $p['rdv']['date'], $p['rdv']['heure']));
-    $took = $n < $cap && $wpdb->insert($t, ['id' => $seat, 'jour' => $p['rdv']['date'], 'heure' => $p['rdv']['heure'], 'cree' => time(), 'libere' => 0]);
+    $took = $n < $cap && $wpdb->insert($t, ['id' => $seat, 'jour' => $p['rdv']['date'], 'heure' => $p['rdv']['heure'], 'cree' => -time(), 'libere' => 0]);
     if ($lock) $wpdb->query("SELECT RELEASE_LOCK('" . esc_sql($t) . "_lock')");
     if (!$took) {
-        if ($p['id'] && $wpdb->get_var($wpdb->prepare("SELECT 1 FROM $t WHERE id = %s", $p['id']))) mc_json(200, ['ok' => true]);
+        if ($p['id'] && (int) $wpdb->get_var($wpdb->prepare("SELECT cree FROM $t WHERE id = %s", $p['id'])) > 0) mc_json(200, ['ok' => true]);
         if ($n >= $cap) mc_json(409, ['ok' => false, 'complet' => true]);
         mc_json(503, ['ok' => false]);
     }
@@ -346,8 +392,9 @@ function mc_api($sub) {
     $subject = '🏍️ NOUVELLE DEMANDE DE RDV — ' . mc_day_fr($p['rdv']['date']) . ' ' . mc_date_fr($p['rdv']['date']) . ' à ' . mc_hour_fr($p['rdv']['heure']) . ' — ' . $p['contact']['nom'];
     $alt = function ($phpmailer) use ($text, $link) { $phpmailer->AltBody = $text . "\n\n—\nRendez-vous annulé ou déplacé ? Libérez la place sur le site : " . $link; };
     add_action('phpmailer_init', $alt);
-    $sent = wp_mail(get_option('mc_to_email', 'contact@motoscool.fr'), $subject, $html, mc_headers($p));
+    $sent = wp_mail(mc_to(), $subject, $html, mc_headers($p));
     remove_action('phpmailer_init', $alt);
     if (!$sent) { $wpdb->delete($t, ['id' => $seat]); mc_json(502, ['ok' => false]); }
+    $wpdb->update($t, ['cree' => time()], ['id' => $seat]); // email parti
     mc_json(200, ['ok' => true]);
 }
