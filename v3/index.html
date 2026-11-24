@@ -8,7 +8,7 @@
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-JgYL61urIxTSqBtyAHS7xRqZ7cH7RkUZ5vYA3YIxFaM=' 'sha256-BMlp6q4EjvbjTTvsRkNUyLwIcyeQFRGfSvhyLbDkCyo=' 'sha256-oGOOrab/DcJ+5oM4Bjw4ZKcAVkaqzlBrhYuz5ATfKkk=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://data.geopf.fr https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-JgYL61urIxTSqBtyAHS7xRqZ7cH7RkUZ5vYA3YIxFaM=' 'sha256-BMlp6q4EjvbjTTvsRkNUyLwIcyeQFRGfSvhyLbDkCyo=' 'sha256-wg1FjwXDH9bujA1PL39oxhEKjWiiVimrg45qAXr8QBc=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://data.geopf.fr https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -1497,10 +1497,10 @@
     phone: '01 43 76 26 38',
     tel: '+33143762638',
     // WhatsApp : numéro au format international, chiffres uniquement, sans « + ». Vide = bouton masqué.
-    whatsapp: '33633660470',
+    whatsapp: '33633660410',
     whatsappMessage: "Bonjour Moto's Cool, j'ai besoin d'un renseignement pour ma moto : ",
     // Mobile du dépanneur pour recevoir la position par SMS. Vide = bouton SMS masqué.
-    sms: '0633660470',
+    sms: '0633660410',
     // Carte : vue affichée par défaut, 'plan' (couleur) ou 'satellite'. Le visiteur peut toujours basculer.
     mapStyle: 'plan',
     // Photos de l'atelier (onglet Photos) : déposer les images dans assets/photos/ puis les lister ici,
@@ -1529,7 +1529,9 @@
     ...(window.SITE_BIKE || {})
   };
   document.addEventListener('DOMContentLoaded', () => {
-    const $ = s => document.querySelector(s);
+    // Bloc retiré de la page (Elementor) : élément remplaçant hors de la page, pour que le reste du site continue de fonctionner
+    const MC_TAG = {"annee":"input","bike3d":"canvas","brand-select":"select","burger":"button","chat-btn":"button","cp":"input","faq-ask":"form","faq-q":"input","faq-wa":"a","gallery":"ul","geo-addr":"button","geo-zone":"button","hero-film":"video","hero-vid":"video","intervention":"select","lb-cap":"figcaption","lb-close":"button","lb-img":"img","lb-next":"button","lb-prev":"button","lightbox":"dialog","menu":"ul","mtext":"p","ok-rdv":"p","plaque":"input","quote-form":"form","rdv-steps":"ol","recap":"dl","ring":"circle","send-pos":"button","socials":"ul","spd-bar":"i","step-back":"button","step-next":"button","submit-btn":"button","telephone":"input","to-top":"button","top":"header","tour3d":"canvas","trails":"canvas","zone-check":"form","zone-q":"input"}, mcStubs = {};
+    const $ = s => document.querySelector(s) || mcStubs[s] || (mcStubs[s] = document.createElement(MC_TAG[s.replace(/^#/, '')] || 'div'));
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasG = !!(window.gsap && window.ScrollTrigger);
     if (hasG) { gsap.registerPlugin(ScrollTrigger); ScrollTrigger.config({ ignoreMobileResize: true }); }
@@ -1846,7 +1848,7 @@
       ring.style.strokeDashoffset = 150.8 * (1 - p);
       toTop.classList.toggle('show', scrollY > 600);
       header.classList.toggle('scrolled', scrollY > 30);
-      document.documentElement.classList.toggle('past-hero', scrollY > heroEl.offsetHeight * 0.8);
+      document.documentElement.classList.toggle('past-hero', !heroEl.isConnected || scrollY > heroEl.offsetHeight * 0.8); // haut de page retiré : boutons visibles tout de suite
     };
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
@@ -1917,7 +1919,9 @@
 
     // ---------- Photos de l'atelier (SITE.gallery) ; cadres « photo à venir » tant que la liste est vide ----------
     {
-      const list = $('#gallery'), photos = (SITE.gallery || []).filter(p => p && p.src);
+      const list = $('#gallery'), inPage = [...list.querySelectorAll('img')].map(im => ({ src: im.getAttribute('src'), alt: im.getAttribute('alt') || '' })).filter(p => p.src);
+      const photos = inPage.length ? inPage : (SITE.gallery || []).filter(p => p && p.src);
+      list.replaceChildren();
       if (!photos.length) {
         for (let i = 0; i < 6; i++) {
           const li = document.createElement('li'), box = document.createElement('div'), t = document.createElement('span');
@@ -2556,6 +2560,7 @@
       gsap.matchMedia().add('all', () => {
         $('#chiffres').classList.add('on');
         const figs = gsap.utils.toArray('.fig');
+        if (!figs.length) return; // bloc « chiffres » retiré de la page
         const tl = gsap.timeline({ scrollTrigger: { trigger: '#figs-stage', start: 'top top', end: '+=120%', pin: true, scrub: 0.4, refreshPriority: 1 } });
         tl.call(() => figs[0].classList.add('play'), null, 0.01);
         figs.forEach((f, i) => {
@@ -2605,7 +2610,7 @@
 
     // Transition d'arrivée de chaque partie (un trait néon), déclenchée une seule fois, sans toucher au défilement
     {
-      const secs = [...document.querySelectorAll('main > section:not(.hero), main > div.bigm')];
+      const secs = [...document.querySelectorAll('main section:not(.hero), main div.bigm')].filter(x => !x.parentElement.closest('section'));
       secs.forEach(sec => {
         if (getComputedStyle(sec).position === 'static') sec.style.position = 'relative';
         const l = document.createElement('i'); l.className = 'sec-line'; l.setAttribute('aria-hidden', 'true'); sec.prepend(l);

@@ -1,72 +1,94 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><title>Installation Moto's Cool - WordPress</title>
+<html lang="fr"><head><meta charset="utf-8"><title>Moto's Cool - Mise à jour et modification du site WordPress</title>
 <style>
-  @page { size: A4; margin: 12mm 13mm; }
-  body { font-family: Arial, Helvetica, sans-serif; color: #1d1d1f; font-size: 11.6pt; line-height: 1.4; margin: 0; }
-  h1 { font-size: 20pt; margin: 0 0 1.5mm; } h1 span { color: #d92b22; }
-  .sub { color: #555; margin: 0 0 4mm; font-size: 10.5pt; }
-  h2 { font-size: 13.5pt; margin: 4.5mm 0 1.5mm; padding: 1.4mm 3mm; background: #303036; color: #fff; border-radius: 2mm; }
-  .box { border: 0.5mm solid #d92b22; border-radius: 2mm; padding: 2.2mm 4mm; margin: 2mm 0 3mm; background: #fff6f5; }
-  ol { margin: 1mm 0 1.5mm 0; padding-left: 7mm; } li { margin: 1mm 0; }
+  @page { size: A4; margin: 9mm 12mm; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #1d1d1f; font-size: 10.2pt; line-height: 1.3; margin: 0; }
+  h1 { font-size: 18.5pt; margin: 0 0 1.2mm; } h1 span { color: #d92b22; }
+  .sub { color: #555; margin: 0 0 3mm; font-size: 10.2pt; }
+  h2 { font-size: 11.8pt; margin: 2.6mm 0 1.1mm; padding: 1.3mm 3mm; background: #303036; color: #fff; border-radius: 2mm; }
+  .box { border: 0.5mm solid #d92b22; border-radius: 2mm; padding: 2mm 4mm; margin: 2mm 0 2.6mm; background: #fff6f5; }
+  .ok { border-color: #1f8a4c; background: #f2fbf5; }
+  ol, ul { margin: 0.6mm 0 1mm 0; padding-left: 7mm; } li { margin: 0.5mm 0; }
   b.k { background: #ffe9e7; padding: 0 1.2mm; border-radius: 1mm; }
   .no { color: #d92b22; font-weight: bold; }
   .step { break-inside: avoid; }
-  .small { font-size: 10pt; color: #444; }
-  table { border-collapse: collapse; width: 100%; font-size: 10.3pt; } td { border: 0.3mm solid #ccc; padding: 1.4mm 2.4mm; vertical-align: top; } td:first-child { width: 34%; font-weight: bold; }
+  .small { font-size: 9.6pt; color: #444; }
+  .page2 { break-before: page; }
+  table { border-collapse: collapse; width: 100%; font-size: 9.9pt; } td { border: 0.3mm solid #ccc; padding: 1.2mm 2.2mm; vertical-align: top; } td:first-child { width: 31%; font-weight: bold; }
 </style></head><body>
-<h1>Moto's Cool <span>·</span> Mettre le site dans WordPress</h1>
-<p class="sub">Guide pas à pas · à suivre dans l'ordre · environ 10 minutes</p>
+<h1>Moto's Cool <span>·</span> Mettre à jour le site WordPress</h1>
+<p class="sub">Nouvelle version : site modifiable avec Elementor, email de confirmation au client, vidéos, assistant réparé · environ 10 minutes</p>
 
-<div class="box step"><b>Avant de commencer, il faut :</b>
-<ol>
-<li>le fichier <b class="k">motoscool-theme.zip</b> (54 Mo) <span class="no">→ ne PAS le décompresser</span> ;</li>
-<li>l'<b>identifiant</b> et le <b>mot de passe WordPress</b> du patron (compte administrateur) ;</li>
-<li>l'adresse qui recevra les demandes de rendez-vous : <b>contact@motoscool.fr</b> (déjà réglée).
- Autre adresse possible <b>uniquement en @motoscool.fr</b> ; pour toute autre adresse (Gmail, Hotmail, Outlook, Orange, Yahoo, iCloud…), prévenir SYZ avant.</li>
-</ol>
-<span class="small">Sur un Mac : télécharger le zip avec Chrome (Safari le décompresse parfois tout seul).</span></div>
+<div class="box step"><b>⛔ NE JAMAIS TOUCHER À :</b>
+<ul>
+<li>l'<b>ancien thème</b> et les <b>anciennes pages</b> du garage (ACCUEIL, Contact, CGV…) : ne rien supprimer ;</li>
+<li>la <b>mise à jour de WordPress</b> proposée en haut (« WordPress 7.x est disponible ») et la <b>version PHP</b> ;</li>
+<li>les pages <b>« Moto's Cool – … »</b> : les modifier oui, les supprimer non ;</li>
+<li>le fichier <b>motoscool-theme.zip</b> (54 Mo, refusé par OVH) : <span class="no">utiliser uniquement motoscool-theme-leger.zip</span>.</li>
+</ul></div>
 
-<div class="step"><h2>1. Se connecter</h2>
-<ol><li>Dans le navigateur, taper : <b class="k">motoscool.fr/wp-admin</b></li>
-<li>Entrer l'identifiant et le mot de passe du patron, cliquer <b class="k">Se connecter</b>.</li></ol></div>
-
-<div class="step"><h2>2. Installer le site</h2>
-<ol><li>Menu de gauche : <b class="k">Apparence</b> → <b class="k">Thèmes</b>.
- <br><span class="small">Noter le nom du thème actif actuel (pour pouvoir revenir en arrière).</span></li>
-<li>En haut : <b class="k">Ajouter un thème</b>, puis en haut : <b class="k">Téléverser un thème</b>.</li>
-<li><b class="k">Choisir un fichier</b> → prendre <b>motoscool-theme.zip</b> → <b class="k">Installer maintenant</b> → attendre 1 à 2 minutes.</li>
-<li>Quand « Thème installé avec succès » s'affiche : <b class="k">Activer</b>.</li>
+<div class="step"><h2>1. Installer la nouvelle version</h2>
+<ol><li><b class="k">motoscool.fr/wp-admin</b> → se connecter.</li>
+<li><b class="k">Apparence</b> → <b class="k">Thèmes</b> → <b class="k">Ajouter un thème</b> → <b class="k">Téléverser un thème</b>.</li>
+<li><b class="k">Choisir un fichier</b> → <b>motoscool-theme-leger.zip</b> (0,8 Mo, <span class="no">ne pas le décompresser</span>) → <b class="k">Installer maintenant</b>.</li>
+<li>WordPress dit que le thème est déjà installé : cliquer <b class="k">Remplacer l'actuel par la version téléversée</b>.</li>
+<li>« Le thème a bien été mis à jour » : cliquer <b class="k">Tableau de bord</b> (menu de gauche). La page <b>« Installation du site Moto's Cool »</b>
+ s'ouvre seule et monte jusqu'à 100 % (1 à 2 min) : <span class="no">ne pas la fermer</span>.
+ <br><span class="small">Si à la place un bouton rouge « Terminer l'installation du site » apparaît : cliquer dessus.</span></li>
+<li>Fin : la page <b>Moto's Cool RDV</b> s'ouvre avec <b>« Site Moto's Cool installé »</b>. Les 17 pages du site ont été ajoutées dans <b>Pages</b>.</li>
 <li>Si une extension de cache existe (WP Rocket, LiteSpeed…) : <b class="k">Vider le cache</b>.</li></ol></div>
 
-<div class="step"><h2>3. Régler la réception des demandes</h2>
-<ol><li>Menu de gauche : <b class="k">Réglages</b> → <b class="k">Moto's Cool RDV</b>.</li>
-<li>« Email de l'accueil » : vérifier <b>contact@motoscool.fr</b> (ou taper l'adresse <b>complète</b> choisie).
- Laisser « Expéditeur » vide. <span class="small">Une adresse vide ou incomplète est refusée avec un message ; l'ancienne est gardée.</span></li>
-<li>Cliquer <b class="k">Enregistrer les modifications</b>.</li>
-<li>Cliquer <b class="k">Envoyer un email de test à l'accueil</b> → vérifier qu'il est bien reçu
- (regarder aussi les <b>indésirables / spams</b>).</li></ol></div>
+<div class="step"><h2>2. Vérifier les réglages (Réglages → Moto's Cool RDV)</h2>
+<ol><li>Email de l'accueil : <b>contact@motoscool.fr</b>. WhatsApp et mobile du dépanneur : <b>06 33 66 04 10</b>. Lien des avis Google, lien TikTok.</li>
+<li><b class="k">Enregistrer les modifications</b>, puis <b class="k">Envoyer un email de test à l'accueil</b> → vérifier la réception (et les spams).</li></ol></div>
 
-<div class="step"><h2>4. Vérifier que tout marche</h2>
-<ol><li>Ouvrir <b class="k">motoscool.fr</b> : le nouveau site Moto's Cool s'affiche.</li>
-<li>Faire une <b>vraie demande de rendez-vous</b> sur le site (formulaire en haut de la page).</li>
-<li>L'accueil reçoit l'email <b>« NOUVELLE DEMANDE DE RDV — jour date à heure — nom »</b>.
- « Répondre » à cet email écrit directement au client.</li>
-<li>Dans cet email : cliquer <b class="k">Libérer la place de ce créneau</b>, puis le bouton <b class="k">Libérer la place</b>
- → le créneau de test redevient libre.</li></ol>
-<p><b>✔ C'est terminé.</b></p></div>
+<div class="step"><h2>3. Vérifier que tout marche</h2>
+<ol><li>Ouvrir <b>motoscool.fr</b> sur l'ordinateur <b>et</b> sur un téléphone : le site s'affiche, le bouton <b>« Une question ? »</b> ouvre l'assistant.</li>
+<li>Faire une <b>vraie demande de rendez-vous</b> avec votre propre email :
+ l'accueil reçoit « NOUVELLE DEMANDE DE RDV… », <b>et vous recevez « Votre demande de rendez-vous est bien reçue »</b>.</li>
+<li>Dans l'email de l'accueil : <b class="k">Libérer la place de ce créneau</b> → <b class="k">Libérer la place</b>.</li></ol>
+<div class="box ok"><b>✔ C'est terminé.</b> Le site est en ligne et le garage peut le modifier (page suivante).</div></div>
 
 <div class="step"><h2>Si quelque chose bloque</h2>
 <table>
-<tr><td>Après « Installer maintenant » : « Le lien que vous avez suivi a expiré » ou un message parlant de « upload_max_filesize »</td><td>Limite de l'hébergement OVH. Ne rien forcer : appeler SYZ.
- (Méthode de secours : FileZilla → dossier <b>www/wp-content/themes</b> → y glisser le dossier « motoscool » extrait du zip →
- WordPress : Apparence → Thèmes → Moto's Cool → Activer.)</td></tr>
-<tr><td>L'email de test n'arrive pas</td><td>Vérifier d'abord l'adresse de l'accueil (étape 3). Puis : Extensions → Ajouter → <b>WP Mail SMTP</b> → Installer → Activer → « Autre SMTP » :
- serveur <b>smtp.mail.ovh.net</b>, chiffrement <b>SSL</b>, port <b>465</b>, identifiant = <b>l'adresse de l'accueil (contact@motoscool.fr)</b>,
- mot de passe = celui de cette boîte (tapé par le patron), e-mail d'expédition = la même adresse, et cocher la case <b>« Forcer… »</b> juste en dessous. Enregistrer, puis refaire l'email de test.
- <br><span class="small">Boîte OVH « Email Pro » ou « Exchange » : le serveur SMTP est différent (indiqué dans l'espace client OVH).</span></td></tr>
-<tr><td>L'email de test arrive, mais la demande de RDV affiche « L'envoi n'a pas abouti »</td><td>Espace client OVH → Web Cloud → Hébergements web → l'hébergement → Vue d'ensemble → PHP →
- « Modifier la version de PHP » → Options avancées → <b>Pare-feu applicatif : désactivé</b> → Valider. Puis onglet « Mes sites » → motoscool.fr (puis www.motoscool.fr) → Gérer mes domaines → Gérer mes options → décocher <b>« Activer le firewall »</b> → Confirmer.</td></tr>
-<tr><td>Une page s'affiche sans mise en forme</td><td>Vider le cache, puis Réglages → Permaliens → <b>Enregistrer les modifications</b>.</td></tr>
-<tr><td>Revenir à l'ancien site</td><td>Apparence → Thèmes → réactiver l'ancien thème (rien n'est supprimé).</td></tr>
+<tr><td>Message rouge « Le téléchargement a échoué »</td><td>Cliquer <b>Réessayer</b>. Si cela échoue encore : appeler SYZ.</td></tr>
+<tr><td>Écran blanc / erreur après l'installation</td><td>Apparence → Thèmes → <b>activer l'ancien thème</b> : l'ancien site revient tel quel. Puis appeler SYZ.</td></tr>
+<tr><td>L'email de test n'arrive pas</td><td>Vérifier les spams. Puis : Extensions → Ajouter → <b>WP Mail SMTP</b> → « Autre SMTP » : <b>smtp.mail.ovh.net</b>, SSL, port <b>465</b>,
+ identifiant <b>contact@motoscool.fr</b> + son mot de passe (tapé par le patron), expéditeur = la même adresse + cocher « Forcer… ».</td></tr>
+<tr><td>Une page sans mise en forme</td><td>Vider le cache, puis Réglages → Permaliens → <b>Enregistrer les modifications</b>.</td></tr>
 </table></div>
+
+<div class="page2">
+<h1>Moto's Cool <span>·</span> Modifier son site (pour le garage)</h1>
+<p class="sub">Tout se fait dans <b>motoscool.fr/wp-admin</b>, comme pour l'ancien site. Les anciennes pages restent dans la liste mais ne s'affichent plus.</p>
+
+<div class="step"><h2>Les pages du site</h2>
+<ol><li><b class="k">Pages</b> : chaque page du site a sa ligne <b>« Moto's Cool – … »</b> (Accueil, Entretien & révision, Dépannage moto, Zone Paris…).</li>
+<li>Survoler la ligne → <b class="k">Modifier avec Elementor</b>.</li>
+<li>Cliquer sur une partie de la page : à gauche, ses <b>champs</b> s'affichent.
+ <ul><li><b>Textes</b> (titres, paragraphes, boutons) : taper le nouveau texte, l'aperçu change aussitôt.</li>
+ <li><b>Photos</b> : cliquer sur la photo du champ → <b>Médiathèque</b> ou <b>Téléverser des fichiers</b> → <b>Insérer le média</b>.</li>
+ <li><b>Listes</b> (questions de la FAQ, photos de l'atelier, liens…) : <b>Ajouter un élément</b>, glisser pour changer l'ordre, icône poubelle pour retirer.</li>
+ <li><b>Liens</b> : adresse d'une page (ex. /services/depannage.html), d'un téléphone (tel:+33143762638) ou d'un site.</li>
+ <li><b>Code HTML (avancé)</b> : en bas des champs, « Modifier le code de ce bloc » → Oui : le code remplace le bloc.</li></ul></li>
+<li>Ajouter : glisser un élément Elementor (Titre, Texte, Image, Vidéo…) ou un bloc <b>« Moto's Cool · Texte »</b> à l'endroit voulu.
+ Retirer une partie : clic droit → <b>Supprimer</b> (le reste du site continue de fonctionner).</li>
+<li>Toujours finir par <b class="k">Mettre à jour</b> (en bas à gauche). <span class="small">Historique (icône horloge) : revenir à une version précédente.</span></li></ol></div>
+
+<div class="step"><h2>En-têtes et pieds de page</h2>
+<p><b class="k">Modèles</b> → <b class="k">Modèles enregistrés</b> → « Moto's Cool – En-tête (…) » ou « Pied de page (…) » → <b class="k">Modifier avec Elementor</b>.
+ Une seule modification s'applique à toutes les pages concernées (page d'accueil · pages services et zones · pages légales).</p></div>
+
+<div class="step"><h2>Vidéos</h2>
+<ol><li>Menu <b class="k">Vidéos</b> → <b class="k">Ajouter une vidéo</b> → titre (affiché sous la vidéo).</li>
+<li><b>Un fichier</b> : Choisir → <b class="k">Envoyer la vidéo</b> (toutes les tailles passent ; MP4 conseillé) — <b>ou un lien</b> YouTube / TikTok.</li>
+<li><b class="k">Publier</b> : la vidéo apparaît dans la partie « Vidéos » de l'accueil. Ordre : « Attributs → Ordre » (0 = en premier).</li></ol></div>
+
+<div class="step"><h2>Référencement Google (Rank Math)</h2>
+<p>Titre, description et mot-clé de chaque page sont déjà remplis. Pour les changer : dans Elementor, bouton <b>SEO</b> (Rank Math) en haut du panneau,
+ ou colonnes « Titre SEO / Description SEO » de la liste <b>Pages</b>.</p></div>
+
+<div class="step"><h2>Numéros et liens</h2>
+<p><b class="k">Réglages</b> → <b class="k">Moto's Cool RDV</b> : email qui reçoit les demandes, WhatsApp, mobile du dépanneur (SMS), avis Google, TikTok, nombre de clients par créneau.</p></div>
+</div>
 </body></html>

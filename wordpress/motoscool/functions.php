@@ -9,6 +9,78 @@ if (!defined('ABSPATH')) exit;
 define('MC_DIR', __DIR__ . '/site');
 define('MC_DB_VERSION', '1');
 
+/* ---------- Fichiers du site (thème léger) ----------
+ * Version légère du thème (zip trop lourd pour l'hébergement) : les vidéos et la 3D manquantes sont téléchargées
+ * une seule fois sur le serveur depuis le site de démonstration, chaque fichier vérifié (taille + empreinte sha256). */
+define('MC_SRC', 'https://said-94.github.io/maquette-mc-2026/');
+function mc_manifest() {
+    static $m = null;
+    if ($m === null) { $m = json_decode((string) @file_get_contents(__DIR__ . '/site-files.json'), true); if (!is_array($m)) $m = []; }
+    return $m;
+}
+function mc_files_ver() { return md5((string) @file_get_contents(__DIR__ . '/site-files.json')); }
+function mc_missing() {
+    clearstatcache();
+    $miss = [];
+    foreach (mc_manifest() as $f) { $d = MC_DIR . '/' . $f['p']; if (!is_file($d) || filesize($d) !== (int) $f['s']) $miss[] = $f; }
+    return $miss;
+}
+function mc_ready() {
+    if (get_option('mc_files_ok') === mc_files_ver()) return true;
+    if (mc_missing()) return false;
+    update_option('mc_files_ok', mc_files_ver(), true);
+    return true;
+}
+function mc_fetch($f) {
+    if (!preg_match('#^[A-Za-z0-9_-][A-Za-z0-9._/-]*$#', $f['p']) || strpos($f['p'], '..') !== false) return 'nom refusé';
+    $dest = MC_DIR . '/' . $f['p'];
+    if (!wp_mkdir_p(dirname($dest))) return 'dossier impossible à créer';
+    $tmp = $dest . '.part';
+    $r = wp_safe_remote_get(MC_SRC . $f['u'], ['timeout' => 90, 'stream' => true, 'filename' => $tmp, 'decompress' => false, 'headers' => ['Accept-Encoding' => 'identity']]);
+    $err = '';
+    if (is_wp_error($r)) $err = $r->get_error_message();
+    elseif (($c = (int) wp_remote_retrieve_response_code($r)) !== 200) $err = 'réponse ' . $c;
+    else { clearstatcache(true, $tmp); if (!is_file($tmp) || filesize($tmp) !== (int) $f['s'] || hash_file('sha256', $tmp) !== $f['h']) $err = 'fichier reçu incorrect'; }
+    if ($err === '' && !@rename($tmp, $dest)) $err = 'écriture impossible';
+    if ($err !== '') @unlink($tmp);
+    return $err;
+}
+function mc_fichiers_url() { return add_query_arg(['action' => 'mc_fichiers', '_wpnonce' => wp_create_nonce('mc_fichiers')], admin_url('admin-post.php')); }
+// Juste après « Activer » : l'installation des fichiers démarre d'elle-même
+add_action('admin_init', function () {
+    global $pagenow;
+    if ($pagenow === 'themes.php' && isset($_GET['activated']) && current_user_can('switch_themes') && !mc_ready()) { wp_safe_redirect(mc_fichiers_url()); exit; }
+    // Thème remplacé par une nouvelle version (« Remplacer l'actuel ») : au premier clic dans l'administration, l'installation reprend d'elle-même
+    // (sauf sur les pages Thèmes / Extensions / mises à jour, pour pouvoir toujours revenir à l'ancien thème)
+    if (!wp_doing_ajax() && !in_array($pagenow, ['themes.php', 'plugins.php', 'update.php', 'update-core.php', 'admin-post.php', 'admin-ajax.php'], true)
+        && current_user_can('switch_themes') && !mc_ready() && !get_transient('mc_fichiers_vu')) { set_transient('mc_fichiers_vu', 1, 600); wp_safe_redirect(mc_fichiers_url()); exit; }
+});
+add_action('admin_notices', function () {
+    if (!current_user_can('switch_themes') || mc_ready()) return;
+    echo '<div class="notice notice-error"><p style="font-size:15px"><b>Moto\'s Cool : installation à terminer.</b> <a class="button button-primary" href="' . esc_url(mc_fichiers_url()) . '">Terminer l\'installation du site</a></p></div>';
+});
+add_action('admin_post_mc_fichiers', function () {
+    if (!current_user_can('switch_themes')) wp_die('Accès refusé.');
+    check_admin_referer('mc_fichiers');
+    @set_time_limit(120);
+    $t0 = microtime(true); $err = '';
+    foreach (mc_missing() as $f) {
+        if (microtime(true) - $t0 > 20) break; // par étapes de 20 s : jamais de dépassement du temps maximal de l'hébergement
+        $e = mc_fetch($f);
+        if ($e !== '') { $err = $f['p'] . ' : ' . $e; break; }
+    }
+    $left = count(mc_missing()); $total = count(mc_manifest());
+    if (!$left) { update_option('mc_files_ok', mc_files_ver(), true); wp_safe_redirect(admin_url('options-general.php?page=mc-rdv&mc_installe=1')); exit; }
+    nocache_headers(); header('Content-Type: text/html; charset=utf-8');
+    $url = mc_fichiers_url(); $pct = (int) floor(100 * ($total - $left) / max(1, $total));
+    echo '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">';
+    if ($err === '') echo '<meta http-equiv="refresh" content="1;url=' . esc_url($url) . '">';
+    echo "<title>Installation Moto's Cool</title></head><body style=\"font:17px/1.5 Arial,sans-serif;max-width:640px;margin:60px auto;padding:0 16px\"><h1>Installation du site Moto's Cool</h1>";
+    if ($err === '') echo '<p><b>' . $pct . ' %</b> : téléchargement des vidéos et de la 3D (' . ($total - $left) . ' / ' . $total . ' fichiers).</p><p><b>Ne fermez pas cette page</b> : elle continue toute seule.</p>';
+    else echo '<p style="color:#b00"><b>Le téléchargement a échoué</b> (' . esc_html($err) . ').</p><p><a href="' . esc_url($url) . '" style="font-size:20px"><b>Réessayer</b></a></p><p>Si cela échoue encore : Apparence → Thèmes → réactiver l\'ancien thème, et appeler SYZ.</p>';
+    echo '</body></html>'; exit;
+});
+
 /* ---------- Installation ---------- */
 function mc_table() { global $wpdb; return $wpdb->prefix . 'mc_resa'; }
 function mc_install() {
@@ -77,6 +149,21 @@ add_action('admin_init', function () {
         add_settings_error('mc_from_email', 'mc_from_email', "Adresse d'expéditeur invalide : l'adresse précédente est conservée.");
         return get_option('mc_from_email');
     }]);
+    // Numéros et liens du site (modifiables sans toucher au code)
+    register_setting('mc_rdv', 'mc_whatsapp', ['sanitize_callback' => function ($v) {
+        $d = preg_replace('/\D+/', '', (string) $v);
+        if ($d === '' || preg_match('/^(0[67]\d{8}|0033[67]\d{8}|33[67]\d{8}|\d{8,15})$/', $d)) return trim((string) $v) === '' ? '' : sanitize_text_field($v);
+        add_settings_error('mc_whatsapp', 'mc_whatsapp', 'Numéro WhatsApp invalide : le numéro précédent est conservé.');
+        return get_option('mc_whatsapp', '06 33 66 04 10');
+    }]);
+    register_setting('mc_rdv', 'mc_sms', ['sanitize_callback' => function ($v) {
+        $d = preg_replace('/\D+/', '', (string) $v);
+        if ($d === '' || preg_match('/^0[67]\d{8}$/', $d)) return $d === '' ? '' : sanitize_text_field($v);
+        add_settings_error('mc_sms', 'mc_sms', 'Mobile du dépanneur invalide (format 06 12 34 56 78) : le numéro précédent est conservé.');
+        return get_option('mc_sms', '06 33 66 04 10');
+    }]);
+    register_setting('mc_rdv', 'mc_avis_url', ['sanitize_callback' => function ($v) { return esc_url_raw(trim((string) $v)); }]);
+    register_setting('mc_rdv', 'mc_tiktok', ['sanitize_callback' => function ($v) { return esc_url_raw(trim((string) $v)); }]);
     register_setting('mc_rdv', 'mc_capacite', ['sanitize_callback' => function ($v) {
         $n = (int) $v; if ($n >= 1) return min(20, $n);
         add_settings_error('mc_capacite', 'mc_capacite', 'Nombre de clients par créneau invalide : la valeur précédente est conservée.');
@@ -85,11 +172,17 @@ add_action('admin_init', function () {
 });
 function mc_settings_page() { ?>
 <div class="wrap"><h1>Moto's Cool : demandes de rendez-vous</h1>
+<?php if (isset($_GET['mc_installe']) && mc_ready()) echo '<div class="notice notice-success"><p><b>Site Moto\'s Cool installé : tous les fichiers sont en place.</b> Vérifiez ci-dessous l\'email de l\'accueil, puis envoyez l\'email de test.</p></div>'; ?>
 <form method="post" action="options.php"><?php settings_fields('mc_rdv'); ?>
 <table class="form-table">
 <tr><th>Email de l'accueil (reçoit les demandes)</th><td><input type="email" class="regular-text" name="mc_to_email" value="<?php echo esc_attr(get_option('mc_to_email')); ?>"></td></tr>
 <tr><th>Expéditeur (facultatif)</th><td><input type="email" class="regular-text" name="mc_from_email" value="<?php echo esc_attr(get_option('mc_from_email')); ?>" placeholder="<?php echo esc_attr(mc_from()); ?>"><p class="description">À laisser vide en général. OVH n'accepte qu'une adresse du domaine du site (et, avec WP Mail SMTP, celle de la boîte connectée). Vide : l'adresse de l'accueil si elle est en @<?php echo esc_html(mc_site_domain()); ?>, sinon rdv@<?php echo esc_html(mc_site_domain()); ?>.</p></td></tr>
 <tr><th>Clients maximum par créneau</th><td><input type="number" min="1" max="20" required name="mc_capacite" value="<?php echo (int) get_option('mc_capacite', 3); ?>"></td></tr>
+<tr><th colspan="2"><h2 style="margin:10px 0 0">Numéros et liens du site</h2></th></tr>
+<tr><th>WhatsApp (bouton du site)</th><td><input type="text" class="regular-text" name="mc_whatsapp" value="<?php echo esc_attr(get_option('mc_whatsapp', '06 33 66 04 10')); ?>" placeholder="06 33 66 04 10"><p class="description">Vide : bouton WhatsApp masqué.</p></td></tr>
+<tr><th>Mobile du dépanneur (SMS « Envoyer ma position »)</th><td><input type="text" class="regular-text" name="mc_sms" value="<?php echo esc_attr(get_option('mc_sms', '06 33 66 04 10')); ?>" placeholder="06 33 66 04 10"><p class="description">Un mobile (06 ou 07). Vide : bouton SMS masqué.</p></td></tr>
+<tr><th>Lien des avis Google</th><td><input type="url" class="regular-text" name="mc_avis_url" value="<?php echo esc_attr(get_option('mc_avis_url', 'https://share.google/6iqXkrDpoP4qPNWKc')); ?>"><p class="description">Vide : bouton « avis Google » masqué.</p></td></tr>
+<tr><th>Lien TikTok</th><td><input type="url" class="regular-text" name="mc_tiktok" value="<?php echo esc_attr(get_option('mc_tiktok', 'https://www.tiktok.com/@motos.cool')); ?>"></td></tr>
 </table><?php submit_button(); ?></form>
 <form method="post"><?php wp_nonce_field('mc_test'); ?><input type="hidden" name="mc_test" value="1"><?php submit_button("Envoyer un email de test à l'accueil", 'secondary'); ?></form>
 <?php if (!empty($_POST['mc_test']) && check_admin_referer('mc_test')) {
@@ -135,6 +228,12 @@ function mc_send_static($f) {
     header('Content-Type: ' . mc_types()[$ext]);
     header('X-Content-Type-Options: nosniff');
     header('Cache-Control: public, max-age=604800');
+    // Textes (scripts, styles…) : l'hébergement peut les compresser à la volée (OVH : mod_deflate). Leur taille d'origine
+    // ne doit alors PAS être annoncée, sinon le navigateur coupe la connexion (ERR_HTTP2_PROTOCOL_ERROR) et le script ne se charge pas
+    if (preg_match('#^(text/|application/(json|xml|manifest)|image/svg)#', mc_types()[$ext])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'HEAD') exit;
+        readfile($f); exit;
+    }
     header('Accept-Ranges: bytes');
     // Lecture par morceaux (vidéos sur iPhone)
     if (!empty($_SERVER['HTTP_RANGE']) && preg_match('/bytes=(\d*)-(\d*)/', $_SERVER['HTTP_RANGE'], $m)) {
@@ -157,6 +256,7 @@ function mc_send_page($f) {
     $html = str_replace('https://motoscool.fr/', esc_url(home_url('/')), $html);
     // Adresse du service de rendez-vous : ce WordPress
     $html = str_replace("bookingEndpoint: ''", "bookingEndpoint: '" . esc_js((string) wp_parse_url(home_url('/mc-rdv'), PHP_URL_PATH)) . "'", $html);
+    $html = mc_fix_scripts($html); // WhatsApp, SMS, avis, TikTok : réglages du site
     // Site réel : visible par Google
     $html = preg_replace('#<meta name="robots" content="[^"]*noindex[^"]*">\s*#i', '', $html);
     // Empreintes de sécurité (CSP) recalculées pour les scripts intégrés
@@ -186,6 +286,13 @@ function mc_send_page($f) {
 add_action('parse_request', function () {
     if (is_admin() || isset($_GET['rest_route'])) return; // API WordPress (éditeur, extensions) : non touchée
     $p = mc_path();
+    // Thème léger pas encore terminé : page d'attente (jamais un site à moitié affiché)
+    if (strpos($p, '/wp-') !== 0 && !mc_ready()) {
+        mc_raw(); status_header(503); header('Retry-After: 600'); nocache_headers(); header('Content-Type: text/html; charset=utf-8');
+        echo "<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Moto's Cool</title></head><body style=\"font:18px/1.6 Arial,sans-serif;text-align:center;margin:20vh 16px\"><h1>Moto's Cool</h1><p>Site en cours de mise à jour, revenez dans quelques minutes.</p><p>Téléphone : 01 43 76 26 38</p></body></html>"; exit;
+    }
+    // Page Moto's Cool modifiable (Elementor) : affichée par WordPress (mc-elementor.php), pas en fichier fixe
+    if (!empty($GLOBALS['mc_routed'])) return;
     // Icône du site : celle de Moto's Cool (sinon WordPress renverrait l'icône de l'ancien site ou son logo)
     if ($p === '/favicon.ico' && is_file(MC_DIR . '/assets/icons/icon-192.png')) mc_send_static(MC_DIR . '/assets/icons/icon-192.png');
     if ($p === '/sitemap.xml' && is_file(MC_DIR . '/sitemap.xml')) {
@@ -202,12 +309,22 @@ add_action('parse_request', function () {
     }
     if (!$f && strpos($p, '/assets/') === 0) { mc_raw(); status_header(404); nocache_headers(); header('Content-Type: text/plain; charset=utf-8'); echo 'Introuvable'; exit; } // fichier du site absent
     if (!$f) return;
-    if (substr($f, -5) === '.html') mc_send_page($f);
+    if (substr($f, -5) === '.html') { if (function_exists('mc_mode') && mc_mode() && in_array($p, ['/', '/index.html', '/index.php'], true)) return; mc_send_page($f); } // pages modifiables : affichées par WordPress
     mc_send_static($f);
 }, 0);
 // Toute autre adresse → accueil Moto's Cool (robots.txt et flux gérés par WordPress)
 add_action('template_redirect', function () {
     if (is_robots() || is_feed() || is_trackback() || (function_exists('is_favicon') && is_favicon())) return;
+    if (function_exists('mc_mode') && mc_mode()) {
+        // Éditeur Elementor, aperçus, modèles (en-têtes, pieds de page) : laissés à WordPress et Elementor
+        if (isset($_GET['elementor-preview']) || is_preview() || is_customize_preview() || is_singular('elementor_library')) return;
+        // Pages Moto's Cool : affichées par mc-page.php
+        if (is_page() && mc_key_of(get_queried_object_id()) !== '') {
+            $canon = mc_url_of_key(mc_key_of(get_queried_object_id()));
+            if (mc_path() !== $canon && !(mc_path() === '/index.php' && $canon === '/')) { wp_safe_redirect(home_url($canon), 301); exit; }
+            return;
+        }
+    }
     if (is_404()) {
         wp_redirect_admin_locations(); // /admin, /login, /dashboard → administration, comme WordPress
         if (preg_match('/\.[a-z0-9]{2,5}$/i', mc_path())) { mc_raw(); status_header(404); nocache_headers(); header('Content-Type: text/plain; charset=utf-8'); echo 'Introuvable'; exit; } // fichier absent : vraie erreur 404
@@ -216,6 +333,7 @@ add_action('template_redirect', function () {
     // Anciennes pages WordPress (/contact/, articles, catégories…) : redirigées vers l'accueil,
     // dont les liens relatifs (assets/…) ne fonctionnent qu'à la racine du site
     if (!in_array(mc_path(), ['/', '/index.php'], true)) { wp_safe_redirect(home_url('/'), 301); exit; }
+    if (function_exists('mc_mode') && mc_mode()) { wp_safe_redirect(home_url('/'), 302); exit; } // recherche, ?p=… : retour à l'accueil (modifiable)
     mc_send_page(MC_DIR . '/index.html');
 }, 99);
 
@@ -396,5 +514,50 @@ function mc_api($sub) {
     remove_action('phpmailer_init', $alt);
     if (!$sent) { $wpdb->delete($t, ['id' => $seat]); mc_json(502, ['ok' => false]); }
     $wpdb->update($t, ['cree' => time()], ['id' => $seat]); // email parti
+    // Réponse au visiteur d'abord (sa demande est enregistrée et l'accueil prévenu), puis l'email de confirmation au client
+    if (function_exists('fastcgi_finish_request')) { register_shutdown_function(function () use ($p) { fastcgi_finish_request(); mc_confirm_mail($p); }); mc_json(200, ['ok' => true]); }
+    mc_confirm_mail($p);
     mc_json(200, ['ok' => true]);
 }
+// Email de confirmation envoyé au client : demande bien reçue, le garage rappelle pour confirmer
+function mc_confirm_mail($p) {
+    $c = $p['contact']; $r = $p['rdv']; $ve = $p['vehicule'];
+    if (!is_email($c['email']) || mc_limited('mail' . strtolower($c['email']), 3, 86400)) return false; // pas d'envois en série vers une même adresse
+    $nolink = function ($s) { return preg_replace('~(https?://|www\.)\S*~i', '[lien retiré]', (string) $s); };
+    $c['nom'] = $nolink($c['nom']); $p['message'] = $nolink($p['message']); $r['adresse'] = $nolink($r['adresse']); $ve['marque'] = $nolink($ve['marque']); $ve['modele'] = $nolink($ve['modele']);
+    $e = function ($s) { return esc_html((string) $s); };
+    $when = mc_day_fr($r['date']) . ' ' . mc_date_fr($r['date']) . ' à ' . str_replace(':', 'h', mc_hour_fr($r['heure']));
+    $lieu = $r['lieu'] === "A l'atelier" ? "À l'atelier (15 ter avenue du Président Salvador Allende, 94400 Vitry-sur-Seine)" : 'Dépannage à domicile : ' . $r['adresse'];
+    $veh = trim($ve['marque'] . ' ' . $ve['modele']) . ($ve['immatriculation'] !== '' ? ' – ' . $ve['immatriculation'] : '');
+    $rows = [['Date souhaitée', $when], ['Lieu', $lieu], ['Véhicule', $veh], ['Intervention', $ve['interventionLabel'] ?: $ve['intervention']], ['Votre téléphone', $c['telephone']]];
+    if ($p['message'] !== '') $rows[] = ['Votre message', $p['message']];
+    $li = ''; $txt = '';
+    foreach ($rows as $row) { $li .= '<li style="margin:4px 0"><b>' . $e($row[0]) . ' :</b> ' . nl2br($e($row[1]), false) . '</li>'; $txt .= '• ' . $row[0] . ' : ' . $row[1] . "\n"; }
+    $tel = '01 43 76 26 38';
+    $html = '<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#1d1d1f;max-width:600px">'
+        . '<p>Bonjour ' . $e($c['nom']) . ',</p>'
+        . '<p>Merci d\'avoir choisi <b>Moto\'s Cool</b> ! Votre demande de rendez-vous a bien été reçue par notre atelier.</p>'
+        . '<p style="margin:18px 0 6px"><b>Récapitulatif de votre demande</b></p><ul style="padding-left:20px;margin:0">' . $li . '</ul>'
+        . '<p style="margin:18px 0 6px"><b>Et maintenant ?</b></p>'
+        . '<p style="margin:0">Votre rendez-vous n\'est pas encore confirmé. Un membre de notre équipe vous rappelle au plus vite, aux heures d\'ouverture, pour confirmer le créneau et faire le point sur votre besoin.</p>'
+        . '<p>Besoin de modifier ou d\'annuler votre demande ? Appelez-nous au <a href="tel:+33143762638" style="color:#d92b22;font-weight:bold">' . $tel . '</a>, ou répondez simplement à cet email.</p>'
+        . '<p style="margin:18px 0 6px"><b>Nos horaires</b></p><p style="margin:0">Du lundi au vendredi : 9h30 – 13h / 14h – 18h30<br>Samedi : 10h – 13h / 14h – 19h<br>Dimanche : fermé</p>'
+        . '<p style="margin:18px 0 6px"><b>Notre adresse</b></p><p style="margin:0">Moto\'s Cool – 15 ter avenue du Président Salvador Allende, 94400 Vitry-sur-Seine</p>'
+        . '<p style="margin-top:22px">À très bientôt,<br><b>L\'équipe Moto\'s Cool</b></p>'
+        . '<p style="font-size:12px;color:#777;margin-top:26px">Ceci est un message automatique : merci de ne pas y répondre pour une urgence. En cas de panne sur la route, appelez-nous directement au ' . $tel . '.</p></div>';
+    $text = "Bonjour " . $c['nom'] . ",\n\nMerci d'avoir choisi Moto's Cool ! Votre demande de rendez-vous a bien été reçue par notre atelier.\n\nRécapitulatif de votre demande\n" . $txt
+        . "\nEt maintenant ?\nVotre rendez-vous n'est pas encore confirmé. Un membre de notre équipe vous rappelle au plus vite, aux heures d'ouverture, pour confirmer le créneau et faire le point sur votre besoin.\n\n"
+        . "Besoin de modifier ou d'annuler votre demande ? Appelez-nous au $tel, ou répondez simplement à cet email.\n\nNos horaires\nDu lundi au vendredi : 9h30 – 13h / 14h – 18h30\nSamedi : 10h – 13h / 14h – 19h\nDimanche : fermé\n\n"
+        . "Notre adresse\nMoto's Cool – 15 ter avenue du Président Salvador Allende, 94400 Vitry-sur-Seine\n\nÀ très bientôt,\nL'équipe Moto's Cool\n\nCeci est un message automatique : merci de ne pas y répondre pour une urgence. En cas de panne sur la route, appelez-nous directement au $tel.";
+    $from = mc_from();
+    $headers = ['Content-Type: text/html; charset=UTF-8', "From: Moto's Cool <$from>", "Reply-To: Moto's Cool <" . mc_to() . '>'];
+    $alt = function ($m) use ($text) { $m->AltBody = $text; };
+    add_action('phpmailer_init', $alt);
+    $ok = wp_mail($c['email'], "Moto's Cool – Votre demande de rendez-vous est bien reçue", $html, $headers);
+    remove_action('phpmailer_init', $alt);
+    return $ok;
+}
+
+/* ---------- Site modifiable dans WordPress (Elementor) et vidéos ---------- */
+require_once __DIR__ . '/mc-elementor.php';
+require_once __DIR__ . '/mc-videos.php';

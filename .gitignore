@@ -7,3 +7,9 @@ frames/
 # Thème WordPress : copie du site et zip générés par wordpress/build.sh
 wordpress/motoscool/site/
 wordpress/motoscool-theme.zip
+
+# Outils et thème léger générés
+wordpress/tools/node_modules/
+wordpress/tools/online-diff.json
+wordpress/light/
+wordpress/motoscool-theme-leger.zip
