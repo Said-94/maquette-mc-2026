@@ -48,9 +48,15 @@ class MC_Widget extends \Elementor\Widget_Base {
             foreach ($d['fields'] as $f) $this->add_control($f['k'], $this->mc_ctrl($f));
             foreach ($d['reps'] as $r) {
                 $rep = new \Elementor\Repeater();
-                foreach ($r['fields'] as $f) $rep->add_control($f['k'], $this->mc_ctrl($f));
+                $tf = $r['title'];
+                foreach ($r['fields'] as $f) {
+                    $rep->add_control($f['k'], $this->mc_ctrl($f));
+                    if ($f['k'] === $tf && $f['t'] === 'media') $tf = '';
+                }
+                if ($tf === '') foreach ($r['fields'] as $f) if ($f['t'] !== 'media') { $tf = $f['k']; break; }
+                $title = $tf === '' ? 'Photo' : '{{{ ' . $tf . ' }}}';
                 $this->add_control($r['k'], ['label' => $r['label'], 'type' => \Elementor\Controls_Manager::REPEATER, 'fields' => $rep->get_controls(),
-                    'default' => $r['def'], 'title_field' => '{{{ ' . $r['title'] . ' }}}', 'prevent_empty' => false]);
+                    'default' => $r['def'], 'title_field' => $title, 'prevent_empty' => false]);
             }
         }
         $this->end_controls_section();
