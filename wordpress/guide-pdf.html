@@ -53,7 +53,7 @@
 <table>
 <tr><td>Message rouge « Le téléchargement a échoué »</td><td>Cliquer <b>Réessayer</b>. Si cela échoue encore : appeler SYZ.</td></tr>
 <tr><td>Écran blanc / erreur après l'installation</td><td>Apparence → Thèmes → <b>activer l'ancien thème</b> : l'ancien site revient tel quel. Puis appeler SYZ.</td></tr>
-<tr><td>L'email de test n'arrive pas</td><td>Vérifier les spams. Puis : Extensions → Ajouter → <b>WP Mail SMTP</b> → « Autre SMTP » : <b>smtp.mail.ovh.net</b>, SSL, port <b>465</b>,
+<tr><td>L'email de test n'arrive pas ou arrive en spam</td><td>Vérifier les spams. Puis faire les 3 réglages « Emails : éviter les spams » (dernière section). WP Mail SMTP : Extensions → Ajouter → <b>WP Mail SMTP</b> → « Autre SMTP » : <b>smtp.mail.ovh.net</b>, SSL, port <b>465</b>,
  identifiant <b>contact@motoscool.fr</b> + son mot de passe (tapé par le patron), expéditeur = la même adresse + cocher « Forcer… ».</td></tr>
 <tr><td>Une page sans mise en forme</td><td>Vider le cache, puis Réglages → Permaliens → <b>Enregistrer les modifications</b>.</td></tr>
 </table></div>
@@ -90,5 +90,11 @@
 
 <div class="step"><h2>Numéros et liens</h2>
 <p><b class="k">Réglages</b> → <b class="k">Moto's Cool RDV</b> : email qui reçoit les demandes, WhatsApp, mobile du dépanneur (SMS), avis Google, TikTok, nombre de clients par créneau.</p></div>
+<div class="step"><h2>Emails : éviter les spams (à faire par SYZ avec le patron, une seule fois)</h2>
+<ol><li><b>WP Mail SMTP</b> : Extensions → Ajouter → « WP Mail SMTP » → Installer → Activer → « Autre SMTP » : serveur <b>ssl0.ovh.net</b>, SSL, port <b>465</b>,
+ identifiant <b>contact@motoscool.fr</b> + mot de passe (tapé par le patron), expéditeur <b>contact@motoscool.fr</b>, cocher « Forcer » → Envoyer un email de test.</li>
+<li><b>DKIM</b> : espace client OVH → Web Cloud → Emails → motoscool.fr → <b>DKIM</b> → Activer (jusqu'à 24 h).</li>
+<li><b>DMARC</b> : espace client OVH → Noms de domaine → motoscool.fr → Zone DNS → Ajouter une entrée → <b>TXT</b> : sous-domaine <b>_dmarc</b>, valeur <b>v=DMARC1; p=none;</b></li></ol></div>
+
 </div>
 </body></html>
