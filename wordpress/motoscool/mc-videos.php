@@ -63,6 +63,23 @@ function mc_seed_videos() {
 add_action('admin_init', function () { if (get_option('mc_videos_seed') !== '1' && current_user_can('edit_posts') && !wp_doing_ajax()) mc_seed_videos(); }, 60);
 
 /* ---------- Partie « Vidéos » sur le site ---------- */
+// Style de la partie Vidéos : dans l'en-tête de la page (HTML valide), seulement sur l'accueil
+add_action('wp_head', function () {
+    if (!function_exists('mc_mode') || !mc_mode() || !is_page() || mc_key_of(get_queried_object_id()) !== 'accueil') return;
+    echo '<style id="mc-videos-css">' . "
+" . '      .mc-videos .vgrid{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+      .mc-videos .vcard{margin:0;background:var(--bg-2,#3a3a42);border:1px solid var(--line,rgba(255,255,255,.1));border-radius:18px;overflow:hidden}
+      .mc-videos .vcard video,.mc-videos .vcard iframe,.mc-videos .vplay{display:block;width:100%;aspect-ratio:16/9;border:0;background:#1d1d22}
+      .mc-videos .vplay.vtall,.mc-videos iframe.vtall{aspect-ratio:9/16;max-height:640px}
+      .mc-videos .vplay{position:relative;cursor:pointer;padding:0;color:#fff;font:inherit;text-decoration:none}
+      .mc-videos .vplay img{width:100%;height:100%;object-fit:cover;display:block}
+      .mc-videos .vplay::after{content:"";position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(217,43,34,.92) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath fill=%27%23fff%27 d=%27M8 5v14l11-7z%27/%3E%3C/svg%3E") center/30px no-repeat;box-shadow:0 0 24px rgba(217,43,34,.6)}
+      .mc-videos .vbadge{position:absolute;left:12px;top:12px;background:rgba(0,0,0,.6);border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:700}
+      .mc-videos .vlogo{display:grid;place-items:center;height:100%;font-weight:800;font-size:1.4rem;opacity:.7}
+      .mc-videos figcaption{padding:12px 16px;font-weight:700;color:var(--text,#fff)}' . "
+" . '</style>' . "
+";
+});
 function mc_videos_html($s) {
     $items = [];
     foreach (mc_videos_list() as $v) {
@@ -88,18 +105,6 @@ function mc_videos_html($s) {
       ' . ($intro !== '' ? '<p class="lead rv">' . esc_html($intro) . '</p>' : '') . '
       <ul class="vgrid rv">' . implode('', $items) . '</ul>
     </div>
-    <style>
-      .mc-videos .vgrid{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-      .mc-videos .vcard{margin:0;background:var(--bg-2,#3a3a42);border:1px solid var(--line,rgba(255,255,255,.1));border-radius:18px;overflow:hidden}
-      .mc-videos .vcard video,.mc-videos .vcard iframe,.mc-videos .vplay{display:block;width:100%;aspect-ratio:16/9;border:0;background:#1d1d22}
-      .mc-videos .vplay.vtall,.mc-videos iframe.vtall{aspect-ratio:9/16;max-height:640px}
-      .mc-videos .vplay{position:relative;cursor:pointer;padding:0;color:#fff;font:inherit;text-decoration:none}
-      .mc-videos .vplay img{width:100%;height:100%;object-fit:cover;display:block}
-      .mc-videos .vplay::after{content:"";position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(217,43,34,.92) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath fill=%27%23fff%27 d=%27M8 5v14l11-7z%27/%3E%3C/svg%3E") center/30px no-repeat;box-shadow:0 0 24px rgba(217,43,34,.6)}
-      .mc-videos .vbadge{position:absolute;left:12px;top:12px;background:rgba(0,0,0,.6);border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:700}
-      .mc-videos .vlogo{display:grid;place-items:center;height:100%;font-weight:800;font-size:1.4rem;opacity:.7}
-      .mc-videos figcaption{padding:12px 16px;font-weight:700;color:var(--text,#fff)}
-    </style>
     <script>document.querySelectorAll(".mc-videos .vplay[data-embed]").forEach(function (b) { b.addEventListener("click", function () { var f = document.createElement("iframe"); f.src = b.getAttribute("data-embed"); f.title = b.getAttribute("aria-label") || "Vidéo"; f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen = true; if (b.classList.contains("vtall")) f.className = "vtall"; b.replaceWith(f); }); });</script>
   </section>';
 }
