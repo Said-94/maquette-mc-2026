@@ -11,7 +11,7 @@
 if (!defined('ABSPATH')) exit;
 
 define('MC_DATA', __DIR__ . '/mc');
-define('MC_PAGES_VER', '1');
+define('MC_PAGES_VER', '2'); // 2 : version optimisée (vitesse, référencement, vidéos) — remplace nos pages de la version 1
 
 /* ---------- Données générées (wordpress/tools/build-elementor.mjs) ---------- */
 function mc_data($name) {
@@ -54,6 +54,21 @@ function mc_fix_html($html) {
     $html = str_replace('https://motoscool.fr/', esc_url($home), $html);
     $base = rtrim((string) wp_parse_url($home, PHP_URL_PATH), '/');
     if ($base !== '') $html = preg_replace('#(\s(?:href|src|action|poster|data-src|data-poster)=")/(?!/)#', '$1' . $base . '/', $html);
+    return mc_asset_versions($html);
+}
+// Fichiers du site (images, vidéos, polices, scripts, styles) appelés avec leur numéro de version : le navigateur les garde
+// en mémoire 1 an, et une nouvelle version du site les remplace aussitôt (le numéro suit le contenu des fichiers)
+function mc_asset_ver() {
+    static $v = null;
+    if ($v === null) { $m = dirname(MC_DIR) . '/site-files.json'; $v = is_file($m) ? substr(md5((string) @file_get_contents($m)), 0, 8) : '1'; }
+    return $v;
+}
+function mc_asset_versions($html) {
+    $v = mc_asset_ver();
+    $html = preg_replace('#(\s(?:href|src|poster|data-src|data-poster)=["\'])((?:\.\./|/|[^"\'\s]*?/)?assets/[^"\'?\#\s]+\.(?:js|css|jpe?g|png|webp|avif|svg|mp4|webm|woff2|glb))(["\'])#i', '$1$2?v=' . $v . '$3', $html);
+    $html = preg_replace('#(url\(\s*[\'"]?)((?:\.\./|/)?assets/[^)\'"?\s]+\.(?:woff2|jpe?g|png|webp|svg))([\'"]?\s*\))#i', '$1$2?v=' . $v . '$3', $html);
+    // images citées dans les scripts (ex. image d'attente de la vidéo d'ouverture) : même adresse que dans la page
+    $html = preg_replace('#(\'(?:\.\./|/)?assets/(?:video|photos)/[a-z0-9-]+\.(?:webp|jpe?g))(\')#i', '$1?v=' . $v . '$2', $html);
     return $html;
 }
 function mc_fix_scripts($html) {
@@ -165,6 +180,8 @@ function mc_template_html($tk, $current_url) {
     $id = isset($ids['t:' . $tk]) ? (int) $ids['t:' . $tk] : 0;
     if ($id && get_post_status($id) === 'publish') $h = mc_render_el_data($id);
     else { $t = mc_data('templates'); $h = isset($t[$tk]) ? mc_widget_html($t[$tk]['widget'], $t[$tk]['settings']) : ''; }
+    // lien « Vidéos » du menu : masqué tant qu'aucune vidéo n'est publiée (la partie Vidéos n'est alors pas affichée)
+    if (strpos($h, 'href="#videos"') !== false && function_exists('mc_videos_list') && !mc_videos_count()) $h = preg_replace('~\s*<li>\s*<a href="#videos"[^>]*>[^<]*</a>\s*</li>~', '', $h);
     // lien de la page en cours
     return preg_replace('#(<a href="' . preg_quote($current_url, '#') . '")#', '$1 aria-current="page"', $h);
 }
@@ -246,19 +263,54 @@ function mc_plain_content($p) {
     $h = preg_replace('#<(script|style|svg|video|dialog|form|noscript)\b[\s\S]*?</\1>#i', '', $h);
     return trim(preg_replace("/\n\s*\n+/", "\n\n", wp_kses($h, ['h1' => [], 'h2' => [], 'h3' => [], 'p' => [], 'ul' => [], 'ol' => [], 'li' => [], 'a' => ['href' => true], 'strong' => [], 'b' => [], 'em' => []])));
 }
+// Ancienne version d'une page ou d'un modèle Moto's Cool : gardée dans l'historique d'Elementor (icône horloge) avant remplacement
+function mc_keep_revision($id, $old_ver) {
+    $old = get_post_meta($id, '_elementor_data', true);
+    if ($old) update_post_meta($id, '_mc_sauvegarde_v' . preg_replace('/\W/', '', (string) $old_ver), wp_slash(is_string($old) ? $old : wp_json_encode($old)));
+    if (!function_exists('wp_save_post_revision') || !wp_revisions_enabled(get_post($id))) return;
+    add_filter('wp_save_post_revision_check_for_changes', '__return_false');
+    wp_save_post_revision($id);
+    remove_filter('wp_save_post_revision_check_for_changes', '__return_false');
+}
+function mc_page_secs($p) {
+    $secs = [];
+    foreach ($p['blocks'] as $b) {
+        $s = $b['s'];
+        if (mc_data('widgets')[$b['w']]['kind'] === 'bloc') $s['mc_code'] = mc_widget_html($b['w'], $b['s']);
+        $secs[] = mc_el_section($b['w'], $s);
+    }
+    return $secs;
+}
+function mc_page_seo($id, $p) {
+    update_post_meta($id, 'rank_math_title', $p['seo']['title']);
+    update_post_meta($id, 'rank_math_description', $p['seo']['description']);
+    if ($p['seo']['keyword'] !== '') update_post_meta($id, 'rank_math_focus_keyword', $p['seo']['keyword']);
+    update_post_meta($id, 'rank_math_facebook_image', home_url('/assets/og-image.jpg'));
+    update_post_meta($id, 'rank_math_twitter_use_facebook', 'on');
+}
 function mc_install_pages() {
     if (!mc_el_ok() || !mc_data('pages') || get_transient('mc_install_lock')) return;
-    set_transient('mc_install_lock', 1, 120);
-    @set_time_limit(120);
+    set_transient('mc_install_lock', 1, 300);
+    @set_time_limit(300);
     $ids = mc_ids();
+    $old_ver = (string) get_option('mc_pages_ver', '');
+    // Nouvelle version du site : nos pages et modèles existants sont remplacés (jamais les anciennes pages du client)
+    $upgrade = $old_ver !== '' && $old_ver !== MC_PAGES_VER;
     foreach (mc_data('templates') as $k => $t) {
         $id = isset($ids['t:' . $k]) ? (int) $ids['t:' . $k] : 0;
-        if ($id && get_post($id) && get_post_status($id) !== 'trash') continue;
+        $t['settings']['mc_code'] = mc_widget_html($t['widget'], $t['settings']);
+        if ($id && get_post($id) && get_post_status($id) !== 'trash') {
+            if ($upgrade && get_post_type($id) === 'elementor_library' && get_post_meta($id, '_mc_tpl', true) === $k) {
+                mc_keep_revision($id, $old_ver);
+                mc_set_el_data($id, [mc_el_section($t['widget'], $t['settings'])], 'section');
+                delete_post_meta($id, '_elementor_css');
+            }
+            continue;
+        }
         $id = wp_insert_post(['post_type' => 'elementor_library', 'post_status' => 'publish', 'post_title' => $t['title']], true);
         if (is_wp_error($id) || !$id) continue;
         wp_set_object_terms($id, 'section', 'elementor_library_type');
         update_post_meta($id, '_mc_tpl', $k);
-        $t['settings']['mc_code'] = mc_widget_html($t['widget'], $t['settings']);
         mc_set_el_data($id, [mc_el_section($t['widget'], $t['settings'])], 'section');
         $ids['t:' . $k] = $id; update_option('mc_pages', $ids, false);
     }
@@ -266,29 +318,29 @@ function mc_install_pages() {
     foreach (mc_data('pages') as $key => $info) {
         $order++;
         $id = isset($ids[$key]) ? (int) $ids[$key] : 0;
-        if ($id && get_post($id) && get_post_status($id) !== 'trash') continue;
         $p = mc_page_data($key);
         if (!$p) continue;
+        if ($id && get_post($id) && get_post_status($id) !== 'trash') {
+            if ($upgrade && get_post_type($id) === 'page' && get_post_meta($id, '_mc_key', true) === $key) {
+                mc_keep_revision($id, $old_ver);
+                mc_set_el_data($id, mc_page_secs($p), 'wp-page');
+                delete_post_meta($id, '_elementor_css');
+                mc_page_seo($id, $p);
+                wp_update_post(['ID' => $id, 'post_content' => mc_plain_content($p)]);
+            }
+            continue;
+        }
         $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'publish', 'post_title' => $info['title'], 'post_name' => 'mc-' . sanitize_title(str_replace('/', '-', $key)),
             'post_content' => mc_plain_content($p), 'comment_status' => 'closed', 'ping_status' => 'closed', 'menu_order' => $order], true);
         if (is_wp_error($id) || !$id) continue;
         update_post_meta($id, '_mc_key', $key);
-        $secs = [];
-        foreach ($p['blocks'] as $b) {
-            $s = $b['s'];
-            if (mc_data('widgets')[$b['w']]['kind'] === 'bloc') $s['mc_code'] = mc_widget_html($b['w'], $b['s']);
-            $secs[] = mc_el_section($b['w'], $s);
-        }
-        mc_set_el_data($id, $secs, 'wp-page');
-        update_post_meta($id, 'rank_math_title', $p['seo']['title']);
-        update_post_meta($id, 'rank_math_description', $p['seo']['description']);
-        if ($p['seo']['keyword'] !== '') update_post_meta($id, 'rank_math_focus_keyword', $p['seo']['keyword']);
-        update_post_meta($id, 'rank_math_facebook_image', home_url('/assets/og-image.jpg'));
-        update_post_meta($id, 'rank_math_twitter_use_facebook', 'on');
+        mc_set_el_data($id, mc_page_secs($p), 'wp-page');
+        mc_page_seo($id, $p);
         $ids[$key] = $id; update_option('mc_pages', $ids, false);
     }
     update_option('mc_pages', $ids, false);
     update_option('mc_pages_ver', MC_PAGES_VER, false);
+    if (function_exists('mc_seed_videos')) mc_seed_videos();
     delete_transient('mc_install_lock');
 }
 add_action('after_switch_theme', 'mc_install_pages', 20);

@@ -31,9 +31,36 @@ function mc_video_source($id) {
     if ($l === '') return null;
     if (preg_match('~(?:youtube\.com/(?:watch\?(?:.*&)?v=|shorts/|embed/|live/)|youtu\.be/)([\w-]{11})~', $l, $m)) return ['type' => 'youtube', 'id' => $m[1], 'url' => $l];
     if (preg_match('~tiktok\.com/(?:@[\w.-]+/video|embed(?:/v2)?|v)/(\d{8,25})~', $l, $m)) return ['type' => 'tiktok', 'id' => $m[1], 'url' => $l];
+    if (preg_match('~^https?://[^?#\s]+\.(?:mp4|webm|m4v|mov)(?:[?#].*)?$~i', $l)) return ['type' => 'file', 'url' => $l]; // lien direct vers un fichier vidéo : lu sur la page
     if (preg_match('~^https?://~i', $l)) return ['type' => 'link', 'url' => $l];
     return null;
 }
+
+function mc_videos_count() {
+    static $n = null;
+    if ($n === null) { $n = 0; foreach (mc_videos_list() as $p) if (mc_video_source($p->ID)) $n++; }
+    return $n;
+}
+// Première installation : les films 3D de l'atelier déjà présents sur le site sont ajoutés au menu « Vidéos »
+// (la partie Vidéos est ainsi visible tout de suite ; le garage peut les retirer ou en ajouter d'autres)
+function mc_seed_videos() {
+    if (get_option('mc_videos_seed') === '1') return;
+    if (function_exists('mc_ready') && !mc_ready()) return; // fichiers du site pas encore tous téléchargés : plus tard
+    if (get_posts(['post_type' => 'mc_video', 'post_status' => 'any', 'numberposts' => 1, 'fields' => 'ids'])) { update_option('mc_videos_seed', '1', false); return; }
+    $list = [['atelier-visite', "Film 3D : l'atelier Moto's Cool à Vitry-sur-Seine"], ['atelier-reparation', 'Film 3D : une moto sur le pont élévateur'],
+        ['atelier-pneu', 'Film 3D : la machine de montage des pneus'], ['atelier-demontage', "Film 3D : une moto démontée pour réparation"]];
+    $o = 0;
+    foreach ($list as $it) {
+        if (!is_file(MC_DIR . '/assets/video/' . $it[0] . '.mp4')) continue;
+        $id = wp_insert_post(['post_type' => 'mc_video', 'post_status' => 'publish', 'post_title' => $it[1], 'menu_order' => ++$o], true);
+        if (is_wp_error($id) || !$id) continue;
+        update_post_meta($id, '_mc_video_lien', home_url('/assets/video/' . $it[0] . '.mp4'));
+        update_post_meta($id, '_mc_video_image', home_url('/assets/video/' . $it[0] . '.webp'));
+    }
+    update_option('mc_videos_seed', '1', false);
+}
+
+add_action('admin_init', function () { if (get_option('mc_videos_seed') !== '1' && current_user_can('edit_posts') && !wp_doing_ajax()) mc_seed_videos(); }, 60);
 
 /* ---------- Partie « Vidéos » sur le site ---------- */
 function mc_videos_html($s) {
@@ -42,9 +69,9 @@ function mc_videos_html($s) {
         $src = mc_video_source($v->ID);
         if (!$src) continue;
         $t = get_the_title($v);
-        $thumb = get_the_post_thumbnail_url($v, 'large');
+        $thumb = get_the_post_thumbnail_url($v, 'large') ?: (string) get_post_meta($v->ID, '_mc_video_image', true);
         $cap = '<figcaption>' . esc_html($t) . '</figcaption>';
-        if ($src['type'] === 'file') $media = '<video controls playsinline preload="metadata" src="' . esc_url($src['url']) . '"' . ($thumb ? ' poster="' . esc_url($thumb) . '"' : '') . ' aria-label="' . esc_attr($t) . '"></video>';
+        if ($src['type'] === 'file') $media = '<video controls playsinline preload="' . ($thumb ? 'none' : 'metadata') . '" src="' . esc_url($src['url']) . '"' . ($thumb ? ' poster="' . esc_url($thumb) . '"' : '') . ' aria-label="' . esc_attr($t) . '"></video>';
         elseif ($src['type'] === 'youtube') $media = '<button type="button" class="vplay" data-embed="' . esc_attr('https://www.youtube-nocookie.com/embed/' . $src['id'] . '?autoplay=1&rel=0') . '" aria-label="' . esc_attr('Lire la vidéo : ' . $t) . '"><img src="' . esc_url($thumb ?: 'https://i.ytimg.com/vi/' . $src['id'] . '/hqdefault.jpg') . '" alt="" loading="lazy" decoding="async"><span class="vbadge">YouTube</span></button>';
         elseif ($src['type'] === 'tiktok') $media = '<button type="button" class="vplay vtall" data-embed="' . esc_attr('https://www.tiktok.com/embed/v2/' . $src['id']) . '" aria-label="' . esc_attr('Lire la vidéo : ' . $t) . '">' . ($thumb ? '<img src="' . esc_url($thumb) . '" alt="" loading="lazy" decoding="async">' : '<span class="vlogo">TikTok</span>') . '<span class="vbadge">TikTok</span></button>';
         else $media = '<a class="vplay" href="' . esc_url($src['url']) . '" target="_blank" rel="noopener">' . ($thumb ? '<img src="' . esc_url($thumb) . '" alt="" loading="lazy">' : '<span class="vlogo">Vidéo</span>') . '<span class="vbadge">Voir</span></a>';

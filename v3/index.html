@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moto's Cool – Garage moto, réparation &amp; dépannage à Vitry-sur-Seine (94)</title>
-  <meta name="description" content="Garage moto et scooter à Vitry-sur-Seine (94) : entretien, réparation toutes marques sur rendez-vous et dépannage dans toute l'Île-de-France. Prix après diagnostic à l'atelier. 01 43 76 26 38.">
+  <title>Garage moto &amp; dépannage à Vitry-sur-Seine (94) | Moto's Cool</title>
+  <meta name="description" content="Garage moto et scooter à Vitry-sur-Seine : entretien et réparation toutes marques sur rendez-vous, dépannage en Île-de-France. Tél. 01 43 76 26 38.">
   <!-- Démo : empêche Google d'indexer cette version. À RETIRER pour la mise en ligne finale sur motoscool.fr -->
   <meta name="robots" content="noindex, nofollow">
   <!-- Sécurité : seules les sources listées peuvent charger des scripts, styles, images ou être contactées -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-JgYL61urIxTSqBtyAHS7xRqZ7cH7RkUZ5vYA3YIxFaM=' 'sha256-BMlp6q4EjvbjTTvsRkNUyLwIcyeQFRGfSvhyLbDkCyo=' 'sha256-wg1FjwXDH9bujA1PL39oxhEKjWiiVimrg45qAXr8QBc=' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' blob: data: https://data.geopf.fr https://api-adresse.data.gouv.fr https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.workers.dev; worker-src 'self' blob:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self'; media-src 'self'; manifest-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests; script-src 'self' 'sha256-c6iUx64DX/wCFAYr+4/XQn7y8yZiqtv+SdOvM0RE7E0=' 'sha256-HeKj54reT7/SaOV1FA0ztAmMBdA4gBYpfzMeyFd+l+8=' 'sha256-BMlp6q4EjvbjTTvsRkNUyLwIcyeQFRGfSvhyLbDkCyo=' 'sha256-6rTcpPM39n1Fdr6WqNRES8+b7qmv/q4xGajTwtDQibM=' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://data.geopf.fr https://*.tile.openstreetmap.org https://tile.openstreetmap.org; connect-src 'self' blob: data: https://data.geopf.fr https://api-adresse.data.gouv.fr https://*.workers.dev; worker-src 'self' blob:">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <script>/* Anti-clickjacking (GitHub Pages ne permet pas l'en-tête frame-ancestors) */ if (window.top !== window.self) { document.documentElement.style.display = 'none'; try { window.top.location = window.location.href; } catch (e) {} }</script>
   <link rel="canonical" href="https://motoscool.fr/">
@@ -36,38 +36,39 @@
   <meta name="twitter:image" content="https://motoscool.fr/assets/og-image.jpg">
   <meta name="twitter:image:alt" content="Moto's Cool – Garage &amp; dépannage moto – 01 43 76 26 38">
 
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <!-- three.js (module ES) : résolu ici, mais téléchargé seulement à la demande par assets/bike3d.js -->
+  <!-- three.js (module ES, hébergé sur le site) : résolu ici, mais téléchargé seulement à la demande par assets/bike3d.js -->
   <script type="importmap">
   { "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      "three": "./assets/vendor/three/build/three.module.js",
+      "three/addons/": "./assets/vendor/three/jsm/"
     },
     "integrity": {
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js": "sha384-61S/Nu32S3E5+n+KpCOTb2eRYps6fVKm+9Gz1QBvSePFthb46f063Aa/qe/lykFZ",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js": "sha384-ZGqh+dJjt6z9NHsWYYt+TPDFj8y+2If7naI6a6AkkyNZyH51CVS3HTWFh0njp4k6",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/geometries/RoundedBoxGeometry.js": "sha384-S52/WAm3DaIIFna675h5dmavqea/akLlPFtPdnzgWWhnz+/nMqR6PPsSXPOd8Gpw",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/lights/RectAreaLightUniformsLib.js": "sha384-HQughOIaWFPX2ah3FuxuEjKA23eHY2FTW+hhVSO01phgQNHLSY2RRDGfVJ1kjFnp",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js": "sha384-L+Ns9skCAqjab7aG8LH5VLknBCoENW7p37sOj39jnITwlWZFabWc29JwzgYf6ygy",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/OutputPass.js": "sha384-RJJc+pg+Ue2ZwXlf8n78cPHMiHrqfr+AxxabF5vkXMXjNPF6nSUoqb20IQXkMo6c",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/RenderPass.js": "sha384-LwKrkOBAkmQ2KT4cv6P6q9Rb9L01GIFU34Zp16tGWZoBnrVuujfjpYZb7OxEMb0J",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/ShaderPass.js": "sha384-zetU6HhR/vTtgSvnS9DE+GQPZhVT/ZOSLa/1+DSM6rkM9hvBgQWr9bCEosZt93ch",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js": "sha384-R734/7SvtqjjeteDKG4qcQA0adDCZ1ZcKfYUZsbVr9qqHGlgSXH9eNN4b3NIgwuc",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js": "sha384-jHGXS4+FuVOBnZkNme2ury3Ccg5DWDLYK22xX/WGdZCZsjRM4J+3n6Qc4CXx1Hjf",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/meshopt_decoder.module.js": "sha384-zhZjnxc+3j2IeX2itXt+5CnnC0YleVRvu5EOaj733tRp38E9hBPnZjweEWX2kN7y",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js": "sha384-oxY9vSeh7Mrt5WmhN8xfWoDRnmoW9krEiRBY7vJKaK90jMUidM0fhbUwcblpBgTu",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/math/MeshSurfaceSampler.js": "sha384-jsBd0ISzMJvzZJJ/TQ7IljMbQwz5J9a5+2YduL9H8OzVN9a79AfEF2FiUIsisiLB",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/Pass.js": "sha384-gSqIFh8vMmp1veyOysIS3KPVUl/A5JPefYvW4b89OeYeW0bwkrjN7qcC1h0XJK/K",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/MaskPass.js": "sha384-SDM80tiGflO8UDV/QzR/mASjcc/+wF7KfRVFNHJUIPcTctwoPI8GoWVTlccZw7V4",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/shaders/CopyShader.js": "sha384-kzVlcj2amFaRNIWZ5zE0PmIN+QTNWWvrgKk31S8N/7w0nf7Qq3xqxHRLbD2UPPSl",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/shaders/LuminosityHighPassShader.js": "sha384-621kiA/kIdX8rtH6VU6+SwMVx+B8g7MQ6x0fei5dZVX3CQZSLkpOlglIk9sxE+/g",
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/shaders/OutputShader.js": "sha384-fT4woAJJtXcAxElHG1cGfIZkiSxaj7u+24LHlfNVDZZ9aSjZvr2emMGPmcD9eF0V"
+      "./assets/vendor/three/build/three.module.js": "sha384-61S/Nu32S3E5+n+KpCOTb2eRYps6fVKm+9Gz1QBvSePFthb46f063Aa/qe/lykFZ",
+      "./assets/vendor/three/jsm/environments/RoomEnvironment.js": "sha384-ZGqh+dJjt6z9NHsWYYt+TPDFj8y+2If7naI6a6AkkyNZyH51CVS3HTWFh0njp4k6",
+      "./assets/vendor/three/jsm/geometries/RoundedBoxGeometry.js": "sha384-S52/WAm3DaIIFna675h5dmavqea/akLlPFtPdnzgWWhnz+/nMqR6PPsSXPOd8Gpw",
+      "./assets/vendor/three/jsm/lights/RectAreaLightUniformsLib.js": "sha384-HQughOIaWFPX2ah3FuxuEjKA23eHY2FTW+hhVSO01phgQNHLSY2RRDGfVJ1kjFnp",
+      "./assets/vendor/three/jsm/postprocessing/EffectComposer.js": "sha384-L+Ns9skCAqjab7aG8LH5VLknBCoENW7p37sOj39jnITwlWZFabWc29JwzgYf6ygy",
+      "./assets/vendor/three/jsm/postprocessing/OutputPass.js": "sha384-RJJc+pg+Ue2ZwXlf8n78cPHMiHrqfr+AxxabF5vkXMXjNPF6nSUoqb20IQXkMo6c",
+      "./assets/vendor/three/jsm/postprocessing/RenderPass.js": "sha384-LwKrkOBAkmQ2KT4cv6P6q9Rb9L01GIFU34Zp16tGWZoBnrVuujfjpYZb7OxEMb0J",
+      "./assets/vendor/three/jsm/postprocessing/ShaderPass.js": "sha384-zetU6HhR/vTtgSvnS9DE+GQPZhVT/ZOSLa/1+DSM6rkM9hvBgQWr9bCEosZt93ch",
+      "./assets/vendor/three/jsm/postprocessing/UnrealBloomPass.js": "sha384-R734/7SvtqjjeteDKG4qcQA0adDCZ1ZcKfYUZsbVr9qqHGlgSXH9eNN4b3NIgwuc",
+      "./assets/vendor/three/jsm/utils/BufferGeometryUtils.js": "sha384-jHGXS4+FuVOBnZkNme2ury3Ccg5DWDLYK22xX/WGdZCZsjRM4J+3n6Qc4CXx1Hjf",
+      "./assets/vendor/three/jsm/libs/meshopt_decoder.module.js": "sha384-zhZjnxc+3j2IeX2itXt+5CnnC0YleVRvu5EOaj733tRp38E9hBPnZjweEWX2kN7y",
+      "./assets/vendor/three/jsm/loaders/GLTFLoader.js": "sha384-oxY9vSeh7Mrt5WmhN8xfWoDRnmoW9krEiRBY7vJKaK90jMUidM0fhbUwcblpBgTu",
+      "./assets/vendor/three/jsm/math/MeshSurfaceSampler.js": "sha384-jsBd0ISzMJvzZJJ/TQ7IljMbQwz5J9a5+2YduL9H8OzVN9a79AfEF2FiUIsisiLB",
+      "./assets/vendor/three/jsm/postprocessing/Pass.js": "sha384-gSqIFh8vMmp1veyOysIS3KPVUl/A5JPefYvW4b89OeYeW0bwkrjN7qcC1h0XJK/K",
+      "./assets/vendor/three/jsm/postprocessing/MaskPass.js": "sha384-SDM80tiGflO8UDV/QzR/mASjcc/+wF7KfRVFNHJUIPcTctwoPI8GoWVTlccZw7V4",
+      "./assets/vendor/three/jsm/shaders/CopyShader.js": "sha384-kzVlcj2amFaRNIWZ5zE0PmIN+QTNWWvrgKk31S8N/7w0nf7Qq3xqxHRLbD2UPPSl",
+      "./assets/vendor/three/jsm/shaders/LuminosityHighPassShader.js": "sha384-621kiA/kIdX8rtH6VU6+SwMVx+B8g7MQ6x0fei5dZVX3CQZSLkpOlglIk9sxE+/g",
+      "./assets/vendor/three/jsm/shaders/OutputShader.js": "sha384-fT4woAJJtXcAxElHG1cGfIZkiSxaj7u+24LHlfNVDZZ9aSjZvr2emMGPmcD9eF0V"
   } }
   </script>
   <!-- Polices auto-hébergées (assets/fonts) : aucune requête vers Google -->
   <link rel="preload" href="assets/fonts/orbitron-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/nunito-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Image d'ouverture (affichée avant la vidéo) : demandée en priorité -->
+  <link rel="preload" href="assets/video/hero-portrait.webp" as="image" type="image/webp" media="(orientation: portrait)" fetchpriority="high">
+  <link rel="preload" href="assets/video/hero-poster.webp" as="image" type="image/webp" media="(orientation: landscape)" fetchpriority="high">
 
   <!-- Données structurées pour Google (SEO local) -->
   <script type="application/ld+json">
@@ -264,8 +265,8 @@
     /* Voile à gauche : la moto reste un décor, le titre et les boutons dominent */
     /* Film de la Ducati en studio, en fond de l'accueil (le formulaire passe devant) */
     .hero-film { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; pointer-events: none; }
-    .hero-film { background: url(../assets/video/hero-poster.jpg) 50% 50% / cover no-repeat; }
-    @media (orientation: portrait) { .hero-film { background-image: url(../assets/video/hero-portrait.jpg); } }
+    .hero-film { background: url(../assets/video/hero-poster.webp) 50% 50% / cover no-repeat; }
+    @media (orientation: portrait) { .hero-film { background-image: url(../assets/video/hero-portrait.webp); } }
     /* Voile : sombre à gauche sous le titre, transparent sur la moto, fondu en bas vers la section suivante */
     .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: linear-gradient(0deg, var(--bg-0) 0%, transparent 22%),
@@ -726,7 +727,7 @@
     /* Engrenage en contour, rotation très lente */
     /* Lignes de circuit, avec un reflet qui les parcourt */
     .fx-circuit { --circuit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M0 40h60l20 20h60l20-20h80M40 0v20l20 20M120 60v60l-20 20H0M240 120h-60l-20 20v100M180 0v30l20 20M60 240v-40l20-20h60l20-20'/%3E%3Cg fill='%23fff' stroke='none'%3E%3Ccircle cx='60' cy='40' r='2.5'/%3E%3Ccircle cx='120' cy='120' r='2.5'/%3E%3Ccircle cx='180' cy='120' r='2.5'/%3E%3Ccircle cx='140' cy='180' r='2.5'/%3E%3C/g%3E%3C/svg%3E"); }
-    .fx-circuit::before { content: ""; position: absolute; inset: 0; background: var(--circuit); opacity: .04; -webkit-mask: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent); mask: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent); }
+    .fx-circuit::before { content: ""; position: absolute; inset: 0; background: var(--circuit); opacity: .04; -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent); mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent); }
     .fx-circuit i { inset: 0; -webkit-mask: var(--circuit); mask: var(--circuit); }
     .fx-circuit b { top: 0; bottom: 0; left: -30%; width: 30%; background: linear-gradient(90deg, transparent, rgba(230,48,39,.3), transparent); animation: fx-sweep 18s linear infinite; }
     @keyframes fx-sweep { to { transform: translateX(440%); } }
@@ -1060,7 +1061,7 @@
               </div>
               <div id="addr-box" hidden>
                 <div style="display:grid;gap:12px">
-                  <label>Adresse<input name="adresse" id="adresse" autocomplete="street-address" maxlength="120" placeholder="N° et rue"></label>
+                  <label>Adresse<input name="adresse" id="adresse" autocomplete="address-line1" maxlength="120" placeholder="N° et rue"></label>
                   <div class="row">
                     <label>Code postal<input name="cp" id="cp" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="94400" aria-describedby="cp-hint"></label>
                     <label>Ville<input name="ville" id="ville" autocomplete="address-level2" maxlength="60" placeholder="Vitry-sur-Seine"></label>
@@ -1084,7 +1085,7 @@
               <label>Email<input name="email" type="email" required autocomplete="email" maxlength="120" placeholder="vous@exemple.fr" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Adresse email complète, ex : vous@exemple.fr"></label>
               <label>Message <span class="opt">(facultatif)</span><textarea name="message" maxlength="1000" placeholder="Ex : révision des 30 000 km, bruit au freinage…"></textarea></label>
               <!-- Piège à robots : champ invisible, laissé vide par les humains -->
-              <label class="hp" aria-hidden="true">Ne pas remplir<input name="hp_x7" tabindex="-1" autocomplete="off"></label>
+              <div class="hp" aria-hidden="true"><label>Ne pas remplir<input name="hp_x7" tabindex="-1" autocomplete="off"></label></div>
               <label class="consent"><input type="checkbox" name="consentement" required><span>J'accepte que mes données soient utilisées pour traiter ma demande, selon la <a href="confidentialite.html">politique de confidentialité</a>.</span></label>
             </fieldset>
             <span class="hint ko" id="form-hint" aria-live="polite"></span>
@@ -1115,10 +1116,10 @@
 
   <!-- MANIFESTE -->
   <section class="manifesto has-fx" id="manifeste" aria-label="Notre engagement">
-    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-reparation.jpg" width="1600" height="900"><source media="(max-width: 760px)" data-src="../assets/video/atelier-reparation-m.mp4" type="video/mp4"><source data-src="../assets/video/atelier-reparation.webm" type="video/webm"><source data-src="../assets/video/atelier-reparation.mp4" type="video/mp4"></video></div>
+    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-reparation.webp" width="1600" height="900" data-sources='[{"src":"../assets/video/atelier-reparation-m.mp4","type":"video/mp4","media":"(max-width: 760px)"},{"src":"../assets/video/atelier-reparation.webm","type":"video/webm"},{"src":"../assets/video/atelier-reparation.mp4","type":"video/mp4"}]'></video></div>
     <div class="wrap">
       <span class="kicker">Moto's Cool</span>
-      <p id="mtext">Votre moto mérite <em>le meilleur soin.</em> Entretien, réparation, dépannage : <em>ne bougez pas, j'arrive !</em></p>
+      <p id="mtext">Un atelier à Vitry, <em>un seul numéro.</em> Entretien, réparation, dépannage : <em>ne bougez pas, j'arrive !</em></p>
     </div>
   </section>
 
@@ -1129,7 +1130,7 @@
   <section class="tour" id="services" aria-labelledby="services-title">
     <div class="wrap tour-head">
       <span class="kicker rv">Nos services</span>
-      <h2 class="rv" id="services-title">Tout pour votre deux-roues.</h2>
+      <h2 class="rv" id="services-title">Ce qu'on fait à l'atelier.</h2>
     </div>
     <div class="tour-stage" id="tour-stage">
       <div class="tour-3d" aria-hidden="true"><canvas id="tour3d"></canvas></div>
@@ -1146,7 +1147,7 @@
         </div>
         <div class="tour-step" data-stop="2">
           <span class="tour-tag">Roue avant · freins</span>
-          <article class="hpanel"><span class="num" aria-hidden="true">02</span><div class="ico"><svg aria-hidden="true"><use href="#i-check"/></svg></div><h3>Freinage &amp; pneus</h3><p>Plaquettes, disques, purge, pneus et équilibrage : votre sécurité avant tout.</p><details class="more"><summary>Voir le détail</summary><ul><li><svg aria-hidden="true"><use href="#i-check"/></svg>Plaquettes & disques de frein</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Purge du circuit de freinage</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Pneus avant & arrière</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Équilibrage des roues</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Contrôle de pression & d'usure</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Conseils selon votre pratique</li></ul></details><a href="#devis" class="btn btn-red" data-presta="Freinage">Réserver</a></article>
+          <article class="hpanel"><span class="num" aria-hidden="true">02</span><div class="ico"><svg aria-hidden="true"><use href="#i-check"/></svg></div><h3>Freinage &amp; pneus</h3><p>Plaquettes, disques, purge, pneus et équilibrage : tout ce qui vous arrête et vous tient à la route.</p><details class="more"><summary>Voir le détail</summary><ul><li><svg aria-hidden="true"><use href="#i-check"/></svg>Plaquettes & disques de frein</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Purge du circuit de freinage</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Pneus avant & arrière</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Équilibrage des roues</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Contrôle de pression & d'usure</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Conseils selon votre pratique</li></ul></details><a href="#devis" class="btn btn-red" data-presta="Freinage">Réserver</a></article>
         </div>
         <div class="tour-step" data-stop="3">
           <span class="tour-tag">Moteur</span>
@@ -1162,7 +1163,7 @@
         </div>
         <div class="tour-step" data-stop="6">
           <span class="tour-tag">Scooters</span>
-          <article class="hpanel"><span class="num" aria-hidden="true">06</span><div class="ico"><svg aria-hidden="true"><use href="#i-gear"/></svg></div><h3>Scooters</h3><p>Piaggio, Vespa et scooters de toutes cylindrées, entretenus avec le même soin.</p><details class="more"><summary>Voir le détail</summary><ul><li><svg aria-hidden="true"><use href="#i-check"/></svg>Entretien et révision toutes cylindrées</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Variateur, courroie et galets</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Freinage, pneus et éclairage</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Piaggio, Vespa et toutes les autres marques</li></ul></details><a href="#devis" class="btn btn-red" data-presta="Entretien">Réserver</a></article>
+          <article class="hpanel"><span class="num" aria-hidden="true">06</span><div class="ico"><svg aria-hidden="true"><use href="#i-gear"/></svg></div><h3>Scooters</h3><p>Piaggio, Vespa et scooters de toutes cylindrées, révisés au même atelier que les motos.</p><details class="more"><summary>Voir le détail</summary><ul><li><svg aria-hidden="true"><use href="#i-check"/></svg>Entretien et révision toutes cylindrées</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Variateur, courroie et galets</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Freinage, pneus et éclairage</li><li><svg aria-hidden="true"><use href="#i-check"/></svg>Piaggio, Vespa et toutes les autres marques</li></ul></details><a href="#devis" class="btn btn-red" data-presta="Entretien">Réserver</a></article>
         </div>
       </div>
     </div>
@@ -1179,7 +1180,7 @@
 
   <!-- HISTOIRE : EN PANNE ? MOTO'S COOL ARRIVE -->
   <section class="story has-fx" id="en-panne" aria-labelledby="story-title">
-    <div class="fx fx-truck top" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" width="1920" height="540"><source data-src="../assets/video/story-5.av1.mp4" type='video/mp4; codecs="av01.0.08M.08"'><source data-src="../assets/video/story-5.webm" type="video/webm"><source data-src="../assets/video/story-5.mp4" type="video/mp4"></video></div>
+    <div class="fx fx-truck top" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" width="1920" height="540" data-sources='[{"src":"../assets/video/story-5.av1.mp4","type":"video/mp4; codecs=\"av01.0.08M.08\""},{"src":"../assets/video/story-5.webm","type":"video/webm"},{"src":"../assets/video/story-5.mp4","type":"video/mp4"}]'></video></div>
     <div class="wrap">
       <span class="kicker rv">Comment ça marche</span>
       <h2 class="rv" id="story-title">En panne ? Moto's Cool arrive.</h2>
@@ -1187,25 +1188,25 @@
       <ol class="scenes">
         <li>
           <figure class="scene" id="sc1">
-            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-1.jpg" aria-label="Film 3D : une moto tombe en panne la nuit au bord de la route, feux de détresse allumés" width="1280" height="800"><source data-src="../assets/video/story-1.av1.mp4" type='video/mp4; codecs="av01.0.08M.08"'><source data-src="../assets/video/story-1.webm" type="video/webm"><source data-src="../assets/video/story-1.mp4" type="video/mp4"></video>
+            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-1.webp" aria-label="Film 3D : une moto tombe en panne la nuit au bord de la route, feux de détresse allumés" width="1280" height="800" data-sources='[{"src":"../assets/video/story-1.av1.mp4","type":"video/mp4; codecs=\"av01.0.08M.08\""},{"src":"../assets/video/story-1.webm","type":"video/webm"},{"src":"../assets/video/story-1.mp4","type":"video/mp4"}]'></video>
             <figcaption><b>La panne</b>Votre moto s'arrête au bord de la route : fumée, voyant, plus rien ne démarre. Mettez-vous en sécurité.</figcaption>
           </figure>
         </li>
         <li>
           <figure class="scene" id="sc2">
-            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-2.jpg" aria-label="Film 3D : le motard cherche Moto's Cool sur son téléphone et appelle le 01 43 76 26 38" width="1280" height="800"><source data-src="../assets/video/story-2.av1.mp4" type='video/mp4; codecs="av01.0.08M.08"'><source data-src="../assets/video/story-2.webm" type="video/webm"><source data-src="../assets/video/story-2.mp4" type="video/mp4"></video>
+            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-2.webp" aria-label="Film 3D : le motard cherche Moto's Cool sur son téléphone et appelle le 01 43 76 26 38" width="1280" height="800" data-sources='[{"src":"../assets/video/story-2.av1.mp4","type":"video/mp4; codecs=\"av01.0.08M.08\""},{"src":"../assets/video/story-2.webm","type":"video/webm"},{"src":"../assets/video/story-2.mp4","type":"video/mp4"}]'></video>
             <figcaption><b>L'appel</b>En panne, vous cherchez «&nbsp;Moto's Cool&nbsp;» sur votre téléphone et vous nous appelez au 01 43 76 26 38.</figcaption>
           </figure>
         </li>
         <li>
           <figure class="scene" id="sc3">
-            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-3.jpg" aria-label="Film 3D : la dépanneuse Moto's Cool arrive, gyrophares allumés" width="1280" height="800"><source data-src="../assets/video/story-3.av1.mp4" type='video/mp4; codecs="av01.0.08M.08"'><source data-src="../assets/video/story-3.webm" type="video/webm"><source data-src="../assets/video/story-3.mp4" type="video/mp4"></video>
+            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-3.webp" aria-label="Film 3D : la dépanneuse Moto's Cool arrive, gyrophares allumés" width="1280" height="800" data-sources='[{"src":"../assets/video/story-3.av1.mp4","type":"video/mp4; codecs=\"av01.0.08M.08\""},{"src":"../assets/video/story-3.webm","type":"video/webm"},{"src":"../assets/video/story-3.mp4","type":"video/mp4"}]'></video>
             <figcaption><b>On arrive</b>Le dépanneur Moto's Cool part de l'atelier de Vitry et vous rejoint dans notre zone de dépannage.</figcaption>
           </figure>
         </li>
         <li>
           <figure class="scene" id="sc4">
-            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-4.jpg" aria-label="Film 3D : la moto dépannée repart" width="1280" height="800"><source data-src="../assets/video/story-4.av1.mp4" type='video/mp4; codecs="av01.0.08M.08"'><source data-src="../assets/video/story-4.webm" type="video/webm"><source data-src="../assets/video/story-4.mp4" type="video/mp4"></video>
+            <video class="scene-vid" data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/story-4.webp" aria-label="Film 3D : la moto dépannée repart" width="1280" height="800" data-sources='[{"src":"../assets/video/story-4.av1.mp4","type":"video/mp4; codecs=\"av01.0.08M.08\""},{"src":"../assets/video/story-4.webm","type":"video/webm"},{"src":"../assets/video/story-4.mp4","type":"video/mp4"}]'></video>
             <figcaption><b>C'est reparti</b>Dépannée et remise en état à l'atelier, votre moto repart. Le prix vous est annoncé après le diagnostic, avant toute intervention.</figcaption>
           </figure>
         </li>
@@ -1288,8 +1289,8 @@
     <div class="figs-stage" id="figs-stage">
       <ul class="wrap figs-list">
         <li class="fig" style="--n:2"><svg class="fig-art art-idf" viewBox="0 0 300 247" aria-hidden="true"><path d="M 129.0 93.8 113.7 85.8 127.4 75.8 136.7 75.6 141.0 87.0 129.0 93.8 Z" pathLength="1" style="--i:0"/><path d="M 123.4 64.9 127.4 75.8 113.7 85.8 129.0 93.8 127.3 108.5 113.9 102.5 102.5 88.2 110.5 73.9 123.4 64.9 Z" pathLength="1" style="--i:1"/><path d="M 160.7 52.5 167.6 69.9 161.7 78.6 166.0 96.2 153.5 85.3 141.0 87.0 136.7 75.6 127.4 75.8 123.4 64.9 133.5 60.1 147.3 64.2 160.7 52.5 Z" pathLength="1" style="--i:2"/><path d="M 129.0 93.8 141.0 87.0 153.5 85.3 166.0 96.2 168.1 103.3 163 121.0 153.3 111.6 134.3 114.7 127.3 108.5 129.0 93.8 Z" pathLength="1" style="--i:3"/><path d="M 27.1 36.3 36.1 36.3 43.2 43.6 58.2 37.1 73.5 49.1 85.6 54.4 100.3 52.0 111.3 65.1 110.5 73.9 102.5 88.2 113.9 102.5 95.6 111.1 93.1 121.8 85.3 127.8 83.6 149.3 71.6 151.3 69.6 170.6 62.3 174.4 50.2 163.3 50.6 149.6 38.5 142.7 24.4 124.5 21.1 117.1 23.6 92.9 16.5 69.6 12.1 68.4 4 42.7 27.1 36.3 Z" pathLength="1" style="--i:4"/><path d="M 166.1 37.5 160.7 52.5 147.3 64.2 133.5 60.1 123.4 64.9 110.5 73.9 111.3 65.1 100.3 52.0 85.6 54.4 73.5 49.1 58.2 37.1 43.2 43.6 36.1 36.3 27.1 36.3 34.2 24.8 36.9 7.6 44.7 4 48.2 15.8 53.9 13.6 66.1 18.7 93.0 10.0 98.8 13.9 113.8 15.5 118.5 21.4 127.0 14.3 131.6 19.5 149.3 25.4 166.1 37.5 Z" pathLength="1" style="--i:5"/><path d="M 113.9 102.5 127.3 108.5 134.3 114.7 153.3 111.6 163 121.0 159.5 125.3 158.4 142.1 152.4 153.1 152.4 175.1 156.3 180.5 145.3 189.2 138.2 200.8 122.8 203.4 110.2 196.1 106.3 202.5 86.2 208.2 74.5 202.8 78.6 191.3 69.6 170.6 71.6 151.3 83.6 149.3 85.3 127.8 93.1 121.8 95.6 111.1 113.9 102.5 Z" pathLength="1" style="--i:6"/><path d="M 163 121.0 168.1 103.3 166.0 96.2 161.7 78.6 167.6 69.9 160.7 52.5 166.1 37.5 171.8 32.6 182.3 40.7 189.1 41.7 197.1 33.8 210.1 36.4 228.2 36.3 233.6 30.1 243.3 31.6 250.9 44.9 246.9 49.6 267.3 65.8 271.0 74.4 287.4 84.7 285.8 101.9 291.0 111.1 287.2 125.2 296 139.8 283.3 155.2 286.3 164.5 279.7 167.3 283.6 186.0 276.5 189.9 262.5 188.8 252.8 191.9 244.1 190.0 230.7 193.1 226.3 203.9 230.5 211.7 225.0 224.0 214.9 235.1 204.9 236.6 194.4 233.8 181.3 243.4 172.1 240.2 146.2 240.5 155.4 228.1 147.7 215.0 141.1 213.9 138.2 200.8 145.3 189.2 156.3 180.5 152.4 175.1 152.4 153.1 158.4 142.1 159.5 125.3 163 121.0 Z" pathLength="1" style="--i:7"/></svg><span class="idx" aria-hidden="true">01 / 03</span><b data-count="8">8</b><span class="lbl">départements : dépannage dans toute l'Île-de-France</span></li>
-        <li class="fig" style="--n:1"><svg class="fig-art art-gear" viewBox="-110 -110 220 220" aria-hidden="true"><circle r="58" pathLength="1"/><circle r="22" pathLength="1"/><g transform="rotate(0.00)" class="tooth" style="--i:0"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(0.00 0 -92)">L</text></g><g transform="rotate(51.43)" class="tooth" style="--i:1"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-51.43 0 -92)">M</text></g><g transform="rotate(102.86)" class="tooth" style="--i:2"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-102.86 0 -92)">M</text></g><g transform="rotate(154.29)" class="tooth" style="--i:3"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-154.29 0 -92)">J</text></g><g transform="rotate(205.71)" class="tooth" style="--i:4"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-205.71 0 -92)">V</text></g><g transform="rotate(257.14)" class="tooth" style="--i:5"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-257.14 0 -92)">S</text></g><g transform="rotate(308.57)" class="tooth off" style="--i:6"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-308.57 0 -92)">D</text></g></svg><span class="idx" aria-hidden="true">02 / 03</span><b data-count="6">6</b><span class="lbl">jours sur 7 à l'atelier</span></li>
-        <li class="fig" style="--n:1"><svg class="fig-art art-phone" viewBox="0 0 200 200" aria-hidden="true"><rect x="66" y="30" width="68" height="128" rx="14" pathLength="1"/><path d="M90 44h20M96 146h8" pathLength="1"/><path class="wave" style="--i:0" d="M146 74q14 20 0 40"/><path class="wave" style="--i:1" d="M158 62q24 32 0 64"/><path class="wave" style="--i:2" d="M170 50q34 44 0 88"/><path class="wave" style="--i:0" d="M54 74q-14 20 0 40"/><path class="wave" style="--i:1" d="M42 62q-24 32 0 64"/><path class="wave" style="--i:2" d="M30 50q-34 44 0 88"/></svg><span class="idx" aria-hidden="true">03 / 03</span><b data-count="1">1</b><span class="lbl">seul appel pour être dépanné</span></li>
+        <li class="fig" style="--n:1"><svg class="fig-art art-gear" viewBox="-110 -110 220 220" aria-hidden="true"><circle r="58" data-pl="1"/><circle r="22" data-pl="1"/><g transform="rotate(0.00)" class="tooth" style="--i:0"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(0.00 0 -92)">L</text></g><g transform="rotate(51.43)" class="tooth" style="--i:1"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-51.43 0 -92)">M</text></g><g transform="rotate(102.86)" class="tooth" style="--i:2"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-102.86 0 -92)">M</text></g><g transform="rotate(154.29)" class="tooth" style="--i:3"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-154.29 0 -92)">J</text></g><g transform="rotate(205.71)" class="tooth" style="--i:4"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-205.71 0 -92)">V</text></g><g transform="rotate(257.14)" class="tooth" style="--i:5"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-257.14 0 -92)">S</text></g><g transform="rotate(308.57)" class="tooth off" style="--i:6"><rect x="-11" y="-84" width="22" height="24" rx="4"/><text x="0" y="-92" transform="rotate(-308.57 0 -92)">D</text></g></svg><span class="idx" aria-hidden="true">02 / 03</span><b data-count="6">6</b><span class="lbl">jours sur 7 à l'atelier</span></li>
+        <li class="fig" style="--n:1"><svg class="fig-art art-phone" viewBox="0 0 200 200" aria-hidden="true"><rect x="66" y="30" width="68" height="128" rx="14" data-pl="1"/><path d="M90 44h20M96 146h8" pathLength="1"/><path class="wave" style="--i:0" d="M146 74q14 20 0 40"/><path class="wave" style="--i:1" d="M158 62q24 32 0 64"/><path class="wave" style="--i:2" d="M170 50q34 44 0 88"/><path class="wave" style="--i:0" d="M54 74q-14 20 0 40"/><path class="wave" style="--i:1" d="M42 62q-24 32 0 64"/><path class="wave" style="--i:2" d="M30 50q-34 44 0 88"/></svg><span class="idx" aria-hidden="true">03 / 03</span><b data-count="1">1</b><span class="lbl">seul appel pour être dépanné</span></li>
       </ul>
     </div>
   </section>
@@ -1298,7 +1299,7 @@
   <!-- AVIS & RÉSEAUX : lien vers les avis Google (SITE.googleReviewsUrl) et comptes sociaux (SITE.socials) -->
   <section class="trust has-fx" id="avis" aria-labelledby="avis-title">
     <div class="neons on" aria-hidden="true"><svg class="nx" style="left:44%;top:12%;width:64px;--d:0.1s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:56%;top:70%;width:40px;--d:0.5s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx" style="left:3%;top:72%;width:48px;--d:0.9s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:86%;top:78%;width:44px;--d:1.3s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:70%;top:4%;width:30px;--d:1.7s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg></div>
-    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-pneu.jpg" width="1600" height="900"><source media="(max-width: 760px)" data-src="../assets/video/atelier-pneu-m.mp4" type="video/mp4"><source data-src="../assets/video/atelier-pneu.webm" type="video/webm"><source data-src="../assets/video/atelier-pneu.mp4" type="video/mp4"></video></div>
+    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-pneu.webp" width="1600" height="900" data-sources='[{"src":"../assets/video/atelier-pneu-m.mp4","type":"video/mp4","media":"(max-width: 760px)"},{"src":"../assets/video/atelier-pneu.webm","type":"video/webm"},{"src":"../assets/video/atelier-pneu.mp4","type":"video/mp4"}]'></video></div>
     <div class="wrap">
       <span class="kicker rv">Avis &amp; réseaux</span>
       <h2 class="rv" id="avis-title">Ils nous ont confié leur moto.</h2>
@@ -1319,7 +1320,7 @@
 
   <!-- FAQ (garder identique au bloc FAQPage JSON-LD de l'en-tête) -->
   <section class="has-fx" id="faq" style="padding-bottom:0" aria-labelledby="faq-title">
-    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-demontage.jpg" width="1600" height="900"><source media="(max-width: 760px)" data-src="../assets/video/atelier-demontage-m.mp4" type="video/mp4"><source data-src="../assets/video/atelier-demontage.webm" type="video/webm"><source data-src="../assets/video/atelier-demontage.mp4" type="video/mp4"></video></div>
+    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-demontage.webp" width="1600" height="900" data-sources='[{"src":"../assets/video/atelier-demontage-m.mp4","type":"video/mp4","media":"(max-width: 760px)"},{"src":"../assets/video/atelier-demontage.webm","type":"video/webm"},{"src":"../assets/video/atelier-demontage.mp4","type":"video/mp4"}]'></video></div>
     <div class="neons on" aria-hidden="true"><svg class="nx" style="left:88%;top:8%;width:52px;--d:0.2s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:74%;top:82%;width:38px;--d:0.7s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg><svg class="nx nm" style="left:94%;top:58%;width:30px;--d:1.1s" viewBox="0 0 100 115"><path d="M50 4 96 30.5v54L50 111 4 84.5v-54z"/></svg></div>
     <div class="wrap">
       <span class="kicker rv">FAQ</span>
@@ -1337,7 +1338,7 @@
         <details><summary>Quels moyens de paiement acceptez-vous ?</summary><p>Nous acceptons la carte bancaire (avec ou sans contact), Apple Pay, Google Pay, les espèces et le virement bancaire. <a href="#avis">Voir les moyens de paiement</a></p></details>
         <details><summary>Vos interventions sont-elles garanties ?</summary><p>Oui : en cas de souci lié à notre intervention, revenez nous voir, nous la reprenons. Les conditions sont précisées sur votre facture. <a href="#devis">Prendre rendez-vous</a></p></details>
       </div>
-      <aside class="faq-side rv" aria-labelledby="faq-ask-title">
+      <div class="faq-side rv" role="region" aria-labelledby="faq-ask-title">
         <h3 id="faq-ask-title">Encore une question ?</h3>
         <form class="faq-ask" id="faq-ask" role="search">
           <label for="faq-q" class="sr-only">Votre question</label>
@@ -1345,8 +1346,8 @@
           <button class="btn btn-red" type="submit">Demander</button>
         </form>
         <p class="faq-side-note">La réponse s'ouvre dans notre assistant.</p>
-        <a class="btn faq-wa" id="faq-wa" target="_blank" rel="noopener" hidden><svg aria-hidden="true"><use href="#i-whatsapp"/></svg>Écrire sur WhatsApp</a>
-      </aside>
+        <a class="btn faq-wa" id="faq-wa" href="#contact" target="_blank" rel="noopener" hidden><svg aria-hidden="true"><use href="#i-whatsapp"/></svg>Écrire sur WhatsApp</a>
+      </div>
       </div>
     </div>
   </section>
@@ -1363,7 +1364,7 @@
       <ul class="gallery rv" id="gallery" aria-label="Photos de l'atelier"></ul>
     </div>
     <dialog class="lightbox" id="lightbox" aria-label="Photo agrandie">
-      <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+      <figure><img id="lb-img" src="assets/icons/favicon.svg" alt=""><figcaption id="lb-cap"></figcaption></figure>
       <button type="button" class="lb-btn lb-close" id="lb-close" aria-label="Fermer">&times;</button>
       <button type="button" class="lb-btn lb-prev" id="lb-prev" aria-label="Photo précédente">&#8249;</button>
       <button type="button" class="lb-btn lb-next" id="lb-next" aria-label="Photo suivante">&#8250;</button>
@@ -1371,7 +1372,7 @@
   </section>
 
   <section class="has-fx" id="contact" aria-labelledby="contact-title">
-    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-visite.jpg" width="1600" height="900"><source media="(max-width: 760px)" data-src="../assets/video/atelier-visite-m.mp4" type="video/mp4"><source data-src="../assets/video/atelier-visite.webm" type="video/webm"><source data-src="../assets/video/atelier-visite.mp4" type="video/mp4"></video></div>
+    <div class="fx-atelier" aria-hidden="true"><video data-autoplay muted loop playsinline preload="none" data-poster="../assets/video/atelier-visite.webp" width="1600" height="900" data-sources='[{"src":"../assets/video/atelier-visite-m.mp4","type":"video/mp4","media":"(max-width: 760px)"},{"src":"../assets/video/atelier-visite.webm","type":"video/webm"},{"src":"../assets/video/atelier-visite.mp4","type":"video/mp4"}]'></video></div>
     <div class="fx fx-road" aria-hidden="true"><i></i></div>
     <div class="wrap">
       <span class="kicker rv">Nous contacter</span>
@@ -1458,8 +1459,8 @@
   </button>
 
   <!-- GSAP (différé). Three.js (moto 3D), Lenis et Leaflet sont chargés à la demande, plus bas. -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" defer crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha384-poC0r6usQOX2Ayt/VGA+t81H6V3iN9L+Irz9iO8o+s0X20tLpzc9DOOtnKxhaQSE" defer crossorigin="anonymous"></script>
+  <script src="assets/vendor/gsap/gsap.min.js" integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" defer crossorigin="anonymous"></script>
+  <script src="assets/vendor/gsap/ScrollTrigger.min.js" integrity="sha384-poC0r6usQOX2Ayt/VGA+t81H6V3iN9L+Irz9iO8o+s0X20tLpzc9DOOtnKxhaQSE" defer crossorigin="anonymous"></script>
   <script src="assets/site-bike.js"></script>
   <script src="assets/rdv-mail.js"></script>
   <script>
@@ -1506,12 +1507,12 @@
     // Photos de l'atelier (onglet Photos) : déposer les images dans assets/photos/ puis les lister ici,
     // ex : { src: 'assets/photos/atelier-1.jpg', alt: "L'atelier vu de l'entrée" }. Vide = cadres « photo à venir ».
     gallery: [
-      { src: '../assets/photos/atelier-1.jpg?v=20261122', alt: "La façade du garage Moto's Cool, avenue du Président Salvador Allende à Vitry-sur-Seine" },
-      { src: '../assets/photos/atelier-2.jpg?v=20261122', alt: "L'entrée de l'accueil Moto's Cool : diagnostic, entretien, freins, pneus, vidange" },
-      { src: '../assets/photos/atelier-3.jpg?v=20261122', alt: "L'entrée de l'atelier Moto's Cool à Vitry-sur-Seine" },
-      { src: '../assets/photos/atelier-4.jpg?v=20261122', alt: "L'atelier vu de la mezzanine : motos et scooters en cours de réparation" },
-      { src: '../assets/photos/atelier-5.jpg?v=20261122', alt: "Les ponts élévateurs et l'établi sous les néons hexagonaux" },
-      { src: '../assets/photos/atelier-6.jpg?v=20261122', alt: "Plaquettes de frein, courroies et une BMW S 1000 RR à l'atelier" }
+      { src: '../assets/photos/atelier-1.webp', alt: "La façade du garage Moto's Cool, avenue du Président Salvador Allende à Vitry-sur-Seine" },
+      { src: '../assets/photos/atelier-2.webp', alt: "L'entrée de l'accueil Moto's Cool : diagnostic, entretien, freins, pneus, vidange" },
+      { src: '../assets/photos/atelier-3.webp', alt: "L'entrée de l'atelier Moto's Cool à Vitry-sur-Seine" },
+      { src: '../assets/photos/atelier-4.webp', alt: "L'atelier vu de la mezzanine : motos et scooters en cours de réparation" },
+      { src: '../assets/photos/atelier-5.webp', alt: "Les ponts élévateurs et l'établi sous les néons hexagonaux" },
+      { src: '../assets/photos/atelier-6.webp', alt: "Plaquettes de frein, courroies et une BMW S 1000 RR à l'atelier" }
     ],
     // Lien vers les avis Google du garage. Vide = bouton masqué.
     googleReviewsUrl: 'https://share.google/6iqXkrDpoP4qPNWKc',
@@ -1538,15 +1539,15 @@
 
     // Chargement à la demande d'un script / d'une feuille de style externe
     // Empreintes (SRI) des bibliothèques externes : un fichier modifié sur le CDN est refusé par le navigateur
-    const SRI = {"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js":"sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO",
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css":"sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb",
-      "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js":"sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed"};
+    const SRI = {"assets/vendor/leaflet/leaflet.min.js":"sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO",
+      "assets/vendor/leaflet/leaflet.min.css":"sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb",
+      "assets/vendor/lenis/lenis.min.js":"sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed"};
     const load = src => new Promise((ok, ko) => { const s = document.createElement('script'); s.src = src; if (/^https:/.test(src)) { s.crossOrigin = 'anonymous'; if (SRI[src]) s.integrity = SRI[src]; } s.onload = ok; s.onerror = ko; document.head.append(s); });
     const loadCss = href => new Promise((ok, ko) => { const l = document.createElement('link'); l.rel = 'stylesheet'; l.crossOrigin = 'anonymous'; if (SRI[href]) l.integrity = SRI[href]; l.href = href; l.onload = ok; l.onerror = ko; document.head.append(l); });
     let leafletP = null; // Leaflet chargé une seule fois, même si les deux cartes le demandent en même temps
     const loadLeaflet = () => leafletP || (leafletP = Promise.all([loadCss(LEAFLET_CSS), load(LEAFLET_JS)]).catch(e => { leafletP = null; throw e; }));
-    const LEAFLET_JS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
-    const LEAFLET_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+    const LEAFLET_JS = 'assets/vendor/leaflet/leaflet.min.js';
+    const LEAFLET_CSS = 'assets/vendor/leaflet/leaflet.min.css';
     // Fonds de carte : plan en couleur (OpenStreetMap) ou vue satellite (photos aériennes de l'IGN, libres d'usage).
     // Vue par défaut : SITE.mapStyle ('plan' ou 'satellite'). Le visiteur peut basculer avec les boutons de la carte.
     function mapBases(map) {
@@ -1671,7 +1672,7 @@
 
     // ---------- Moto 3D (three.js) et défilement doux (Lenis) : chargés à la demande ----------
     // Mobile ou « économie de données » : au premier geste ; ordinateur : après le chargement, au repos.
-    const LENIS_JS = 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js';
+    const LENIS_JS = 'assets/vendor/lenis/lenis.min.js';
     const idle = window.requestIdleCallback || (cb => setTimeout(cb, 300));
     // Qualité adaptée à l'appareil, pour rester fluide partout :
     //  - lowEnd : économie de données, réseau 2G/3G, ≤ 2 Go de mémoire ou ≤ 2 cœurs → images fixes seulement, aucune vidéo ni 3D
@@ -1795,7 +1796,7 @@
       heroFilmOn = true;
       const hv = $('#hero-vid'), tall = innerHeight > innerWidth;
       idle(() => {
-        hv.poster = tall ? '../assets/video/hero-portrait.jpg' : '../assets/video/hero-poster.jpg';
+        hv.poster = tall ? '../assets/video/hero-portrait.webp' : '../assets/video/hero-poster.webp';
         hv.hidden = false;
         if (staticOnly) return;
         const name = tall ? 'hero-portrait' : 'hero-1080';
@@ -1911,7 +1912,7 @@
     const waNumber = String(SITE.whatsapp || '').replace(/\D/g, '');
     const waLink = waNumber ? `https://wa.me/${waNumber}?text=${encodeURIComponent(SITE.whatsappMessage)}` : '';
     if (waLink) {
-      document.body.insertAdjacentHTML('beforeend', `<a class="wa" href="${waLink}" target="_blank" rel="noopener" aria-label="Écrire à Moto's Cool sur WhatsApp"><svg aria-hidden="true"><use href="#i-whatsapp"/></svg></a>`);
+      document.body.insertAdjacentHTML('beforeend', `<aside class="wa-zone" aria-label="WhatsApp"><a class="wa" href="${waLink}" target="_blank" rel="noopener" aria-label="Écrire à Moto's Cool sur WhatsApp"><svg aria-hidden="true"><use href="#i-whatsapp"/></svg></a></aside>`);
     }
 
     // Email affiché au dernier moment (les robots qui collectent les adresses ne le voient pas dans le code)
@@ -1935,6 +1936,8 @@
           const li = document.createElement('li'), b = document.createElement('button'), im = document.createElement('img');
           b.type = 'button'; b.className = 'ph'; b.setAttribute('aria-label', 'Agrandir : ' + (p.alt || 'photo ' + (i + 1)));
           im.src = p.src; im.alt = p.alt || ''; im.loading = 'lazy'; im.decoding = 'async';
+          const sm = /assets\/photos\/[\w-]+\.webp/.test(p.src) && !/-480\.webp/.test(p.src) ? p.src.replace(/\.webp(\?|$)/, '-480.webp$1') : ''; // version légère pour les petits écrans
+          if (sm) { im.srcset = sm + ' 480w, ' + p.src + ' 1000w'; im.sizes = '(max-width: 760px) 34vw, 400px'; }
           b.append(im); b.addEventListener('click', () => { show(i); dlg.showModal(); if (lenis) lenis.stop(); }); li.append(b); list.append(li);
         });
         $('#lb-prev').addEventListener('click', () => show(cur - 1));
@@ -2637,6 +2640,7 @@
       const w = tall || lightMode ? 720 : big ? 3840 : 1920, h = tall ? 1280 : lightMode ? 720 : w * 9 / 16;
       av1Ok(w, h).then(ok => { if (ok && !heroFilmEl.dataset.armed) heroFilmEl.dataset.src = base + '.av1.mp4'; });
     }
+    document.querySelectorAll('[data-pl]').forEach(e => e.setAttribute('pathLength', '1')); // dessins animés (attribut SVG 2 ajouté ici : HTML valide)
     const vids = [...document.querySelectorAll('video[data-autoplay]')];
     // Images fixes des vidéos : demandées seulement à l'approche (environ 800 px), jamais au premier chargement
     {
@@ -2651,6 +2655,7 @@
       v.dataset.armed = '1';
       if (v.dataset.src) v.src = v.dataset.src;
       v.querySelectorAll('source[data-src]').forEach(s => { s.src = s.dataset.src; });
+      if (v.dataset.sources && !v.querySelector('source')) { try { const l = JSON.parse(v.dataset.sources); l.forEach((o, i) => { const s = document.createElement('source'); if (o.media) s.media = o.media; if (o.type) s.type = o.type; s.src = o.src; if (i === l.length - 1) s.addEventListener('error', () => { v.dataset.dead = '1'; }); v.appendChild(s); }); } catch (e) {} }
       v.load();
     };
     // Une vidéo qui ne peut pas être lue (format, réseau) laisse simplement son image fixe

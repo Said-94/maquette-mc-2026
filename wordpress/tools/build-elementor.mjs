@@ -14,11 +14,18 @@ import * as acorn from 'acorn';
 const PRELUDE = `<script>/* Moto's Cool : démarrage des scripts, partie par partie */
 window.mcWarn = function (e) { try { console.warn("Moto's Cool : une partie de la page n'a pas démarré (bloc retiré ou modifié dans Elementor).", e); } catch (x) {} };
 window.mcOnReady = function (f) {
-  var done = false, run = function () { if (done) return; done = true; try { f(); } catch (e) { mcWarn(e); } };
+  var done = false, run = function () { if (done) return; done = true; try { var p = f(); if (p && p.catch) p.catch(mcWarn); } catch (e) { mcWarn(e); } };
   if (!window.MC_PREVIEW) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run(); return; }
   var last = -1, still = 0, t = setInterval(function () { var n = document.querySelectorAll('.elementor-widget[data-widget_type^="mc_"]').length; if (n > 0 && n === last) { if (++still >= 2) { clearInterval(t); run(); } } else still = 0; last = n; }, 250);
 };
+// Vitesse (téléphones) : le démarrage est découpé en petites tranches ; entre deux tranches, le navigateur affiche la page
+// et répond au doigt (pas de longue tâche bloquante). Le résultat est identique, seulement étalé.
+window.mcT = 0;
+window.mcLate = function () { var n = performance.now(); if (!window.mcT) { window.mcT = n; return false; } return n - window.mcT > 40; };
+window.mcYield = function () { return new Promise(function (r) { var go = function () { window.mcT = performance.now(); r(); }; setTimeout(go, 0); /* le navigateur peut afficher la page entre deux tranches */ }); };
+window.mcOnLoad = function (f) { if (document.readyState === 'complete') setTimeout(f, 0); else addEventListener('load', f); };
 </script>`;
+const YIELD = 'if (mcLate()) await mcYield(); ';
 function wrapScripts(html) {
   let used = false;
   const out = html.replace(/<script(?![^>]*\bsrc=)(?![^>]*type="(?:application\/ld\+json|importmap|module)")([^>]*)>([\s\S]*?)<\/script>/g, (m, attrs, js) => {
@@ -37,16 +44,18 @@ function wrapScripts(html) {
           // « const a = … » : la variable existe toujours, sa valeur est calculée à part (une erreur n'arrête pas la suite)
           const all = s.declarations.flatMap(d => names(d.id));
           const sets = s.declarations.filter(d => d.init).map(d => (d.id.type === 'ObjectPattern' ? '(' : '') + js.slice(d.id.start, d.id.end) + ' = ' + js.slice(d.init.start, d.init.end) + (d.id.type === 'ObjectPattern' ? ')' : '') + ';').join(' ');
-          edits.push({ s: s.start, e: s.end, a: `${s.kind === 'var' ? 'var' : 'let'} ${all.join(', ')}; try { ${sets} } catch (e) { mcWarn(e); }`, b: '', replace: true });
-        } else if (!/Declaration$/.test(s.type)) edits.push({ s: s.start, e: s.end, a: 'try { ', b: ' } catch (e) { mcWarn(e); }' });
+          edits.push({ s: s.start, e: s.end, a: `${YIELD}${s.kind === 'var' ? 'var' : 'let'} ${all.join(', ')}; try { ${sets} } catch (e) { mcWarn(e); }`, b: '', replace: true });
+        } else if (!/Declaration$/.test(s.type)) edits.push({ s: s.start, e: s.end, a: YIELD + 'try { ', b: ' } catch (e) { mcWarn(e); }' });
       }
-      edits.push({ s: c.start, e: c.arguments[1].start, a: 'mcOnReady(', b: '', replace: true });
+      edits.push({ s: c.start, e: c.arguments[1].start, a: 'mcOnReady(' + (fn.async ? '' : 'async '), b: '', replace: true });
       edits.push({ s: fn.end, e: c.end, a: ')', b: '', replace: true });
     }
     if (!edits.length) return m;
     used = true;
     let j = js;
     for (const x of edits.sort((p, q) => q.s - p.s)) j = x.replace ? j.slice(0, x.s) + x.a + j.slice(x.e) : j.slice(0, x.s) + x.a + j.slice(x.s, x.e) + x.b + j.slice(x.e);
+    // « au chargement complet de la page » : exécuté tout de suite s'il a déjà eu lieu pendant le démarrage découpé
+    j = j.replace(/(^|[^.\w$])addEventListener\('load', /g, '$1mcOnLoad(');
     acorn.parse(j, { ecmaVersion: 'latest', sourceType: 'script' }); // contrôle : le script transformé reste valide
     return `<script${attrs}>${j}</script>`;
   });
@@ -309,7 +318,10 @@ for (const pg of PAGES) {
   if (pg.key === 'confidentialite') foot = foot.replace('href="#cookies"', 'href="/confidentialite.html#cookies"');
   const kindName = { accueil: 'accueil', pages: 'pages', legal: 'pages_legales' }[pg.kind];
   const kindTitle = { accueil: "page d'accueil", pages: 'pages services et zones', legal: 'pages légales' }[pg.kind];
-  for (const [part, src, lab] of [['entete', strip(S(headerEl)), 'En-tête'], ['pied', foot, 'Pied de page']]) {
+  // Accueil : lien « Vidéos » dans le menu (masqué sur le site tant qu'aucune vidéo n'est publiée)
+  let hdr = strip(S(headerEl));
+  if (pg.kind === 'accueil') { const li = '<li><a href="#photos">Photos</a></li>'; if (!hdr.includes(li)) problems.push('menu : lien Photos introuvable'); hdr = hdr.replace(li, li + '\n        <li><a href="#videos">Vidéos</a></li>'); }
+  for (const [part, src, lab] of [['entete', hdr, 'En-tête'], ['pied', foot, 'Pied de page']]) {
     const tk = part + '_' + kindName;
     const b = block('mc_' + tk, `${lab} (${kindTitle})`, src);
     if (!templates[tk]) templates[tk] = { title: `Moto's Cool – ${lab} (${kindTitle})`, widget: b.w, settings: b.s, kind: pg.kind, page: pg.key };

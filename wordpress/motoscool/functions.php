@@ -224,10 +224,18 @@ function mc_send_static($f) {
     mc_raw();
     $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
     $size = filesize($f); $start = 0; $end = $size - 1;
+    if (function_exists('mc_sec_headers')) mc_sec_headers(false);
+    // Cache : 1 an pour les fichiers appelés avec leur numéro de version (?v=…, ajouté par mc_fix_html), sinon 7 jours
+    $etag = '"' . dechex((int) filemtime($f)) . '-' . dechex((int) filesize($f)) . '"';
+    // (images, polices, vidéos : 1 an dans tous les cas, comme la règle du serveur ajoutée dans .htaccess)
+    $long = isset($_GET['v']) || preg_match('/^(jpe?g|png|webp|avif|svg|ico|gif|woff2?|mp4|webm|glb)$/', $ext);
+    header('Cache-Control: ' . ($long ? 'public, max-age=31536000' . (isset($_GET['v']) ? ', immutable' : '') : 'public, max-age=604800'));
+    header('ETag: ' . $etag);
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s', (int) filemtime($f)) . ' GMT');
+    $inm = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? str_replace(['W/', '-gzip', '-br'], '', (string) $_SERVER['HTTP_IF_NONE_MATCH']) : '';
+    if ($inm !== '' && strpos($inm, trim($etag, '"')) !== false) { status_header(304); exit; }
     status_header(200);
     header('Content-Type: ' . mc_types()[$ext]);
-    header('X-Content-Type-Options: nosniff');
-    header('Cache-Control: public, max-age=604800');
     // Textes (scripts, styles…) : l'hébergement peut les compresser à la volée (OVH : mod_deflate). Leur taille d'origine
     // ne doit alors PAS être annoncée, sinon le navigateur coupe la connexion (ERR_HTTP2_PROTOCOL_ERROR) et le script ne se charge pas
     if (preg_match('#^(text/|application/(json|xml|manifest)|image/svg)#', mc_types()[$ext])) {
@@ -273,8 +281,10 @@ function mc_send_page($f) {
         if (!is_ssl()) $new = preg_replace('/\s*upgrade-insecure-requests;?/', '', $new);
         $html = str_replace($csp[0], '<meta http-equiv="Content-Security-Policy" content="' . $new . '"', $html);
     }
+    if (function_exists('mc_asset_versions')) $html = mc_asset_versions($html);
     status_header(200);
     header('Content-Type: text/html; charset=utf-8');
+    if (function_exists('mc_sec_headers')) mc_sec_headers(true);
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('X-Frame-Options: SAMEORIGIN');
@@ -561,3 +571,4 @@ function mc_confirm_mail($p) {
 /* ---------- Site modifiable dans WordPress (Elementor) et vidéos ---------- */
 require_once __DIR__ . '/mc-elementor.php';
 require_once __DIR__ . '/mc-videos.php';
+require_once __DIR__ . '/mc-optim.php';

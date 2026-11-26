@@ -59,7 +59,7 @@
     .todo { color: #ffb84d; font-weight: 800; }
     footer { border-top: 1px solid var(--line); padding: 26px 0 40px; color: var(--muted); font-size: .9rem; }
     footer ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0; }
-    body::before { content: ""; position: fixed; right: -40px; bottom: 0; z-index: -1; width: min(48vw, 640px); aspect-ratio: 960 / 600; background: url(../assets/video/bike-ducati.jpg) no-repeat center / contain; opacity: .22; -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 52%, #000 55%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 52%, #000 55%, transparent 100%); pointer-events: none; }
+    body::before { content: ""; position: fixed; right: -40px; bottom: 0; z-index: -1; width: min(48vw, 640px); aspect-ratio: 960 / 600; background: url(../assets/video/bike-ducati.webp) no-repeat center / contain; opacity: .22; -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 52%, #000 55%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 52%, #000 55%, transparent 100%); pointer-events: none; }
     body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20115'%3E%3Cfilter%20id%3D'g'%3E%3CfeGaussianBlur%20stdDeviation%3D'2.2'%2F%3E%3C%2Ffilter%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'3'%20opacity%3D'.55'%20filter%3D'url(%23g)'%2F%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'1.6'%20opacity%3D'.5'%2F%3E%3C%2Fsvg%3E") 6% 22% / 46px auto no-repeat, url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20115'%3E%3Cfilter%20id%3D'g'%3E%3CfeGaussianBlur%20stdDeviation%3D'2.2'%2F%3E%3C%2Ffilter%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'3'%20opacity%3D'.55'%20filter%3D'url(%23g)'%2F%3E%3Cpath%20d%3D'M50%204%2096%2030.5v54L50%20111%204%2084.5v-54z'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'1.6'%20opacity%3D'.5'%2F%3E%3C%2Fsvg%3E") 88% 14% / 34px auto no-repeat; opacity: .55; }
   </style>
 </head>
@@ -150,11 +150,11 @@
     <p><b>Ce site ne dépose aucun cookie publicitaire, de mesure d'audience ou de réseau social, et n'utilise aucun traceur.</b> Il n'y a donc rien à accepter ni à refuser : aucun bandeau de consentement n'est nécessaire.</p>
     <p>Seul un stockage strictement technique peut intervenir, nécessaire au fonctionnement du site : la mise en cache habituelle des fichiers par votre navigateur. Il ne contient aucune donnée personnelle et est exempté de consentement (article 82 de la loi Informatique et Libertés).</p>
     <h3>Ressources externes</h3>
-    <p>Les polices de caractères sont hébergées sur le site lui-même : aucune requête n'est faite vers Google. Pour afficher certaines fonctions, le site charge des ressources depuis des serveurs tiers, qui reçoivent à cette occasion votre adresse IP, comme pour toute page web :</p>
+    <p>Les polices de caractères et les bibliothèques d'animation et de carte (GSAP, Three.js, Lenis, Leaflet) sont hébergées sur le site lui-même : aucune requête n'est faite vers Google ni vers un réseau de diffusion tiers. Seules quelques fonctions chargent des ressources depuis des serveurs tiers, qui reçoivent à cette occasion votre adresse IP, comme pour toute page web :</p>
     <ul>
-      <li>cdnjs / Cloudflare et jsDelivr (bibliothèques GSAP, Three.js, Lenis et Leaflet) ;</li>
       <li>OpenStreetMap (fonds de carte de la zone de dépannage et plan d'accès) ;</li>
       <li>Service de géocodage de l'État, Géoplateforme IGN (recherche de commune, clic sur la carte, boutons « Me localiser » et « Envoyer ma position », photos aériennes de la vue « Satellite » des cartes : uniquement si vous les utilisez) ;</li>
+      <li>vidéos YouTube ou TikTok de la partie « Vidéos » : rien n'est chargé depuis ces plateformes tant que vous ne cliquez pas sur la vidéo (YouTube est alors lu en mode « confidentialité renforcée ») ;</li>
       <li>en mode IA uniquement : Cloudflare et Anthropic (assistant, voir ci-dessus).</li>
     </ul>
     <h3>Gestion des cookies</h3>
@@ -162,7 +162,7 @@
     <p>Si des outils de mesure d'audience ou des contenus tiers déposant des cookies étaient ajoutés à l'avenir, un bandeau de consentement serait mis en place et cette page mise à jour.</p>
 
     <h2>Mise à jour</h2>
-    <p>Cette politique peut évoluer. Dernière mise à jour : 22 novembre 2026.</p>
+    <p>Cette politique peut évoluer. Dernière mise à jour : 26 novembre 2026.</p>
   </main>
 
   <footer>
