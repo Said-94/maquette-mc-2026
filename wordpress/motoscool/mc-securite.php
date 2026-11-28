@@ -138,6 +138,9 @@ function mc_2fa_gate($user) {
     return new WP_Error('mc_2fa', '<strong>Code de sécurité manquant ou incorrect.</strong> Tapez le code à 6 chiffres affiché dans l\'application du téléphone (ou un code de secours).');
 }
 add_action('login_form', function () {
+    // Champ affiché seulement si au moins un compte a activé la double vérification (sinon l'écran reste comme avant)
+    if (defined('MC_2FA_OFF') && MC_2FA_OFF) return;
+    if (!get_users(['meta_key' => 'mc_2fa_on', 'meta_value' => '1', 'number' => 1, 'fields' => 'ID'])) return;
     echo '<p><label for="mc_2fa">Code de sécurité <span style="font-weight:400;color:#646970">(seulement si la double vérification est activée)</span></label>'
         . '<input type="text" name="mc_2fa" id="mc_2fa" class="input" inputmode="numeric" autocomplete="one-time-code" maxlength="11" size="20"></p>';
 });
@@ -448,7 +451,7 @@ function mc_sec_page() {
         $txt = $on ? 'Double vérification activée (code du téléphone demandé à chaque connexion).' : 'Double vérification <b>non activée</b>.';
         if (strtolower($o->user_login) === 'admin') $txt .= ' L\'identifiant « admin » est le premier essayé par les robots : mot de passe long et unique obligatoire (et double vérification conseillée).';
         if ((int) $o->ID !== (int) $u->ID && $on) $txt .= ' ' . $btn('2fa_reset', 'Retirer (téléphone perdu)', '<input type="hidden" name="uid" value="' . (int) $o->ID . '">', 'button button-small');
-        mc_sec_row($on ? 'ok' : 'warn', 'Compte « ' . $o->user_login . ' »' . ((int) $o->ID === (int) $u->ID ? ' (vous)' : ''), $txt);
+        mc_sec_row($on ? 'ok' : 'info', 'Compte « ' . $o->user_login . ' »' . ((int) $o->ID === (int) $u->ID ? ' (vous)' : ''), $txt);
     }
     echo '</tbody></table>';
     // Double vérification du compte connecté
