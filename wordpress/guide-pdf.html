@@ -17,7 +17,7 @@
   table { border-collapse: collapse; width: 100%; font-size: 9.9pt; } td { border: 0.3mm solid #ccc; padding: 1.2mm 2.2mm; vertical-align: top; } td:first-child { width: 31%; font-weight: bold; }
 </style></head><body>
 <h1>Moto's Cool <span>·</span> Mettre à jour le site WordPress</h1>
-<p class="sub">Version du 26/11 : site plus rapide et plus sûr, référencement Google optimisé, partie Vidéos remplie · environ 10 minutes</p>
+<p class="sub">Version 2.1 du 28/11 : site plus rapide, sécurité renforcée (page 3), référencement Google optimisé, partie Vidéos remplie · environ 10 minutes</p>
 
 <div class="box step"><b>⛔ NE JAMAIS TOUCHER À :</b>
 <ul>
@@ -30,7 +30,7 @@
 <div class="step"><h2>1. Installer la nouvelle version</h2>
 <ol><li><b class="k">motoscool.fr/wp-admin</b> → se connecter.</li>
 <li><b class="k">Apparence</b> → <b class="k">Thèmes</b> → <b class="k">Ajouter un thème</b> → <b class="k">Téléverser un thème</b>.</li>
-<li><b class="k">Choisir un fichier</b> → <b>motoscool-theme-leger.zip</b> (0,8 Mo, <span class="no">ne pas le décompresser</span>) → <b class="k">Installer maintenant</b>.</li>
+<li><b class="k">Choisir un fichier</b> → <b>motoscool-theme-leger.zip</b> (1,8 Mo, <span class="no">ne pas le décompresser</span>) → <b class="k">Installer maintenant</b>.</li>
 <li>WordPress dit que le thème est déjà installé : cliquer <b class="k">Remplacer l'actuel par la version téléversée</b>.</li>
 <li>« Le thème a bien été mis à jour » : cliquer <b class="k">Tableau de bord</b> (menu de gauche). La page <b>« Installation du site Moto's Cool »</b>
  s'ouvre seule et monte jusqu'à 100 % (1 à 2 min) : <span class="no">ne pas la fermer</span>.
@@ -97,5 +97,37 @@
 <li><b>DKIM</b> : espace client OVH → Web Cloud → Emails → motoscool.fr → <b>DKIM</b> → Activer (jusqu'à 24 h).</li>
 <li><b>DMARC</b> : espace client OVH → Noms de domaine → motoscool.fr → Zone DNS → Ajouter une entrée → <b>TXT</b> : sous-domaine <b>_dmarc</b>, valeur <b>v=DMARC1; p=none;</b></li></ol></div>
 
+</div>
+
+<div class="page2">
+<h1>Moto's Cool <span>·</span> Sécurité du site</h1>
+<p class="sub">Tout est déjà actif après l'installation. Une page résume tout : <b class="k">Réglages</b> → <b class="k">Moto's Cool Sécurité</b> (vert = en place, orange = à prévoir, rouge = à traiter).</p>
+
+<div class="step"><h2>Ce qui protège le site (automatique)</h2>
+<table>
+<tr><td>Connexion</td><td>5 mots de passe ratés : la connexion est bloquée 20 min pour cet appareil (24 h si ça recommence). Le site ne dit jamais si un identifiant existe. « Mot de passe oublié » limité à 5 demandes par heure.</td></tr>
+<tr><td>Contrôle des fichiers (antivirus)</td><td>Chaque jour, chaque fichier de WordPress, des extensions et du thème est comparé à l'original. Le contrôle cherche aussi les virus connus, les programmes cachés avec les images et un nouveau compte administrateur. <b>En cas de problème : email d'alerte</b> + message rouge dans WordPress.</td></tr>
+<tr><td>Dossier des images</td><td>Aucun programme ne peut y être lancé (porte d'entrée n°1 des pirates). Testé automatiquement sur le serveur.</td></tr>
+<tr><td>Fichiers sensibles</td><td>Configuration, sauvegardes, journaux, XML-RPC : interdits au public. Liste des dossiers fermée.</td></tr>
+<tr><td>Administration verrouillée</td><td>Impossible de modifier le code depuis WordPress, inscriptions fermées, commentaires fermés, accès à distance coupé.</td></tr>
+<tr><td>Discrétion</td><td>Versions de WordPress et PHP et noms des comptes cachés. Connexion https forcée.</td></tr>
+<tr><td>Navigateur des visiteurs</td><td>Le site ne peut pas être piégé dans un autre site ; caméra, micro et paiement interdits aux pages.</td></tr>
+<tr><td>Rendez-vous</td><td>Anti-robots, nombre d'envois limité, lien « Libérer la place » signé (impossible à falsifier).</td></tr>
+</table></div>
+
+<div class="step"><h2>Double vérification : code du téléphone (à activer avec SYZ, 5 min)</h2>
+<ol><li>Sur le téléphone : installer <b>Google Authenticator</b> (gratuit).</li>
+<li>WordPress → <b class="k">Réglages</b> → <b class="k">Moto's Cool Sécurité</b> → « Ma double vérification » : dans l'application, <b>+</b> → <b>Scanner un code QR</b>.</li>
+<li>Taper le code à 6 chiffres → <b class="k">Activer la double vérification</b>. <span class="no">Noter les 8 codes de secours</span> (téléphone perdu = un code de secours).</li>
+<li>Ensuite, à chaque connexion : identifiant, mot de passe, et le code affiché par le téléphone dans « Code de sécurité ».</li></ol></div>
+
+<div class="step"><h2>Si un email « alerte sécurité » arrive</h2>
+<p><span class="no">Ne rien supprimer soi-même : appeler SYZ.</span> Le détail est dans Réglages → Moto's Cool Sécurité. Si c'est normal (par exemple un nouvel administrateur que vous avez créé), cliquer <b>« C'est normal »</b>.</p></div>
+
+<div class="step"><h2>Les bons réflexes</h2>
+<ul><li>Mot de passe de l'administration : <b>long (12 caractères et plus) et utilisé nulle part ailleurs</b>. Jamais envoyé par email ou SMS.</li>
+<li><span class="no">Ne pas cliquer</span> sur « Mettre à jour WordPress » ni changer la version PHP : SYZ le fait après l'avoir testé (prochaine étape prévue).</li>
+<li>Ne pas installer d'extension trouvée au hasard. Supprimer les extensions désactivées inutiles (avec SYZ).</li>
+<li>Sauvegardes : vérifier dans l'espace client OVH que les sauvegardes automatiques sont actives.</li></ul></div>
 </div>
 </body></html>

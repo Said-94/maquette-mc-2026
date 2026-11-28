@@ -96,7 +96,7 @@ add_action('init', function () {
 
 /* ---------- Réglages du serveur (.htaccess) : liste des dossiers fermée, cache long des images ---------- */
 // Chaque bloc est ajouté seul, puis le site est testé : en cas d'erreur, le bloc est retiré aussitôt.
-define('MC_HT_VER', '1');
+define('MC_HT_VER', '2');
 function mc_ht_try($file, $marker, $lines) {
     $ok0 = wp_remote_retrieve_response_code(wp_remote_get(home_url('/'), ['timeout' => 15, 'sslverify' => false, 'redirection' => 0]));
     if (!$ok0 || $ok0 >= 500) return 'test-impossible';
@@ -106,15 +106,35 @@ function mc_ht_try($file, $marker, $lines) {
     if (!$ok1 || $ok1 >= 500 || ($ok2 && $ok2 >= 500)) { insert_with_markers($file, $marker, []); return 'retire'; }
     return 'ok';
 }
+// Faut-il (re)tenter ? Nouvelle version des réglages, ou test impossible la dernière fois (nouvel essai une fois par jour)
+function mc_ht_due() {
+    if (get_option('mc_ht_ver') !== MC_HT_VER) return true;
+    $e = get_option('mc_ht_etat');
+    return is_array($e) && in_array('test-impossible', $e, true) && !get_transient('mc_ht_essai');
+}
 function mc_htaccess() {
-    if (get_option('mc_ht_ver') === MC_HT_VER) return;
+    if (!mc_ht_due()) return;
     update_option('mc_ht_ver', MC_HT_VER, false); // une seule tentative par version (jamais en boucle)
+    set_transient('mc_ht_essai', 1, DAY_IN_SECONDS);
     if (!function_exists('insert_with_markers')) require_once ABSPATH . 'wp-admin/includes/misc.php';
     if (!function_exists('get_home_path')) require_once ABSPATH . 'wp-admin/includes/file.php';
     $f = get_home_path() . '.htaccess';
-    if (!is_file($f) || !is_writable($f)) { update_option('mc_ht_etat', 'non-modifiable', false); return; }
+    if (!is_file($f) || !is_writable($f)) {
+        update_option('mc_ht_etat', ['dossiers' => 'non-modifiable', 'fichiers' => 'non-modifiable', 'cache' => 'non-modifiable',
+            'images' => function_exists('mc_uploads_protect') ? mc_uploads_protect() : 'non-modifiable'], false);
+        return;
+    }
     $etat = [];
     $etat['dossiers'] = mc_ht_try($f, "Moto's Cool securite", ['Options -Indexes']);
+    // Fichiers sensibles interdits au public : configuration, sauvegardes, journaux, XML-RPC (porte des robots),
+    // fichiers qui donnent la version de WordPress, page d'installation
+    $etat['fichiers'] = mc_ht_try($f, "Moto's Cool fichiers proteges", mc_ht_deny_lines(
+        '^(?i:wp-config\.php|wp-config-sample\.php|readme\.html|license\.txt|licence\.txt|xmlrpc\.php|install\.php|debug\.log|error_log|php_errorlog|\.user\.ini|.*\.(?:sql|bak|old|orig|save|swp|log))$'));
+    if ($etat['fichiers'] === 'ok' && is_file(ABSPATH . 'readme.html')) { // vérifié : la règle est-elle appliquée par le serveur ?
+        $c = wp_remote_retrieve_response_code(wp_remote_get(home_url('/readme.html'), ['timeout' => 15, 'sslverify' => false, 'redirection' => 0]));
+        if ((int) $c === 200) $etat['fichiers'] = 'sans-effet';
+    }
+    $etat['images'] = function_exists('mc_uploads_protect') ? mc_uploads_protect() : 'non-modifiable';
     $y = '"access plus 1 year"'; $w = '"access plus 7 days"';
     $etat['cache'] = mc_ht_try($f, "Moto's Cool cache", ['<IfModule mod_expires.c>', 'ExpiresActive On',
         "ExpiresByType image/jpeg $y", "ExpiresByType image/png $y", "ExpiresByType image/webp $y", "ExpiresByType image/avif $y",
@@ -127,7 +147,7 @@ function mc_htaccess() {
 add_action('admin_init', function () {
     if (wp_doing_ajax() || !current_user_can('manage_options')) return;
     if (function_exists('mc_ready') && !mc_ready()) return;
-    if (get_option('mc_ht_ver') !== MC_HT_VER) mc_htaccess();
+    if (mc_ht_due()) mc_htaccess();
     if (!get_transient('mc_https_vu')) { set_transient('mc_https_vu', 1, DAY_IN_SECONDS); mc_https_check(); }
 }, 50);
 add_action('switch_theme', function () { // thème changé : les réglages Moto's Cool du serveur sont retirés

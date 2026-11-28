@@ -15,6 +15,16 @@ for (const f of list) {
   if (TEXT.test(f.p) || f.s <= 50000 || diff.has(f.p)) { const d = path.join(OUT, 'motoscool/site', f.p); fs.mkdirSync(path.dirname(d), { recursive: true }); fs.copyFileSync(path.join(T, 'site', f.p), d); inc++; incB += f.s; }
   else { fetchN++; fetchB += f.s; }
 }
+// Empreintes des fichiers du thème (hors site/, vérifié par site-files.json) : le contrôle de sécurité quotidien
+// repère ainsi un fichier du thème modifié ou un programme ajouté par un pirate
+{
+  const crypto = await import('node:crypto'), base = path.join(OUT, 'motoscool');
+  const walk = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e => e.isDirectory() ? (e.name === 'site' && d === base ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]);
+  const emp = {};
+  for (const f of walk(base).sort()) { const rel = path.relative(base, f).replace(/\\/g, '/'); if (rel !== 'mc-empreintes.json') emp[rel] = crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex'); }
+  fs.writeFileSync(path.join(base, 'mc-empreintes.json'), JSON.stringify(emp));
+  console.log(`mc-empreintes.json : ${Object.keys(emp).length} fichiers du thème`);
+}
 const zip = path.join(OUT, 'motoscool-theme-leger.zip');
 execFileSync('C:/Windows/System32/tar.exe', ['-a', '-cf', zip, 'motoscool'], { cwd: OUT });
 const z = fs.readFileSync(zip);

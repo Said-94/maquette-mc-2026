@@ -572,3 +572,4 @@ function mc_confirm_mail($p) {
 require_once __DIR__ . '/mc-elementor.php';
 require_once __DIR__ . '/mc-videos.php';
 require_once __DIR__ . '/mc-optim.php';
+require_once __DIR__ . '/mc-securite.php';
